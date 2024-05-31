@@ -1,9 +1,19 @@
+import { useCategoryListAPI } from "@/app/hooks/api_hooks/Campaign/useCampaignListApi";
 import GroupHeaderComponent from "@/components/ui/GroupHeaderComponent";
+import { useEffect } from "react";
+import CreateSurveryComponent from "./CreateSurveryComponent";
 import GroupCreateComponent from "./GroupCreateComponent";
 import SurveyCreateComponent from "./SurveyCreateComponent";
-import CreateSurveryComponent from "./CreateSurveryComponent";
 
 const CreateFeedbackGroupComponent = () => {
+  const { categoryList, execute: fetchCategory } = useCategoryListAPI();
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  console.log(categoryList, "categoryList");
+
   return (
     <div>
       <GroupHeaderComponent header="Group" />
