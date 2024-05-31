@@ -1,7 +1,4 @@
-import Input from "@/components/ui/Input";
-
 import { Field, Label } from "@headlessui/react";
-import React from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -10,9 +7,10 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import SearchableSelectMenu from "@/components/ui/SearchableSelectMenu";
-import TextareaComponent from "@/components/ui/TextareaComponent";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import SearchableSelectMenu from "@ui/SearchableSelectMenu";
+import TextareaComponent from "@ui/TextareaComponent";
+import { useSelectMenuReducer } from "@ui/useSelectMenuReducer";
 import { useNavigate } from "react-router-dom";
 
 export interface ICreateSurveyFromFields {
@@ -20,6 +18,11 @@ export interface ICreateSurveyFromFields {
   surveyDescription: string;
 }
 
+const dataItem = [
+  { id: "1", name: "siraj" },
+  { id: "2", name: "siraj" },
+  { id: "3", name: "siraj" },
+];
 const AddSurveyQuestionComponent = () => {
   const formHook = useForm<ICreateSurveyFromFields>({
     defaultValues: {},
@@ -44,6 +47,8 @@ const AddSurveyQuestionComponent = () => {
       console.log(data, "data");
     }
   };
+
+  const dataItemList = useSelectMenuReducer(dataItem, "name", "id");
 
   const handelLaunchAudions = () => {
     navigate("/app/campaign/create-survey?step_id=step_3");
@@ -91,13 +96,71 @@ const AddSurveyQuestionComponent = () => {
                       <p className="text-sm font-medium text-[#333333] pb-2">
                         Question Type
                       </p>
-                      <SearchableSelectMenu />
+                      <SearchableSelectMenu
+                        errorMessages={[
+                          {
+                            message: "Parent theme is required",
+                            type: "required",
+                          },
+                        ]}
+                        onSelectItem={(item) => {
+                          if (item) {
+                            formHook.setValue("surveyTitle", item.title);
+                          }
+                        }}
+                        fieldError={formHook.formState.errors.surveyTitle}
+                        register={formHook.register("surveyTitle", {
+                          required: true,
+                        })}
+                        selectItems={dataItemList}
+                        placeholder="Select Parent Theme"
+                        showTooltips={true}
+                        showTypedErrors={true}
+                        showDropdownIcon={true}
+                        defaultSelected={
+                          dataItemList?.filter(
+                            (oc) => oc.title === formHook.watch("surveyTitle")
+                          )[0]
+                        }
+                        listBoxClassName="w-full"
+                        className="text-gray-800 "
+                        containerClassName="w-full"
+                      />
                     </div>
                     <div className="w-full">
                       <p className="text-sm font-medium text-[#333333] pb-2">
                         Can this question can be skipped?
                       </p>
-                      <SearchableSelectMenu />
+                      <SearchableSelectMenu
+                        errorMessages={[
+                          {
+                            message: "Parent theme is required",
+                            type: "required",
+                          },
+                        ]}
+                        onSelectItem={(item) => {
+                          if (item) {
+                            formHook.setValue("surveyTitle", item.title);
+                          }
+                        }}
+                        fieldError={formHook.formState.errors.surveyTitle}
+                        register={formHook.register("surveyTitle", {
+                          required: true,
+                        })}
+                        selectItems={dataItemList}
+                        placeholder="Select Parent Theme"
+                        showTooltips={true}
+                        showTypedErrors={true}
+                        showDropdownIcon={true}
+                        defaultSelected={
+                          dataItemList?.filter(
+                            (oc) => oc.title === formHook.watch("surveyTitle")
+                          )[0]
+                        }
+                        listBoxClassName="w-full"
+                        className="text-gray-800 "
+                        containerClassName="w-full"
+                      />
                     </div>
                   </div>
                   <div>
@@ -173,13 +236,71 @@ const AddSurveyQuestionComponent = () => {
                       <p className="text-sm font-medium text-[#333333] pb-2">
                         Question Type
                       </p>
-                      <SearchableSelectMenu />
+                      <SearchableSelectMenu
+                        errorMessages={[
+                          {
+                            message: "Parent theme is required",
+                            type: "required",
+                          },
+                        ]}
+                        onSelectItem={(item) => {
+                          if (item) {
+                            formHook.setValue("surveyTitle", item.title);
+                          }
+                        }}
+                        fieldError={formHook.formState.errors.surveyTitle}
+                        register={formHook.register("surveyTitle", {
+                          required: true,
+                        })}
+                        selectItems={dataItemList}
+                        placeholder="Select Parent Theme"
+                        showTooltips={true}
+                        showTypedErrors={true}
+                        showDropdownIcon={true}
+                        defaultSelected={
+                          dataItemList?.filter(
+                            (oc) => oc.title === formHook.watch("surveyTitle")
+                          )[0]
+                        }
+                        listBoxClassName="w-full"
+                        className="text-gray-800 "
+                        containerClassName="w-full"
+                      />
                     </div>
                     <div className="w-full">
                       <p className="text-sm font-medium text-[#333333] pb-2">
                         Can this question can be skipped?
                       </p>
-                      <SearchableSelectMenu />
+                      <SearchableSelectMenu
+                        errorMessages={[
+                          {
+                            message: "Parent theme is required",
+                            type: "required",
+                          },
+                        ]}
+                        onSelectItem={(item) => {
+                          if (item) {
+                            formHook.setValue("surveyTitle", item.title);
+                          }
+                        }}
+                        fieldError={formHook.formState.errors.surveyTitle}
+                        register={formHook.register("surveyTitle", {
+                          required: true,
+                        })}
+                        selectItems={dataItemList}
+                        placeholder="Select Parent Theme"
+                        showTooltips={true}
+                        showTypedErrors={true}
+                        showDropdownIcon={true}
+                        defaultSelected={
+                          dataItemList?.filter(
+                            (oc) => oc.title === formHook.watch("surveyTitle")
+                          )[0]
+                        }
+                        listBoxClassName="w-full"
+                        className="text-gray-800 "
+                        containerClassName="w-full"
+                      />
                     </div>
                   </div>
                   <div>

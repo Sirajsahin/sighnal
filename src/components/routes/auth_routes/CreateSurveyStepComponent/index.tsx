@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import SetpComponent from "./StepComponent";
-import CreateSurveyQuestionHeaderComponent from "./CreateSurveyQuestionHeaderComponent";
 import { useSearchParams } from "react-router-dom";
 import AddSurveyQuestionComponent from "./AddSurveyQuestionComponent";
 import AudienceLaunchComponent from "./AudienceLaunchComponent";
+import CreateSurveyQuestionHeaderComponent from "./CreateSurveyQuestionHeaderComponent";
+import SetpComponent from "./StepComponent";
 const CreateSurveyStepComponent = () => {
   const [params, _setparams] = useSearchParams();
   const step_id = params.get("step_id");

@@ -1,23 +1,64 @@
-import { Field, Label } from "@headlessui/react";
-import React from "react";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import Input from "../../../../ui/Input";
-import TextareaComponent from "../../../../ui/TextareaComponent";
-import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/outline";
+import CalenderComponent from "../../../../ui/CalenderComponent";
+import ToogleComponent from "../../../../ui/ToogleComponent";
 
 export interface ICreateSurveyFromFields {
   surveyTitle: string;
   surveyDescription: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface ISelectedDate {
+  startDate: any;
+  endDate: any;
+  key: string;
 }
 
 const AudienceLaunchComponent = () => {
+  // State For StartDate And End Date
+
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const [selectionDate, setSelectionDate] = useState<ISelectedDate>({
+    startDate: yesterday,
+    endDate: today,
+    key: "selectionDate",
+  });
+
+  // Calculate Start Date And End Date and Change Date Format Also
+  const startDate = new Date(selectionDate.startDate);
+  const endDate = new Date(selectionDate.endDate);
+
+  //   const dispatch = useAppDispatch();
+
+  const startYear = startDate.getFullYear();
+  const startMonth = (startDate.getMonth() + 1).toString().padStart(2, "0");
+  const startDay = startDate.getDate().toString().padStart(2, "0");
+
+  const endYear = endDate.getFullYear();
+  const endMonth = (endDate.getMonth() + 1).toString().padStart(2, "0");
+  const endDay = endDate.getDate().toString().padStart(2, "0");
+
+  const formattedStartDate = `${startYear}-${startMonth}-${startDay}`;
+  const formattedEndDate = `${endYear}-${endMonth}-${endDay}`;
+
+  // Default Value
   const formHook = useForm<ICreateSurveyFromFields>({
-    defaultValues: {},
+    mode: "onChange",
+    defaultValues: {
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+    },
   });
 
   const navigate = useNavigate();
-
+  console.log(navigate);
   /* Actions and Handlers */
   const validateConditionalFormFields = (data: ICreateSurveyFromFields) => {
     let isValid = false;
@@ -34,8 +75,12 @@ const AudienceLaunchComponent = () => {
     }
     if (data && isFormSubmissionValid) {
       console.log(data, "data");
-      navigate("/app/campaign/create-survey?step_id=step_2");
+      // navigate("/app/campaign/create-survey?step_id=step_2");
     }
+  };
+
+  const handelClick = () => {
+    console.log("");
   };
 
   return (
@@ -46,32 +91,71 @@ const AudienceLaunchComponent = () => {
       >
         <div>
           <p className="text-base font-bold py-3">Audience & Launch</p>
-          <p className="text-sm">Add Target Audience</p>
+          <p className="text-[#333333] font-medium text-sm">
+            Add Target Audience
+          </p>
           <div className="text-sm text-[#333333]">
             <div className="border border-1 border-purple-100 mt-3 p-3 w-full rounded-lg flex justify-between items-center gap-2">
-              <span className="flex items-center gap-2 text-xs text-black bg-[#E7F0EC] px-4 py-2 rounded-3xl ">
+              <span className="flex items-center gap-2 text-sm text-black bg-[#E7F0EC] px-4 py-2 rounded-3xl ">
                 <PlusIcon className="w-4 h-4" /> Click to add target audience
               </span>
             </div>
           </div>
-          <div className="w-full flex justify-between gap-3">
-            <div className="w-full">
-              <p>Add Comments</p>
-              <div className="text-sm text-[#333333] py-2">
-                <div className="border border-1 border-purple-100 mt-3 p-3 w-full rounded-lg flex justify-between items-center gap-2">
-                  <span className="flex items-center gap-2 text-xs text-black  px-4 py-2 rounded-3xl ">
+          <div className="w-full flex justify-between gap-3 my-2">
+            <div className="w-full ">
+              <p className="text-[#333333] font-medium text-sm mb-2">
+                Add Comments
+              </p>
+              <div className="text-sm text-[#333333]">
+                <div className="border border-1 border-purple-100  p-3 w-full rounded-lg flex justify-between items-center gap-2">
+                  <span className="flex items-center gap-2 text-sm text-black  px-4 py-2 rounded-3xl  justify-between">
                     Comments On
                   </span>
+                  <ToogleComponent />
                 </div>
               </div>
             </div>
-            <div className="w-full">
-              <p>Anonymous Submission</p>
-              <div className="text-sm text-[#333333] py-2">
-                <div className="border border-1 border-purple-100 mt-3 p-3 w-full rounded-lg flex justify-between items-center gap-2">
-                  <span className="flex items-center gap-2 text-xs text-black  px-4 py-2 rounded-3xl ">
+            <div className="w-full mb-2">
+              <p className="text-[#333333] font-medium text-sm mb-2">
+                Anonymous Submission
+              </p>
+              <div className="text-sm text-[#333333] ">
+                <div className="border border-1 border-purple-100  p-3 w-full rounded-lg flex justify-between items-center gap-2">
+                  <span className="flex items-center gap-2 text-sm text-black  px-4 py-2 rounded-3xl justify-between ">
                     With ID’s
                   </span>
+                  <ToogleComponent />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-full flex justify-between gap-3 my-2">
+            <div className="w-full mb-2">
+              <p className="text-[#333333] font-medium text-sm mb-2">
+                Start Date - End Date
+              </p>
+              <div className="text-sm text-[#333333] ">
+                <div className="border border-1 border-purple-100 p-3 w-full rounded-lg flex justify-between items-center gap-2">
+                  <CalenderComponent
+                    selectionDate={selectionDate}
+                    setSelectionDate={setSelectionDate}
+                    startDate={formattedStartDate}
+                    endDate={formattedEndDate}
+                    handelClick={handelClick}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="w-full mb-2">
+              <p className="text-[#333333] font-medium text-sm mb-2">
+                Start Time - End Time
+              </p>
+              <div className="text-sm text-[#333333] ">
+                <div className="border border-1 border-purple-100 p-3 w-full rounded-lg flex justify-between items-center gap-2">
+                  <span className="flex items-center gap-2 text-sm text-black  px-4 py-2 rounded-3xl justify-between ">
+                    With ID’s
+                  </span>
+                  <ToogleComponent />
                 </div>
               </div>
             </div>

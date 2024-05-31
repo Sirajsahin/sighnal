@@ -2,10 +2,8 @@ import { ReactNode } from "react";
 import {
   FieldError,
   FieldErrorsImpl,
-  LiteralUnion,
   Merge,
   Message,
-  RegisterOptions,
   UseFormRegisterReturn,
 } from "react-hook-form";
 
@@ -28,7 +26,8 @@ export interface IFormComponents {
   key?: string;
   fieldError?:
     | Merge<FieldError, FieldErrorsImpl<ISelectMenuItemData>>
-    | FieldError;
+    | FieldError
+    | undefined;
   errorMessages: IFormFieldErrorMessages[];
 }
 
@@ -127,7 +126,7 @@ export interface ISearchableSelectMenu
   extends IFormComponents,
     IUseFormRegister,
     React.AllHTMLAttributes<HTMLInputElement> {
-  selectItems?: SelectMenuItems;
+  selectItems: SelectMenuItems;
   containerClassName?: string;
   label?: string;
   variant?: "LIKE_INPUT" | "LIKE_TEXT";
@@ -304,16 +303,16 @@ export interface IAgeSelectMenu {
   defaultValues?: { year: string; month: string; day: string };
   yearFieldError:
     | Merge<FieldError, FieldErrorsImpl<ISelectMenuItemData>>
-    | FieldError
-    | undefined;
+    | FieldError;
+
   monthFieldError:
     | Merge<FieldError, FieldErrorsImpl<ISelectMenuItemData>>
-    | FieldError
-    | undefined;
+    | FieldError;
+
   dayFieldError:
     | Merge<FieldError, FieldErrorsImpl<ISelectMenuItemData>>
-    | FieldError
-    | undefined;
+    | FieldError;
+
   onYearSelect?: (year: string) => void;
   onMonthSelect?: (month: string) => void;
   onDaySelect?: (day: string) => void;
