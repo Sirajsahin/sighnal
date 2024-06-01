@@ -13,9 +13,9 @@ const UIContainer: React.FC<React.PropsWithChildren<IUIContainerProps>> = (
         <div className="w-full flex-col h-screen">
           <HeaderComponent />
 
-          <main className="py-6 px-4">
-            <div className="px-4 sm:px-2 lg:px-3  ">{props?.children}</div>
-          </main>
+          <div className="px-4 sm:px-2 lg:px-3  overflow-y-auto h-full ">
+            {props?.children}
+          </div>
         </div>
       </div>
     </>
