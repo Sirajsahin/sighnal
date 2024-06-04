@@ -1,6 +1,7 @@
 import { Field, Label } from "@headlessui/react";
 import { useFieldArray, useForm } from "react-hook-form";
 
+import Input from "@/components/ui/Input";
 import {
   Disclosure,
   DisclosureButton,
@@ -11,6 +12,9 @@ import { PlusIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import SearchableSelectMenu from "@ui/SearchableSelectMenu";
 import TextareaComponent from "@ui/TextareaComponent";
 import { useSelectMenuReducer } from "@ui/useSelectMenuReducer";
+import { remove } from "lodash";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export interface ICampaignQuestionDetailsInfo {
   questionName: string;
@@ -19,11 +23,9 @@ export interface ICampaignQuestionDetailsInfo {
   questionOption: ICampaignQuestionDetailsOptionsInfo[];
 }
 export interface ICampaignQuestionDetailsOptionsInfo {
-  optionNameId: string;
-  optionName: string;
+  option: string;
 }
 export interface ICreateSurveyFromFields {
-  qustionsId: string;
   question_details: ICampaignQuestionDetailsInfo[];
 }
 
@@ -37,7 +39,7 @@ const AddSurveyQuestionComponent = () => {
     defaultValues: {},
   });
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const questionDetailsFormHook = useFieldArray({
     name: "question_details",
     control: formHook.control,
@@ -47,10 +49,41 @@ const AddSurveyQuestionComponent = () => {
     questionDetailsFormHook.append({
       questionName: null,
       questionType: null,
-      questionOption: null,
+      questionOption: [{ option: "" }],
       questionSkip: null,
     });
   };
+
+  //option create
+
+  const handleDeleteProductOptions = (id: number, optionIndex: number) => {
+    // formHook.setValue(`question_details.${id}.questionOption`,[])
+
+    questionDetailsFormHook.update(id, {
+      ...formHook.getValues(`question_details.${id}`),
+      questionOption: remove(
+        formHook.getValues(`question_details.${id}.questionOption`),
+        (_f, index) => {
+          return index !== optionIndex;
+        }
+      ),
+    });
+  };
+
+  const handleAddProductOptions = (id: number) => {
+    // formHook.setValue(`question_details.${id}.questionOption`,[])
+    questionDetailsFormHook.update(id, {
+      ...formHook.getValues(`question_details.${id}`),
+      questionOption: [
+        ...formHook.getValues(`question_details.${id}.questionOption`),
+        { option: "" },
+      ],
+    });
+  };
+  useEffect(() => {
+    // handleAddProductItem();
+    // console.log("bb");
+  }, []);
 
   const onSubmit = (data: ICreateSurveyFromFields) => {
     if (data) {
@@ -61,7 +94,7 @@ const AddSurveyQuestionComponent = () => {
   const dataItemList = useSelectMenuReducer(dataItem, "name", "id");
 
   const handelLaunchAudions = () => {
-    // navigate("/app/campaign/create-survey?step_id=step_3");
+    navigate("/app/campaign/create-survey?step_id=3");
   };
 
   return (
@@ -70,34 +103,35 @@ const AddSurveyQuestionComponent = () => {
         <form className="" onSubmit={formHook.handleSubmit(onSubmit)}>
           {questionDetailsFormHook.fields.length > 0 &&
             questionDetailsFormHook?.fields?.map((filed, index) => {
+              console.log(filed, "filed");
               return (
-                <div key={index}>
+                <div key={index} className="mb-4">
                   <div className="mx-auto w-full divide-y  rounded-xl bg-white shadow-lg">
                     <Disclosure as="div" className="p-6" defaultOpen={true}>
                       <DisclosureButton className="group flex w-full items-center justify-between">
                         <span className="text-xl font-medium text-black group-data-[hover]:text-black/80">
-                          Question {filed.questionSkip}{" "}
-                          <span>
-                            <button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                questionDetailsFormHook.remove(index);
-                              }}
-                            >
-                              <TrashIcon className="w-4 h-4 text-gray-500" />
-                            </button>
-                          </span>
+                          Question {index + 1}
                         </span>
                         <ChevronDownIcon className="size-5 fill-black group-data-[hover]:fill-black/50 group-data-[open]:rotate-180" />
                       </DisclosureButton>
                       <DisclosurePanel className="mt-2 text-sm/5 ">
                         <div>
-                          <div className="w-full  mt-2">
+                          <div className="w-full  mt-4">
                             <Field>
-                              <Label className="text-xs font-medium text-[#333333]">
+                              <Label className="text-xs font-medium text-[#333333] items-center gap-1 flex">
                                 Ask your question{" "}
                                 <span className="text-red-400 text-xs">*</span>
+                                <span>
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      questionDetailsFormHook.remove(index);
+                                    }}
+                                  >
+                                    <TrashIcon className="w-3 h-3 text-red-500" />
+                                  </button>
+                                </span>
                               </Label>
 
                               <TextareaComponent
@@ -242,40 +276,67 @@ const AddSurveyQuestionComponent = () => {
                             <p className="text-sm font-medium text-[#333333] py-3">
                               Options
                             </p>
-                            <div className="flex flex-col gap-3">
-                              <div className="w-full shadow-sm border border-1 border-[#817f7f] h-10 rounded-lg flex justify-between items-center p-2">
-                                <p className="text-[#333] text-sm font-medium">
-                                  Bad
-                                </p>
-                                <p>
-                                  <XMarkIcon className="h-4 w-4" />
-                                </p>
-                              </div>
-                              <div className="w-full shadow-sm border border-1 border-[#817f7f] h-10 rounded-lg flex justify-between items-center p-2">
-                                <p className="text-[#333] text-sm font-medium">
-                                  Bad
-                                </p>
-                                <p>
-                                  <XMarkIcon className="h-4 w-4" />
-                                </p>
-                              </div>
-                              <div className="w-full shadow-sm border border-1 border-[#817f7f] h-10 rounded-lg flex justify-between items-center p-2">
-                                <p className="text-[#333] text-sm font-medium">
-                                  Bad
-                                </p>
-                                <p>
-                                  <XMarkIcon className="h-4 w-4" />
-                                </p>
-                              </div>
-                              <div className="w-full shadow-sm border border-1 border-[#817f7f] h-10 rounded-lg flex justify-between items-center p-2">
-                                <p className="text-[#333] text-sm font-medium">
-                                  Bad
-                                </p>
-                                <p>
-                                  <XMarkIcon className="h-4 w-4" />
-                                </p>
-                              </div>
-                            </div>
+
+                            {filed?.questionOption?.map((item, id) => {
+                              return (
+                                <div
+                                  className="flex items-center w-full relative mb-2"
+                                  key={`${id} +${item}`}
+                                >
+                                  <Input
+                                    className="text-xs w-full"
+                                    placeholder="Enter Options"
+                                    register={formHook.register(
+                                      `question_details.${index}.questionOption.${id}.option`,
+                                      {
+                                        required: true,
+                                      }
+                                    )}
+                                    fieldError={
+                                      formHook?.formState?.errors
+                                        ?.question_details
+                                        ? formHook?.formState?.errors
+                                            ?.question_details[index]
+                                            ?.questionOption[id]?.option
+                                          ? formHook?.formState?.errors
+                                              ?.question_details[index]
+                                              ?.questionOption[id]?.option
+                                          : null
+                                        : null
+                                    }
+                                    errorMessages={[
+                                      {
+                                        message: "Option is required",
+                                        type: "required",
+                                      },
+                                      // forAlphaNumericWithoutDot.errors
+                                    ]}
+                                  />
+                                  <p
+                                    className=" pr-3 items-center absolute right-0 pt-2"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      handleDeleteProductOptions(index, id);
+                                    }}
+                                  >
+                                    <XMarkIcon className="w-4 h-4" />
+                                  </p>
+                                </div>
+                              );
+                            })}
+
+                            <button
+                              className="mt-6 inline-flex items-center w-auto justify-center bg-gray-200  py-3 text-xs   text-[#333333]  rounded-xl px-4 gap-1"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleAddProductOptions(index);
+                              }}
+                            >
+                              <PlusIcon className="w-4 h-4" /> Add another
+                              option
+                            </button>
                           </div>
                         </div>
                       </DisclosurePanel>
@@ -285,7 +346,7 @@ const AddSurveyQuestionComponent = () => {
               );
             })}
           <div
-            className="bg-[#0C6243] mt-3 p-3 w-full rounded-lg flex justify-between items-center gap-2 cursor-pointer"
+            className="bg-[#0C6243] mt-6 p-3 w-full rounded-lg flex justify-between items-center gap-2 cursor-pointer"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -302,18 +363,19 @@ const AddSurveyQuestionComponent = () => {
           </div>
           <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
             <button
+              type="submit"
               onClick={() => handelLaunchAudions()}
-              className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+              className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
             >
               Save Changes
             </button>
             <button
               type="button"
-              className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+              className="mt-3 inline-flex w-full justify-center rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
               // onClick={() => setOpen(false)}
               data-autofocus
             >
-              Cancel
+              Go Back
             </button>
           </div>
         </form>
@@ -323,22 +385,3 @@ const AddSurveyQuestionComponent = () => {
 };
 
 export default AddSurveyQuestionComponent;
-
-{
-  /* <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
-                  <button
-                    type="submit"
-                    className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-                  >
-                    Save Changes
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                    // onClick={() => setOpen(false)}
-                    data-autofocus
-                  >
-                    Cancel
-                  </button>
-                </div> */
-}

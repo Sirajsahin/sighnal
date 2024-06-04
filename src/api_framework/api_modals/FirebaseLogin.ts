@@ -1,3 +1,7 @@
+export interface IUserAuthorization {
+  accessToken: string | null;
+  isValid: boolean;
+}
 export interface IDecodedAuthAccessToken {
   exp: number;
   iat: number;
@@ -30,4 +34,12 @@ export interface IFirebaseAPIConfig {
   readonly messagingSenderId: string;
   readonly appId: string;
   readonly measurementId: string;
+}
+
+// Create Login USER
+
+export interface ISignalUserCreateProps {
+  email: string;
+  password: string;
+  name: string;
 }

@@ -10,9 +10,9 @@ const CreateSurveyStepComponent = () => {
   return (
     <div>
       <SetpComponent />
-      {step_id === "step_1" && <CreateSurveyQuestionHeaderComponent />}
-      {step_id === "step_2" && <AddSurveyQuestionComponent />}
-      {step_id === "step_3" && <AudienceLaunchComponent />}
+      {step_id === "1" && <CreateSurveyQuestionHeaderComponent />}
+      {step_id === "2" && <AddSurveyQuestionComponent />}
+      {step_id === "3" && <AudienceLaunchComponent />}
     </div>
   );
 };

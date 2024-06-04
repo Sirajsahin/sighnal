@@ -1,18 +1,20 @@
+import { Toaster } from "react-hot-toast";
 import {
   createBrowserRouter,
   redirect,
   RouterProvider,
 } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
 
 import App from "../../App";
 
-import { useRouter } from "../hooks/useRouter";
-import Products from "@/components/Products";
-import CreateFeedbackGroupComponent from "@/components/routes/auth_routes/CreateFeedbackGroupComponent";
-import FeedbackCampaignSurveyComponent from "@/components/routes/auth_routes/FeedbackCampaignSurveyComponent";
-import CreateSurveyStepComponent from "@/components/routes/auth_routes/CreateSurveyStepComponent";
 import CampaignSurveyPageIndex from "@/components/rendarChildren/CampaignSurveyPageIndex";
+import CreateFeedbackGroupComponent from "@/components/routes/auth_routes/CreateFeedbackGroupComponent";
+import CreateSurveyStepComponent from "@/components/routes/auth_routes/CreateSurveyStepComponent";
+import FeedbackCampaignSurveyComponent from "@/components/routes/auth_routes/FeedbackCampaignSurveyComponent";
+import Login from "@/components/shared/Login";
+import { useRouter } from "../hooks/useRouter";
+import ThankyouPage from "@/components/routes/auth_routes/ThankyouPage";
+import QuestionPreviewComponent from "@/components/routes/auth_routes/QuestionPreviewComponent";
 
 export interface IRouterProps {}
 
@@ -20,22 +22,20 @@ const Router: React.FC<IRouterProps> = () => {
   const { getRouteKey } = useRouter();
 
   const redirectIfNotAuthenticated = () => {
-    // const accessToken = localStorage?.getItem(configuration?.localStorage?.ACCESS_TOKEN?.key)
-    const accessToken = true;
-
+    const accessToken = localStorage?.getItem("AuthToken");
     if (accessToken) {
       return true;
     } else {
-      return redirect(getRouteKey("LOGIN_PAGE", "url"));
+      return true;
+      // return redirect(getRouteKey("LOGIN_PAGE", "url"));
     }
   };
 
   const redirectIfLoggedIn = () => {
-    const accessToken = "";
+    const accessToken = localStorage?.getItem("AuthToken");
 
     if (accessToken) {
-      // return redirect(getRouteKey('SEARCH_CUSTOMER', 'url'))
-      return false;
+      return true;
     } else {
       return false;
     }
@@ -44,7 +44,7 @@ const Router: React.FC<IRouterProps> = () => {
   const router = createBrowserRouter([
     {
       path: getRouteKey("LANDING_PAGE", "url"),
-      element: <Products />,
+      element: <Login />,
       loader: () => {
         return redirect(getRouteKey("LOGIN_PAGE", "url"));
       },
@@ -57,6 +57,10 @@ const Router: React.FC<IRouterProps> = () => {
         {
           path: getRouteKey("HOME_PAGE", "path"),
           element: <CreateFeedbackGroupComponent />,
+        },
+        {
+          path: getRouteKey("THANKYOU", "path"),
+          element: <ThankyouPage />,
         },
 
         {
@@ -71,6 +75,10 @@ const Router: React.FC<IRouterProps> = () => {
               path: getRouteKey("CREATE_SURVEY", "path"),
               element: <CreateSurveyStepComponent />,
             },
+            {
+              path: getRouteKey("SURVEY_PREVIEW", "path"),
+              element: <QuestionPreviewComponent />,
+            },
           ],
         },
       ],
@@ -78,7 +86,7 @@ const Router: React.FC<IRouterProps> = () => {
     {
       path: getRouteKey("LOGIN_PAGE", "url"),
       loader: redirectIfLoggedIn,
-      element: <Products />,
+      element: <Login />,
     },
   ]);
 

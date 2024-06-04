@@ -6,19 +6,17 @@ const UIContainer: React.FC<React.PropsWithChildren<IUIContainerProps>> = (
   props
 ) => {
   return (
-    <>
-      <div className="flex w-full flex-row h-screen">
-        <SidebarComponent />
+    <div className="flex h-screen">
+      <SidebarComponent />
 
-        <div className="w-full flex-col h-screen">
-          <HeaderComponent />
+      <div className="flex flex-col w-full">
+        <HeaderComponent />
 
-          <div className="px-4 sm:px-2 lg:px-3  overflow-y-auto h-full ">
-            {props?.children}
-          </div>
+        <div className="flex-1 mx-6 my-6 sm:px-2 lg:px-3 overflow-auto">
+          {props?.children}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
