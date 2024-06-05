@@ -102,7 +102,7 @@ const AudienceLaunchComponent = () => {
     navigate("/app/thankyou");
   };
   const handelOpenPreview = () => {
-    navigate("/app/campaign/create-survey/preview");
+    navigate("/app/campaign/survey-preview?step_id=1");
   };
 
   return (

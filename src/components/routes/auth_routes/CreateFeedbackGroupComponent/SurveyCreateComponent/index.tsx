@@ -20,7 +20,7 @@ const data = [
 ];
 const SurveyCreateComponent = () => {
   return (
-    <div className=" flex gap-4">
+    <div className=" grid grid-cols-4 gap-4">
       {data.map((val, id) => {
         return (
           <div key={id}>

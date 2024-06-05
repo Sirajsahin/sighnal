@@ -6,6 +6,7 @@ export const ROUTES_MAPPINGS = {
   "/": "LANDING_PAGE",
   "/app": "ROOT",
   "/app/login": "LOGIN_PAGE",
+  "/app/org-details": "ORGANAIZATION_DETAILS",
   "/app/home": "HOME_PAGE",
   "/app/thankyou": "THANKYOU",
   "/app/campaign": "CAMPAIGN",
@@ -55,6 +56,14 @@ export const NAVIGATION_ROUTES: IRoutesDefined = {
     icon: "HiOutlineHome",
     url: "/app/invalid-login",
     path: "invalid-login",
+    children: {},
+  },
+  ORGANAIZATION_DETAILS: {
+    id: "ORGANAIZATION_DETAILS",
+    title: "Invalid Login",
+    icon: "HiOutlineHome",
+    url: "/app/org-details",
+    path: "org-details",
     children: {},
   },
   HOME_PAGE: {

@@ -10,6 +10,7 @@ import Input from "@/components/ui/Input";
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { Field, Label } from "@headlessui/react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export interface ICreateGroupFromFields {
   groupName: string;
@@ -25,6 +26,7 @@ const CreateSurveyModal: React.FC<IFeedbackCreateModalProps> = ({
     defaultValues: {},
   });
 
+  const navigate = useNavigate();
   /* Actions and Handlers */
   const validateConditionalFormFields = (data: ICreateGroupFromFields) => {
     let isValid = false;
@@ -41,6 +43,7 @@ const CreateSurveyModal: React.FC<IFeedbackCreateModalProps> = ({
     }
     if (data && isFormSubmissionValid) {
       console.log(data, "data");
+      navigate("/app/campaign/campaign-list");
     }
   };
 

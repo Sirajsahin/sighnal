@@ -32,6 +32,7 @@ export type RouteKeys =
   | "LANDING_PAGE"
   | "ROOT"
   | "LOGIN_PAGE"
+  | "ORGANAIZATION_DETAILS"
   | "HOME_PAGE"
   | "CAMPAIGN"
   | "CAMPAIGN_PAGE"

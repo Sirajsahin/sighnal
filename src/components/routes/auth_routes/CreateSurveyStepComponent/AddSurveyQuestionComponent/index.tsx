@@ -88,14 +88,15 @@ const AddSurveyQuestionComponent = () => {
   const onSubmit = (data: ICreateSurveyFromFields) => {
     if (data) {
       console.log(data, "data");
+      navigate("/app/campaign/create-survey?step_id=3");
     }
   };
 
   const dataItemList = useSelectMenuReducer(dataItem, "name", "id");
 
-  const handelLaunchAudions = () => {
-    navigate("/app/campaign/create-survey?step_id=3");
-  };
+  // const handelLaunchAudions = () => {
+  //   navigate("/app/campaign/create-survey?step_id=3");
+  // };
 
   return (
     <div className=" flex justify-center items-center  mr-auto my-3 ">
@@ -364,7 +365,7 @@ const AddSurveyQuestionComponent = () => {
           <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
             <button
               type="submit"
-              onClick={() => handelLaunchAudions()}
+              // onClick={() => handelLaunchAudions()}
               className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
             >
               Save Changes

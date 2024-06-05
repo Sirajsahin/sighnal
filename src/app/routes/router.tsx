@@ -11,10 +11,10 @@ import CampaignSurveyPageIndex from "@/components/rendarChildren/CampaignSurveyP
 import CreateFeedbackGroupComponent from "@/components/routes/auth_routes/CreateFeedbackGroupComponent";
 import CreateSurveyStepComponent from "@/components/routes/auth_routes/CreateSurveyStepComponent";
 import FeedbackCampaignSurveyComponent from "@/components/routes/auth_routes/FeedbackCampaignSurveyComponent";
+import QuestionPreviewComponent from "@/components/routes/auth_routes/QuestionPreviewComponent";
+import ThankyouPage from "@/components/routes/auth_routes/ThankyouPage";
 import Login from "@/components/shared/Login";
 import { useRouter } from "../hooks/useRouter";
-import ThankyouPage from "@/components/routes/auth_routes/ThankyouPage";
-import QuestionPreviewComponent from "@/components/routes/auth_routes/QuestionPreviewComponent";
 
 export interface IRouterProps {}
 
@@ -23,11 +23,12 @@ const Router: React.FC<IRouterProps> = () => {
 
   const redirectIfNotAuthenticated = () => {
     const accessToken = localStorage?.getItem("AuthToken");
-    if (accessToken) {
+
+    if (accessToken !== "Bearer undefined") {
       return true;
     } else {
-      return true;
-      // return redirect(getRouteKey("LOGIN_PAGE", "url"));
+      // return false;
+      return redirect(getRouteKey("LOGIN_PAGE", "url"));
     }
   };
 

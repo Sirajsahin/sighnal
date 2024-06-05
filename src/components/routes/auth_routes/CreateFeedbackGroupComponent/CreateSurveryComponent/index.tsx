@@ -3,7 +3,7 @@ const CreateSurveryComponent = () => {
   const navigate = useNavigate();
 
   const handelRouteSurvey = () => {
-    navigate(`/app/campaign/create-survey?step_id=step_1`);
+    navigate(`/app/campaign/create-survey?step_id=1`);
   };
   return (
     <div className="mt-14 flex justify-center items-center gap-2 flex-col">

@@ -4,7 +4,7 @@ const StatsCardComponent: React.FC<IFeedbackStatsComponentProps> = ({
   cardValue,
 }) => {
   return (
-    <div className=" p-3 bg-[#F5F5F5] w-56 rounded-xl">
+    <div className=" p-4 bg-[#F5F5F5] w-auto rounded-xl">
       <div className="flex  items-center gap-3">
         <div className="bg-white h-14 w-14 rounded-xl"></div>
         <div className="flex flex-col gap-1">
