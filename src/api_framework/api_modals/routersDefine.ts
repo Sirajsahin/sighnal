@@ -38,6 +38,7 @@ export type RouteKeys =
   | "CAMPAIGN_PAGE"
   | "CREATE_SURVEY"
   | "THANKYOU"
+  | "USER_PROFILE"
   | "SURVEY_PREVIEW";
 
 export type RouterRoutes = {

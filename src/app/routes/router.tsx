@@ -15,6 +15,7 @@ import QuestionPreviewComponent from "@/components/routes/auth_routes/QuestionPr
 import ThankyouPage from "@/components/routes/auth_routes/ThankyouPage";
 import Login from "@/components/shared/Login";
 import { useRouter } from "../hooks/useRouter";
+import UserProfile from "@/components/shared/UserProfile";
 
 export interface IRouterProps {}
 
@@ -58,6 +59,10 @@ const Router: React.FC<IRouterProps> = () => {
         {
           path: getRouteKey("HOME_PAGE", "path"),
           element: <CreateFeedbackGroupComponent />,
+        },
+        {
+          path: getRouteKey("USER_PROFILE", "path"),
+          element: <UserProfile />,
         },
         {
           path: getRouteKey("THANKYOU", "path"),

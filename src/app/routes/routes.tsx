@@ -8,6 +8,7 @@ export const ROUTES_MAPPINGS = {
   "/app/login": "LOGIN_PAGE",
   "/app/org-details": "ORGANAIZATION_DETAILS",
   "/app/home": "HOME_PAGE",
+  "/app/user-profile": "USER_PROFILE",
   "/app/thankyou": "THANKYOU",
   "/app/campaign": "CAMPAIGN",
   "/app/campaign/campaign-list": "CAMPAIGN_PAGE",
@@ -72,6 +73,14 @@ export const NAVIGATION_ROUTES: IRoutesDefined = {
     icon: "MdOutlineDashboard",
     url: "/app/home",
     path: "home",
+    children: {},
+  },
+  USER_PROFILE: {
+    id: "USER_PROFILE",
+    title: "homepage",
+    icon: "MdOutlineDashboard",
+    url: "/app/user-profile",
+    path: "user-profile",
     children: {},
   },
   THANKYOU: {
