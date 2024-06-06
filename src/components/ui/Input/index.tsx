@@ -22,7 +22,7 @@ const Input: React.FC<IInput> = ({
 
   return (
     <div className={clsx("", className)}>
-      <div className="w-full relative mt-2 flex justify-start items-center rounded-md border ">
+      <div className="w-full relative  flex justify-start items-center rounded-md border ">
         {props?.startIcon && (
           <div className="pointer-events-none  inset-y-0 left-0 flex justify-center items-center pl-2 pr-2">
             {props?.startIcon}

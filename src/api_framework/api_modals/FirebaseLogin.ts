@@ -43,3 +43,21 @@ export interface ISignalUserCreateProps {
   password: string;
   name: string;
 }
+
+// Signup Response
+export interface IUserSignUpResponseData {
+  user_id: string;
+  created_at: number | null;
+  updated_at: number | null;
+  name: string;
+  email: string;
+  password: string;
+  is_deleted: boolean;
+  is_email_verified: boolean;
+  status: string;
+  auth_token: string;
+}
+export interface IUserSignUpResponse {
+  status: boolean;
+  data: IUserSignUpResponseData | null;
+}

@@ -44,35 +44,40 @@ const UserProfile = () => {
       //   createUserRole(constructedData);
     }
   };
-  const dataItemList = [];
+  const dataItemList = [
+    { id: "1", title: "siraj" },
+    { id: "2", title: "siraj" },
+    { id: "3", title: "siraj" },
+  ];
+
   return (
-    <div>
+    <div className="grid grid-cols-12">
       <form
         action="#"
         method="POST"
-        className="space-y-6"
+        className="space-y-4 col-span-10"
         onSubmit={formHook.handleSubmit(onSubmit)}
       >
-        <div className="flex gap-3 items-center my-6">
-          <div className="h-28 w-128 rounded-2xl bg-[#D9D9D9] items-center flex justify-center"></div>
+        <div className="flex gap-3 items-center my-4">
+          <div className="h-20 w-20 rounded-full bg-[#D9D9D9] items-center flex justify-center"></div>
           <div>
-            <p className="text-xs text-[#3333] font-medium">
+            <p className="text-sm text-[#333333] font-bold">
               Upload Company Logo
             </p>
-            <p className="text-xs text-[#475467] py-2">
+            <p className="text-xs text-[#475467] py-1 font-medium">
               Recommended size: 400x400px
             </p>
           </div>
         </div>
         <div className="my-6">
-          <p className="text-base text-[#3333] font-bold">
+          <p className="text-base text-[#333333] font-bold">
             Your Personal details
           </p>
-          <p className="text-sm text-[#475467] py-2">
+          <p className="text-sm text-[#475467] py-1">
             Please provide your personal details, they will be used to complete
             your profile on Sighnal.
           </p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6 items-center mt-4">
             <Input
               className="text-xs"
               placeholder="Enter Your Name"
@@ -184,15 +189,15 @@ const UserProfile = () => {
             />
           </div>
         </div>
-        <div className="my-6">
-          <p className="text-base text-[#3333] font-bold">
+        <div className="pt-12">
+          <p className="text-base text-[#333333] font-bold">
             Your Organisation details
           </p>
-          <p className="text-sm text-[#475467] py-2">
+          <p className="text-sm text-[#475467] py-1">
             Please provide your Organisation information accurately, It will be
             used in your communications on the platform.
           </p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6 items-center mt-4">
             <Input
               className="text-xs"
               placeholder="Enter Your Org Name"

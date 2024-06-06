@@ -2,6 +2,11 @@
 const path = require("path");
 
 module.exports = {
+  devServer: {
+    headers: {
+      "Cross-Origin-Embedder-Policy": "unsafe-none",
+    },
+  },
   webpack: {
     alias: {
       "@": path.resolve(__dirname, "src/"),

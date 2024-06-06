@@ -3,6 +3,7 @@ import { useUserCreateAPI } from "@/app/hooks/api_hooks/user/useUserCreateAPI";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useForm } from "react-hook-form";
 import { LuLogOut } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 import Input from "../ui/Input";
 import SearchableSelectMenu from "../ui/SearchableSelectMenu";
 
@@ -12,6 +13,11 @@ export interface ICreateGroupFromFields {
   org_size: string;
   org_detp: string;
 }
+const dataItemList = [
+  { id: "1", title: "siraj" },
+  { id: "2", title: "siraj" },
+  { id: "3", title: "siraj" },
+];
 
 export default function Organaization() {
   const formHook = useForm<ICreateGroupFromFields>({
@@ -28,6 +34,9 @@ export default function Organaization() {
     }
     return isValid;
   };
+
+  const navigate = useNavigate();
+
   const onSubmit = (data: ICreateGroupFromFields) => {
     const isFormSubmissionValid = validateConditionalFormFields(data);
     if (!isFormSubmissionValid) {
@@ -39,12 +48,11 @@ export default function Organaization() {
         email: data.country,
         password: data.org_size,
       };
-
+      navigate("/app/home");
       createUserRole(constructedData);
     }
   };
 
-  const dataItemList = [];
   return (
     <div>
       <div className="grid grid-cols-3 h-screen flex-1 overflow-y-auto">

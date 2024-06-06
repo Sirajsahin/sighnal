@@ -14,8 +14,8 @@ import FeedbackCampaignSurveyComponent from "@/components/routes/auth_routes/Fee
 import QuestionPreviewComponent from "@/components/routes/auth_routes/QuestionPreviewComponent";
 import ThankyouPage from "@/components/routes/auth_routes/ThankyouPage";
 import Login from "@/components/shared/Login";
-import { useRouter } from "../hooks/useRouter";
 import UserProfile from "@/components/shared/UserProfile";
+import { useRouter } from "../hooks/useRouter";
 
 export interface IRouterProps {}
 
@@ -25,10 +25,9 @@ const Router: React.FC<IRouterProps> = () => {
   const redirectIfNotAuthenticated = () => {
     const accessToken = localStorage?.getItem("AuthToken");
 
-    if (accessToken !== "Bearer undefined") {
+    if (accessToken) {
       return true;
     } else {
-      // return false;
       return redirect(getRouteKey("LOGIN_PAGE", "url"));
     }
   };

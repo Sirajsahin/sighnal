@@ -6,9 +6,10 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 
 const userNavigation = [
-  { name: "Your profile", href: "#" },
+  { name: "Your profile", href: "/app/user-profile" },
   { name: "Sign out", href: "#" },
 ];
 
@@ -17,6 +18,7 @@ function classNames(...classes: any[]) {
 }
 
 export default function HeaderComponent() {
+  const navigate = useNavigate();
   return (
     <div className="">
       <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
@@ -99,15 +101,15 @@ export default function HeaderComponent() {
                   {userNavigation.map((item) => (
                     <Menu.Item key={item.name}>
                       {({ active }) => (
-                        <a
-                          href={item.href}
+                        <div
+                          onClick={() => navigate("/app/user-profile")}
                           className={classNames(
                             active ? "bg-gray-50" : "",
                             "block px-3 py-1 text-sm leading-6 text-gray-900"
                           )}
                         >
                           {item.name}
-                        </a>
+                        </div>
                       )}
                     </Menu.Item>
                   ))}

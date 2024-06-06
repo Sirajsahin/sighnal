@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import Input from "../ui/Input";
 import GoogleSigninButton from "./GoogleSignInButton";
 import Organaization from "./Organaization";
+import { useEffect } from "react";
 
 export interface ICreateGroupFromFields {
   name: string;
@@ -41,11 +42,16 @@ export default function Login() {
       createUserRole(constructedData);
     }
   };
-  const flage = true;
+  useEffect(()=>{
+    const accessToken = localStorage?.getItem("AuthToken") ? true : false;
+    console.log(accessToken)
+  },[])
+  const accessToken = localStorage?.getItem("AuthToken") ? true : false;
+
   return (
     <>
       <div className="flex h-screen flex-1 overflow-y-auto">
-        {flage ? (
+        {accessToken ? (
           <Organaization />
         ) : (
           <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">

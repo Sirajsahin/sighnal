@@ -1,3 +1,4 @@
+import { ROUTES } from "@/app/routes/routes";
 import { FirebaseError, initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider,
@@ -7,39 +8,31 @@ import {
 } from "firebase/auth";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom"; // Use 'react-router-dom' for navigation
-import envConfig from "./envConfig"; // Ensure the path is correct
-
-import { ROUTES } from "@/app/routes/routes";
+import { useNavigate } from "react-router-dom";
+import envConfig from "./envConfig";
 import { useAuthMiddlewares } from "./useAuthMiddlewares";
 
 export const useFirebaseLogin = () => {
   const { validateAccessToken } = useAuthMiddlewares();
   const [accessToken, setAccessToken] = useState<any>(null);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   const app = initializeApp({ ...envConfig.firebase });
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // Methods
-  //1. Signout Method
+  // Signout Method
   const clientSignOut = () => {
     try {
       signOut(auth);
-      try {
-        // Clear all local and session storage and cookies
-        localStorage.clear();
-        sessionStorage.clear();
-        document.cookie.split(";").forEach(function (cookie) {
-          const eqPos = cookie.indexOf("=");
-          const name =
-            eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
-          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-        });
-      } catch {
-        // Handle any additional errors
-      }
+      localStorage.clear();
+      sessionStorage.clear();
+      document.cookie.split(";").forEach((cookie) => {
+        const eqPos = cookie.indexOf("=");
+        const name =
+          eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      });
       toast.success("Successfully Logged Out");
     } catch {
       toast.error("Error while logging out");
@@ -53,6 +46,7 @@ export const useFirebaseLogin = () => {
     }
   };
 
+  // Sign-in with Google
   const signInWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -62,8 +56,7 @@ export const useFirebaseLogin = () => {
         window.location.replace(ROUTES.LOGIN_PAGE.url);
         return null;
       }
-      const accessToken = result?.user;
-      setAccessToken(accessToken);
+      setAccessToken(result.user);
       return result.user;
     } catch (error) {
       const firebaseError = error as FirebaseError;
