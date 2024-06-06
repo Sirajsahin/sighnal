@@ -27,12 +27,14 @@ export const useFirebaseLogin = () => {
       signOut(auth);
       localStorage.clear();
       sessionStorage.clear();
+
       document.cookie.split(";").forEach((cookie) => {
         const eqPos = cookie.indexOf("=");
         const name =
           eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
         document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
       });
+      navigate("/app/login/sign-in");
       toast.success("Successfully Logged Out");
     } catch {
       toast.error("Error while logging out");
@@ -52,13 +54,22 @@ export const useFirebaseLogin = () => {
       const result = await signInWithPopup(auth, provider);
       const credential = GoogleAuthProvider.credentialFromResult(result);
       if (!credential?.accessToken || !result?.user) {
+        localStorage.clear();
+        sessionStorage.clear();
         toast.error("Google authentication error.");
         window.location.replace(ROUTES.LOGIN_PAGE.url);
         return null;
       }
+
+      localStorage.setItem("displayName", result?.user?.displayName);
+      localStorage.setItem("email", result?.user?.email);
+      localStorage.setItem("photoURL", result?.user?.photoURL);
+
       setAccessToken(result.user);
       return result.user;
     } catch (error) {
+      localStorage.clear();
+      sessionStorage.clear();
       const firebaseError = error as FirebaseError;
       toast.error(`Error with login: ${firebaseError.message}`);
       navigate(ROUTES.LOGIN_PAGE.url);

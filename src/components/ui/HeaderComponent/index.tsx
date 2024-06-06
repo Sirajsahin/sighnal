@@ -1,3 +1,4 @@
+import { useFirebaseLogin } from "@/app/hooks/api_hooks/auth/useFirebaseLogin";
 import { Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -8,17 +9,13 @@ import {
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 
-const userNavigation = [
-  { name: "Your profile", href: "/app/user-profile" },
-  { name: "Sign out", href: "#" },
-];
-
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function HeaderComponent() {
   const navigate = useNavigate();
+  const { clientSignOut } = useFirebaseLogin();
   return (
     <div className="">
       <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
@@ -72,15 +69,16 @@ export default function HeaderComponent() {
                 <span className="sr-only">Open user menu</span>
                 <img
                   className="h-8 w-8 rounded-full bg-gray-50"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  src={localStorage.getItem("photoURL")}
                   alt=""
                 />
+
                 <span className="hidden lg:flex lg:items-center">
                   <span
-                    className="ml-4 text-sm font-semibold leading-6 text-gray-900"
+                    className="ml-4 text-sm font-semibold leading-6 text-gray-900 capitalize"
                     aria-hidden="true"
                   >
-                    Tom Cook
+                    {localStorage.getItem("displayName")}
                   </span>
                   <ChevronDownIcon
                     className="ml-2 h-5 w-5 text-gray-400"
@@ -98,21 +96,32 @@ export default function HeaderComponent() {
                 leaveTo="transform opacity-0 scale-95"
               >
                 <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                  {userNavigation.map((item) => (
-                    <Menu.Item key={item.name}>
-                      {({ active }) => (
-                        <div
-                          onClick={() => navigate("/app/user-profile")}
-                          className={classNames(
-                            active ? "bg-gray-50" : "",
-                            "block px-3 py-1 text-sm leading-6 text-gray-900"
-                          )}
-                        >
-                          {item.name}
-                        </div>
-                      )}
-                    </Menu.Item>
-                  ))}
+                  <Menu.Item>
+                    {({ active }) => (
+                      <div
+                        onClick={() => navigate("/app/user-profile")}
+                        className={classNames(
+                          active ? "bg-gray-50" : "",
+                          "block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer"
+                        )}
+                      >
+                        User Profile
+                      </div>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <div
+                        onClick={() => clientSignOut()}
+                        className={classNames(
+                          active ? "bg-gray-50" : "",
+                          "block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer"
+                        )}
+                      >
+                        Logout
+                      </div>
+                    )}
+                  </Menu.Item>
                 </Menu.Items>
               </Transition>
             </Menu>

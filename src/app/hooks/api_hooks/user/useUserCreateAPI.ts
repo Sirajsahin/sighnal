@@ -16,7 +16,7 @@ export const useUserCreateAPI = () => {
 
   const execute = useCallback(async (paramProps: ISignalUserCreateProps) => {
     try {
-      const accessToken = "";
+      const accessToken = localStorage.getItem("AuthToken");
       await axios
         .post(USER_LOGIN_APIS.CREATE_USER_API.baseURL ?? "", paramProps, {
           headers: {

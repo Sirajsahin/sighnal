@@ -1,8 +1,4 @@
 // import { ROTA_APIS } from "@/api_framework/api_config";
-import {
-  IRotaManagementRotaCategoryData,
-  IRotaManagementRotaCategoryResponse,
-} from "@/api_framework/api_modals/Rota";
 
 // import { useAppDispatch } from "@/app_redux/hooks/root_hook";
 
@@ -11,9 +7,7 @@ import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 export const useCategoryListAPI = () => {
-  const [categoryList, setCategoryList] = useState<
-    IRotaManagementRotaCategoryData[]
-  >([]);
+  const [categoryList, setCategoryList] = useState<[]>([]);
 
   // const dispatch = useAppDispatch();
 
@@ -38,7 +32,7 @@ export const useCategoryListAPI = () => {
             },
           }
         )
-        .then((res: AxiosResponse<IRotaManagementRotaCategoryResponse>) => {
+        .then((res: AxiosResponse<any>) => {
           if (res.data.status === true) {
             setCategoryList(res.data.data);
             // dispatch(setCategory({ data:  }));

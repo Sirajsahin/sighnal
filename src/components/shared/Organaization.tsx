@@ -1,11 +1,14 @@
-import { ISignalUserCreateProps } from "@/api_framework/api_modals/FirebaseLogin";
-import { useUserCreateAPI } from "@/app/hooks/api_hooks/user/useUserCreateAPI";
+import { IUserOrgCreateProps } from "@/api_framework/api_modals/user";
+import { useUserCountyListAPI } from "@/app/hooks/api_hooks/user/useUserCountyListAPI";
+import { useUserOrgCreateAPI } from "@/app/hooks/api_hooks/user/useUserOrgCreateAPI";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { LuLogOut } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import Input from "../ui/Input";
 import SearchableSelectMenu from "../ui/SearchableSelectMenu";
+import { useSelectMenuReducer } from "../ui/useSelectMenuReducer";
 
 export interface ICreateGroupFromFields {
   name: string;
@@ -24,7 +27,9 @@ export default function Organaization() {
     defaultValues: {},
   });
 
-  const { execute: createUserRole } = useUserCreateAPI();
+  const { execute: createUserOrg } = useUserOrgCreateAPI();
+  const { execute: fetcCountry, countyList } = useUserCountyListAPI();
+
   /* Actions and Handlers */
   const validateConditionalFormFields = (data: ICreateGroupFromFields) => {
     let isValid = false;
@@ -37,19 +42,27 @@ export default function Organaization() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    fetcCountry();
+  }, []);
+  
+  const countyListItem = useSelectMenuReducer(countyList, "name", "id");
   const onSubmit = (data: ICreateGroupFromFields) => {
     const isFormSubmissionValid = validateConditionalFormFields(data);
     if (!isFormSubmissionValid) {
       return;
     }
     if (data && isFormSubmissionValid) {
-      const constructedData: ISignalUserCreateProps = {
-        name: data.name,
-        email: data.country,
-        password: data.org_size,
+      const constructedData: IUserOrgCreateProps = {
+        business_name: data?.name,
+        country: data.country,
+        department: data.org_detp,
       };
-      navigate("/app/home");
-      createUserRole(constructedData);
+      createUserOrg(constructedData).then(({ status }) => {
+        if (status) {
+          navigate("/app/home");
+        }
+      });
     }
   };
 
@@ -109,7 +122,7 @@ export default function Organaization() {
                     <SearchableSelectMenu
                       errorMessages={[
                         {
-                          message: " theme is required",
+                          message: " Country is required",
                           type: "required",
                         },
                       ]}
@@ -122,13 +135,13 @@ export default function Organaization() {
                       register={formHook.register(`country`, {
                         required: true,
                       })}
-                      selectItems={dataItemList}
-                      placeholder="Select Parent Theme"
+                      selectItems={countyListItem}
+                      placeholder="Select Country"
                       showTooltips={true}
                       showTypedErrors={true}
                       showDropdownIcon={true}
                       defaultSelected={
-                        dataItemList?.filter(
+                        countyListItem?.filter(
                           (oc) => oc.title === formHook.watch(`country`)
                         )[0]
                       }
@@ -136,27 +149,7 @@ export default function Organaization() {
                       className="text-gray-800 "
                       containerClassName="w-full"
                     />
-                    <div>
-                      <div className="my-6">
-                        <Input
-                          className="text-xs"
-                          type="text"
-                          placeholder="Organisation Size"
-                          register={formHook.register("org_size", {
-                            required: true,
-                            // ...forAlphaNumericWithoutDot.validations
-                          })}
-                          fieldError={formHook.formState.errors.org_size}
-                          errorMessages={[
-                            {
-                              message: "Group Name is required",
-                              type: "required",
-                            },
-                            // forAlphaNumericWithoutDot.errors
-                          ]}
-                        />
-                      </div>
-                    </div>
+
                     <div className="my-6">
                       <SearchableSelectMenu
                         errorMessages={[

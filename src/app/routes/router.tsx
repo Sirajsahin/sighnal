@@ -101,7 +101,7 @@ const Router: React.FC<IRouterProps> = () => {
           element: <Login />,
         },
         {
-          path: getRouteKey("ORG_PAGE", "path"),
+          path: getRouteKey("ONBOARD_PAGE", "path"),
           element: <Organaization />,
         },
       ],

@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 
 export const useUserAuthenticationTokenAPI = () => {
   const [logStatus, setLogStatus] = useState<boolean>(false);
+  const [businessId, setBusinessId] = useState<boolean>(false);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -23,6 +25,11 @@ export const useUserAuthenticationTokenAPI = () => {
         });
 
         if (response.status === 200) {
+          if (response?.data?.data?.business_id) {
+            setBusinessId(true);
+          } else {
+            setBusinessId(false);
+          }
           dispatch(setUserValid({ isValid: true }));
           dispatch(
             setAuthorization({
@@ -38,6 +45,7 @@ export const useUserAuthenticationTokenAPI = () => {
         }
       } catch (e) {
         const error = e as AxiosError;
+        setBusinessId(false);
         setLogStatus(false);
         dispatch(setUserValid({ isValid: false }));
         dispatch(
@@ -53,5 +61,5 @@ export const useUserAuthenticationTokenAPI = () => {
     [dispatch, navigate]
   );
 
-  return { logStatus, callback };
+  return { logStatus, callback, businessId };
 };

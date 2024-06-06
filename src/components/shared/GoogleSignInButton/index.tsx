@@ -9,8 +9,11 @@ import { IGoogleSigninButtonProps } from "./interface";
 const GoogleSigninButton: React.FC<IGoogleSigninButtonProps> = (_props) => {
   const { signInWithGoogle, accessToken } = useFirebaseLogin();
   const { getRouteKey } = useRouter();
-  const { callback: IAMAuthorizationAPI, logStatus } =
-    useUserAuthenticationTokenAPI();
+  const {
+    callback: IAMAuthorizationAPI,
+    logStatus,
+    businessId,
+  } = useUserAuthenticationTokenAPI();
 
   const navigate = useNavigate();
 
@@ -21,10 +24,14 @@ const GoogleSigninButton: React.FC<IGoogleSigninButtonProps> = (_props) => {
   }, [accessToken]);
 
   useEffect(() => {
-    if (logStatus === true) {
-      navigate(getRouteKey("ORG_PAGE", "url"));
+    if (logStatus) {
+      if (logStatus && businessId) {
+        navigate(getRouteKey("HOME_PAGE", "url"));
+      } else {
+        navigate(getRouteKey("ONBOARD_PAGE", "url"));
+      }
     }
-  }, [logStatus]);
+  }, [logStatus, businessId]);
 
   return (
     <button
