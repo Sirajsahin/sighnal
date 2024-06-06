@@ -1,8 +1,10 @@
+import { ISurveyCreateProps } from "@/api_framework/api_modals/group";
+import { useSurveyCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyCreateAPI";
 import Input from "@/components/ui/Input";
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { Field, Label } from "@headlessui/react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export interface ICreateSurveyFromFields {
   surveyTitle: string;
@@ -15,6 +17,12 @@ const CreateSurveyQuestionHeaderComponent = () => {
   });
 
   const navigate = useNavigate();
+  const { execute: createSurvey } = useSurveyCreateAPI();
+
+  const [params, _setparams] = useSearchParams();
+
+  const buisnessId = params.get("business_id");
+  const groupId = params.get("group_id");
 
   /* Actions and Handlers */
   const validateConditionalFormFields = (data: ICreateSurveyFromFields) => {
@@ -25,13 +33,26 @@ const CreateSurveyQuestionHeaderComponent = () => {
     }
     return isValid;
   };
+
   const onSubmit = (data: ICreateSurveyFromFields) => {
     const isFormSubmissionValid = validateConditionalFormFields(data);
     if (!isFormSubmissionValid) {
       return;
     }
     if (data && isFormSubmissionValid) {
-      navigate("/app/campaign/create-survey?step_id=2");
+      const constructedData: ISurveyCreateProps = {
+        business_id: buisnessId,
+        name: data.surveyTitle,
+        description: data.surveyDescription,
+        group_id: groupId,
+      };
+      createSurvey(constructedData).then(({ status }) => {
+        if (status) {
+          navigate(
+            `/app/campaign/create-survey?step_id=2&business_id=${buisnessId}&group_id=${groupId}`
+          );
+        }
+      });
     }
   };
 

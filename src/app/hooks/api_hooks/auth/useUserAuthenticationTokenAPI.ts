@@ -26,9 +26,14 @@ export const useUserAuthenticationTokenAPI = () => {
 
         if (response.status === 200) {
           if (response?.data?.data?.business_id) {
+            localStorage.setItem(
+              "business_id",
+              response?.data?.data?.business_id
+            );
             setBusinessId(true);
           } else {
             setBusinessId(false);
+            localStorage.setItem("business_id", null);
           }
           dispatch(setUserValid({ isValid: true }));
           dispatch(

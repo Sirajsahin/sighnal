@@ -1,4 +1,5 @@
 import { IUserOrgCreateProps } from "@/api_framework/api_modals/user";
+import { useFirebaseLogin } from "@/app/hooks/api_hooks/auth/useFirebaseLogin";
 import { useUserCountyListAPI } from "@/app/hooks/api_hooks/user/useUserCountyListAPI";
 import { useUserOrgCreateAPI } from "@/app/hooks/api_hooks/user/useUserOrgCreateAPI";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
@@ -27,6 +28,7 @@ export default function Organaization() {
     defaultValues: {},
   });
 
+  const { clientSignOut } = useFirebaseLogin();
   const { execute: createUserOrg } = useUserOrgCreateAPI();
   const { execute: fetcCountry, countyList } = useUserCountyListAPI();
 
@@ -45,7 +47,7 @@ export default function Organaization() {
   useEffect(() => {
     fetcCountry();
   }, []);
-  
+
   const countyListItem = useSelectMenuReducer(countyList, "name", "id");
   const onSubmit = (data: ICreateGroupFromFields) => {
     const isFormSubmissionValid = validateConditionalFormFields(data);
@@ -199,7 +201,10 @@ export default function Organaization() {
         </div>
         <div className="">
           <div className="flex justify-end my-4 pr-6">
-            <button className=" border border-1  px-4 py-2 rounded-md text-sm hover:bg-slate-500 hover:text-white flex gap-1 items-center">
+            <button
+              className=" border border-1  px-4 py-2 rounded-md text-sm hover:bg-slate-500 hover:text-white flex gap-1 items-center"
+              onClick={() => clientSignOut()}
+            >
               <LuLogOut />
               Logout
             </button>

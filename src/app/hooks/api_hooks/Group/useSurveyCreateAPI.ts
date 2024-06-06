@@ -1,49 +1,46 @@
 // import { ROTA_APIS } from "@/api_framework/api_config";
 import { USER_LOGIN_APIS } from "@/api_framework/api_config";
-import { IUserOrgCreateProps } from "@/api_framework/api_modals/user";
+import {
+  IgroupDetailsResponse,
+  ISurveyCreateProps,
+} from "@/api_framework/api_modals/group";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
 type InventoryTaxCreateAPIResponse = { status: boolean; message: string };
 
-export const useUserOrgCreateAPI = () => {
-  const execute = useCallback(async (paramProps: IUserOrgCreateProps) => {
+export const useSurveyCreateAPI = () => {
+  const execute = useCallback(async (paramProps: ISurveyCreateProps) => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
       const response: InventoryTaxCreateAPIResponse = await axios
-        .post(USER_LOGIN_APIS.USER_ORG_CREATE_API.baseURL ?? "", paramProps, {
+        .post(USER_LOGIN_APIS.SURVEY_CREATE_API.baseURL ?? "", paramProps, {
           headers: {
             Authorization: `${accessToken}`,
           },
         })
-        .then((res: AxiosResponse<any>) => {
-          console.log(res, "res");
+        .then((res: AxiosResponse<IgroupDetailsResponse>) => {
           if (res.data.status === true) {
-            localStorage.setItem("business_id", res?.data?.data?.business_id);
-            toast.success("User Onboard Successful");
-
-            return { status: true, message: "" };
+            toast.success("Survey Created Successful");
+            return { status: true, message: res.data?.data?.group_id };
           } else {
-            localStorage.setItem("business_id", null);
-            toast.error("User Onboard Faild");
-            return { status: false, message: "" };
+            toast.error("Survey Created Faild");
+            return { status: false, message: null };
           }
         })
         .catch((e: AxiosError) => {
-          localStorage.setItem("business_id", null);
-          console.log(e, "res");
           if (e.code === "ERR_BAD_REQUEST") {
-            toast.error("User Onboard Faild");
-            return { status: false, message: "" };
+            toast.error("Survey Created Faild");
+            return { status: false, message: null };
           }
           if (e.response.status === 400) {
-            toast.error("User Onboard Faild");
-            return { status: false, message: "" };
+            toast.error("Survey Created Faild");
+            return { status: false, message: null };
           }
           if (e.response.status === 500) {
             toast.error("Server error 500");
-            return { status: false, message: "" };
+            return { status: false, message: null };
           }
         });
       return response;

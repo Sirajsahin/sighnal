@@ -8,7 +8,9 @@ const StatsCardComponent: React.FC<IFeedbackStatsComponentProps> = ({
       <div className="flex  items-center gap-3">
         <div className="bg-white h-14 w-14 rounded-xl"></div>
         <div className="flex flex-col gap-1">
-          <p className="text-xs font-normal text-[#475467]">{cardText}</p>
+          <p className="text-xs font-normal text-[#475467] capitalize">
+            {cardText}
+          </p>
           <h2 className="text-2xl font-bold text-[#333333]">{cardValue}</h2>
         </div>
       </div>

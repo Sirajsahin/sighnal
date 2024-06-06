@@ -1,4 +1,4 @@
-export interface IFeedbackStatsComponentProps{
-    cardText?:string
-    cardValue?:string
+export interface IFeedbackStatsComponentProps {
+  cardText?: string;
+  cardValue?: number;
 }

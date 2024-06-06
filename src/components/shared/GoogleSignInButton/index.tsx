@@ -39,7 +39,7 @@ const GoogleSigninButton: React.FC<IGoogleSigninButtonProps> = (_props) => {
         signInWithGoogle();
       }}
       type="button"
-      className="flex justify-start items-center rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900  ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+      className="flex justify-start items-center py-1"
     >
       <a
         href="#"

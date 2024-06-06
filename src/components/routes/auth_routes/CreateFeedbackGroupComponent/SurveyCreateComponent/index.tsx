@@ -1,30 +1,25 @@
+import { useGroupStatsListAPI } from "@/app/hooks/api_hooks/Group/useGroupStatsListAPI";
 import StatsCardComponent from "@/components/ui/StatsCardComponent";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
-const data = [
-  {
-    item: "Live",
-    number: "0",
-  },
-  {
-    item: "Upcoming",
-    number: "0",
-  },
-  {
-    item: "Completed",
-    number: "0",
-  },
-  {
-    item: "Total",
-    number: "0",
-  },
-];
 const SurveyCreateComponent = () => {
+  const [params, _setparams] = useSearchParams();
+  const { execute: fetchGroupStats, groupStats } = useGroupStatsListAPI();
+  useEffect(() => {
+    const buisnessId = params.get("business_id");
+    const groupId = params.get("group_id");
+    if (buisnessId && groupId) {
+      fetchGroupStats(buisnessId, groupId);
+    }
+  }, [params.get("business_id"), params.get("group_id")]);
+
   return (
-    <div className=" grid grid-cols-4 gap-4">
-      {data.map((val, id) => {
+    <div className=" grid grid-cols-5 gap-6">
+      {groupStats?.map((val, id) => {
         return (
           <div key={id}>
-            <StatsCardComponent cardText={val?.item} cardValue={val?.number} />
+            <StatsCardComponent cardText={val?.status} cardValue={val?.count} />
           </div>
         );
       })}

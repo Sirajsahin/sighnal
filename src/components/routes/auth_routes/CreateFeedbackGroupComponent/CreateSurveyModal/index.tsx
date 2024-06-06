@@ -6,6 +6,8 @@ import {
 } from "@headlessui/react";
 import { IFeedbackCreateModalProps } from "./interface";
 
+import { IGroupCreateprops } from "@/api_framework/api_modals/group";
+import { useGroupCreateAPI } from "@/app/hooks/api_hooks/Group/useGroupCreateAPI";
 import Input from "@/components/ui/Input";
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { Field, Label } from "@headlessui/react";
@@ -22,6 +24,7 @@ const CreateSurveyModal: React.FC<IFeedbackCreateModalProps> = ({
   setOpen,
 }) => {
   // const { forOnlyAlphabet, forAlphaNumericWithoutDot } = useFormValidations();
+  const { execute: createGroup } = useGroupCreateAPI();
   const formHook = useForm<ICreateGroupFromFields>({
     defaultValues: {},
   });
@@ -42,8 +45,19 @@ const CreateSurveyModal: React.FC<IFeedbackCreateModalProps> = ({
       return;
     }
     if (data && isFormSubmissionValid) {
-      console.log(data, "data");
-      navigate("/app/campaign/campaign-list");
+      const constructedData: IGroupCreateprops = {
+        business_id: localStorage.getItem("business_id"),
+        name: data.groupName,
+        description: data.groupDescription,
+      };
+
+      createGroup(constructedData).then(({ status, message }) => {
+        if (status) {
+          navigate(
+            `/app/campaign/campaign-list?business_id=${localStorage.getItem("business_id")}&group_id=${message}`
+          );
+        }
+      });
     }
   };
 

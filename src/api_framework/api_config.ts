@@ -19,4 +19,24 @@ export const USER_LOGIN_APIS: SighnalAuthAPIS = {
     baseURL: `${BASE_URL}/static/country/list/`,
     params: {},
   },
+  GROUP_CREATE_API: {
+    baseURL: `${BASE_URL}/business/group/create/`,
+    params: {},
+  },
+  GROUP_DETAILS_API: {
+    baseURL: `${BASE_URL}/business/group/details/`,
+    params: {},
+  },
+  GROUP_LIST_API: {
+    baseURL: `${BASE_URL}/business/group/list/`,
+    params: {},
+  },
+  GROUP_STATS_API: {
+    baseURL: `${BASE_URL}/business/survey/stats/`,
+    params: {},
+  },
+  SURVEY_CREATE_API: {
+    baseURL: `${BASE_URL}/business/survey/create/`,
+    params: {},
+  },
 };

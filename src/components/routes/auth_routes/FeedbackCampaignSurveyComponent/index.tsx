@@ -1,14 +1,27 @@
 import GroupHeaderComponent from "@/components/ui/GroupHeaderComponent";
 
+import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsAPI";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import CreateSurveryComponent from "../CreateFeedbackGroupComponent/CreateSurveryComponent";
 import SurveyCreateComponent from "../CreateFeedbackGroupComponent/SurveyCreateComponent";
 import AddGroupUserComponent from "./AddGroupUserComponent";
 const FeedbackCampaignSurveyComponent = () => {
+  const [params, _setparams] = useSearchParams();
+  const { execute: fetchGroupDetails, groupDetails } = useGroupDetailsAPI();
+  useEffect(() => {
+    const buisnessId = params.get("business_id");
+    const groupId = params.get("group_id");
+    if (buisnessId && groupId) {
+      fetchGroupDetails(buisnessId, groupId);
+    }
+  }, [params.get("business_id"), params.get("group_id")]);
+  
   return (
     <div>
       <GroupHeaderComponent
-        header="Application Feedback"
-        para="Streamline your product feedback process with Product Feedback Surveys. Group surveys by product lines or individual products to gather detailed feedback from users. Analyze feedback to make informed product decisions, prioritize features, and enhance overall product satisfaction."
+        header={groupDetails?.name}
+        para={groupDetails?.description}
       />
       <AddGroupUserComponent />
       <div className="my-5 mt-10">

@@ -1,0 +1,46 @@
+export interface IGroupCreateprops {
+  business_id: string;
+  description: string;
+  name: string;
+}
+
+//GROUP DETALS AND LIST
+
+export interface IgroupDetailsData {
+  group_id: string;
+  user_id: string;
+  name: string;
+  description: string;
+  business_id: string;
+  created_at: number;
+  updated_at: number;
+}
+export interface IgroupDetailsResponse {
+  status: boolean;
+  data: IgroupDetailsData | null;
+}
+export interface IgroupListResponse {
+  status: boolean;
+  data: IgroupDetailsData[] | null;
+}
+
+// group stats
+
+export interface IGroupStatsresponseData {
+  status: string;
+  count: number;
+}
+export interface IGroupStatsresponse {
+  status: boolean;
+  message: string;
+  data: IGroupStatsresponseData[] | null;
+}
+
+//Survey Create
+
+export interface ISurveyCreateProps {
+  name: string;
+  description: string;
+  group_id: string;
+  business_id: string;
+}
