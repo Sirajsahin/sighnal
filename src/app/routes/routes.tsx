@@ -5,7 +5,9 @@ import { IRoutesDefined } from "../../api_framework/api_modals/routersDefine";
 export const ROUTES_MAPPINGS = {
   "/": "LANDING_PAGE",
   "/app": "ROOT",
-  "/app/login": "LOGIN_PAGE",
+  "/app/login": "LOGIN",
+  "/app/login/sign-in": "LOGIN_PAGE",
+  "/app/login/onboard": "ORG_PAGE",
   "/app/org-details": "ORGANAIZATION_DETAILS",
   "/app/home": "HOME_PAGE",
   "/app/user-profile": "USER_PROFILE",
@@ -16,6 +18,26 @@ export const ROUTES_MAPPINGS = {
   "/app/campaign/survey-preview": "SURVEY_PREVIEW",
 };
 
+export const LOGINSUBNAVIGATION: IRoutesDefined = {
+  ORG_PAGE: {
+    id: "ORG_PAGE",
+    icon: "HiOutlineHome",
+    title: "Vetic VMS Product",
+    description: "Vetic VMS Product",
+    url: "/app/login/onboard",
+    path: "onboard",
+    children: {},
+  },
+  LOGIN_PAGE: {
+    id: "LOGIN_PAGE",
+    title: "Vetic VMS Login",
+    icon: "HiOutlineHome",
+    description: "Vetic VMS Login Page",
+    url: "/app/login/sign-in",
+    path: "sign-in",
+    children: {},
+  },
+};
 export const CAMPAIGNPAGESUBROUTE: IRoutesDefined = {
   CAMPAIGN_PAGE: {
     id: "CAMPAIGN_PAGE",
@@ -125,13 +147,15 @@ export const ROUTES: IRoutesDefined = {
       ...NAVIGATION_ROUTES, // rendering navigation routes inside main /app route
     },
   },
-  LOGIN_PAGE: {
-    id: "LOGIN_PAGE",
+  LOGIN: {
+    id: "LOGIN",
     title: "Vetic VMS Login",
     icon: "HiOutlineHome",
     description: "Vetic VMS Login Page",
     url: "/app/login",
-    path: "/login",
-    children: {},
+    path: "login",
+    children: {
+      ...LOGINSUBNAVIGATION,
+    },
   },
 };

@@ -31,10 +31,12 @@ export interface IRoutesDefined {
 export type RouteKeys =
   | "LANDING_PAGE"
   | "ROOT"
+  | "LOGIN"
   | "LOGIN_PAGE"
   | "ORGANAIZATION_DETAILS"
   | "HOME_PAGE"
   | "CAMPAIGN"
+  | "ORG_PAGE"
   | "CAMPAIGN_PAGE"
   | "CREATE_SURVEY"
   | "THANKYOU"

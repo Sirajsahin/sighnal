@@ -8,12 +8,14 @@ import {
 import App from "../../App";
 
 import CampaignSurveyPageIndex from "@/components/rendarChildren/CampaignSurveyPageIndex";
+import LoginLayoutPage from "@/components/rendarChildren/LoginLayoutPage";
 import CreateFeedbackGroupComponent from "@/components/routes/auth_routes/CreateFeedbackGroupComponent";
 import CreateSurveyStepComponent from "@/components/routes/auth_routes/CreateSurveyStepComponent";
 import FeedbackCampaignSurveyComponent from "@/components/routes/auth_routes/FeedbackCampaignSurveyComponent";
 import QuestionPreviewComponent from "@/components/routes/auth_routes/QuestionPreviewComponent";
 import ThankyouPage from "@/components/routes/auth_routes/ThankyouPage";
 import Login from "@/components/shared/Login";
+import Organaization from "@/components/shared/Organaization";
 import UserProfile from "@/components/shared/UserProfile";
 import { useRouter } from "../hooks/useRouter";
 
@@ -89,9 +91,20 @@ const Router: React.FC<IRouterProps> = () => {
       ],
     },
     {
-      path: getRouteKey("LOGIN_PAGE", "url"),
+      path: getRouteKey("LOGIN", "url"),
       loader: redirectIfLoggedIn,
-      element: <Login />,
+      element: <LoginLayoutPage />,
+      children: [
+        {
+          path: getRouteKey("LOGIN_PAGE", "url"),
+          loader: redirectIfLoggedIn,
+          element: <Login />,
+        },
+        {
+          path: getRouteKey("ORG_PAGE", "path"),
+          element: <Organaization />,
+        },
+      ],
     },
   ]);
 

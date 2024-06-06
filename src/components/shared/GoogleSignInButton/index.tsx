@@ -21,8 +21,8 @@ const GoogleSigninButton: React.FC<IGoogleSigninButtonProps> = (_props) => {
   }, [accessToken]);
 
   useEffect(() => {
-    if (logStatus === false) {
-      navigate(getRouteKey("HOME_PAGE", "url"));
+    if (logStatus === true) {
+      navigate(getRouteKey("ORG_PAGE", "url"));
     }
   }, [logStatus]);
 
