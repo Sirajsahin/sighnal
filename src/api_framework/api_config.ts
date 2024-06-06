@@ -39,4 +39,8 @@ export const USER_LOGIN_APIS: SighnalAuthAPIS = {
     baseURL: `${BASE_URL}/business/survey/create/`,
     params: {},
   },
+  QUESTION_CREATE_API: {
+    baseURL: `${BASE_URL}/business/question/create-list/`,
+    params: {},
+  },
 };

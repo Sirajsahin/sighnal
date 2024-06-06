@@ -44,3 +44,19 @@ export interface ISurveyCreateProps {
   group_id: string;
   business_id: string;
 }
+
+// Survey response
+export interface ISurveyCreateResponse {
+  data: {
+    user_id: string;
+    group_id: string;
+    survey_id: string;
+    business_id: string;
+    name: string;
+    description: string;
+    created_at: number;
+    status: string;
+  };
+  status: true;
+  message: "Survey Created Successfully";
+}

@@ -1,8 +1,8 @@
 // import { ROTA_APIS } from "@/api_framework/api_config";
 import { USER_LOGIN_APIS } from "@/api_framework/api_config";
 import {
-  IgroupDetailsResponse,
   ISurveyCreateProps,
+  ISurveyCreateResponse,
 } from "@/api_framework/api_modals/group";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -20,10 +20,10 @@ export const useSurveyCreateAPI = () => {
             Authorization: `${accessToken}`,
           },
         })
-        .then((res: AxiosResponse<IgroupDetailsResponse>) => {
+        .then((res: AxiosResponse<ISurveyCreateResponse>) => {
           if (res.data.status === true) {
             toast.success("Survey Created Successful");
-            return { status: true, message: res.data?.data?.group_id };
+            return { status: true, message: res.data?.data?.survey_id };
           } else {
             toast.error("Survey Created Faild");
             return { status: false, message: null };

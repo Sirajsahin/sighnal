@@ -46,10 +46,10 @@ const CreateSurveyQuestionHeaderComponent = () => {
         description: data.surveyDescription,
         group_id: groupId,
       };
-      createSurvey(constructedData).then(({ status }) => {
+      createSurvey(constructedData).then(({ status, message }) => {
         if (status) {
           navigate(
-            `/app/campaign/create-survey?step_id=2&business_id=${buisnessId}&group_id=${groupId}`
+            `/app/campaign/create-survey?step_id=2&business_id=${buisnessId}&group_id=${groupId}&survey_id=${message}`
           );
         }
       });

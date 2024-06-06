@@ -1,6 +1,7 @@
 import { Field, Label } from "@headlessui/react";
 import { useFieldArray, useForm } from "react-hook-form";
 
+import { useSurveyQuestionCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyQuestionCreateAPI";
 import Input from "@/components/ui/Input";
 import {
   Disclosure,
@@ -14,17 +15,18 @@ import TextareaComponent from "@ui/TextareaComponent";
 import { useSelectMenuReducer } from "@ui/useSelectMenuReducer";
 import { remove } from "lodash";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export interface ICampaignQuestionDetailsInfo {
-  questionName: string;
-  questionType: string;
-  questionSkip: string;
-  questionOption: ICampaignQuestionDetailsOptionsInfo[];
+  question: string;
+  question_type_id: string;
+  can_skipped: string;
+  options: Array<string>;
+  group_id: string;
+  business_id: string;
+  survey_id: string;
 }
-export interface ICampaignQuestionDetailsOptionsInfo {
-  option: string;
-}
+
 export interface ICreateSurveyFromFields {
   question_details: ICampaignQuestionDetailsInfo[];
 }
@@ -35,6 +37,7 @@ const dataItem = [
   { id: "3", name: "siraj" },
 ];
 const AddSurveyQuestionComponent = () => {
+  const [params, _setparams] = useSearchParams();
   const formHook = useForm<ICreateSurveyFromFields>({
     defaultValues: {},
   });
@@ -45,24 +48,33 @@ const AddSurveyQuestionComponent = () => {
     control: formHook.control,
   });
 
+  const business_id = params.get("business_id");
+  const group_id = params.get("group_id");
+  const survey_id = params.get("survey_id");
+
+  const { execute: createQuestion } = useSurveyQuestionCreateAPI();
+
   const handleAddProductItem = () => {
     questionDetailsFormHook.append({
-      questionName: null,
-      questionType: null,
-      questionOption: [{ option: "" }],
-      questionSkip: null,
+      question: null,
+      question_type_id: null,
+      options: [""],
+      can_skipped: null,
+      business_id: business_id,
+      group_id: group_id,
+      survey_id: survey_id,
     });
   };
 
   //option create
 
   const handleDeleteProductOptions = (id: number, optionIndex: number) => {
-    // formHook.setValue(`question_details.${id}.questionOption`,[])
+    // formHook.setValue(`question_details.${id}.options`,[])
 
     questionDetailsFormHook.update(id, {
       ...formHook.getValues(`question_details.${id}`),
-      questionOption: remove(
-        formHook.getValues(`question_details.${id}.questionOption`),
+      options: remove(
+        formHook.getValues(`question_details.${id}.options`),
         (_f, index) => {
           return index !== optionIndex;
         }
@@ -71,13 +83,10 @@ const AddSurveyQuestionComponent = () => {
   };
 
   const handleAddProductOptions = (id: number) => {
-    // formHook.setValue(`question_details.${id}.questionOption`,[])
+    // formHook.setValue(`question_details.${id}.options`,[])
     questionDetailsFormHook.update(id, {
       ...formHook.getValues(`question_details.${id}`),
-      questionOption: [
-        ...formHook.getValues(`question_details.${id}.questionOption`),
-        { option: "" },
-      ],
+      options: [...formHook.getValues(`question_details.${id}.options`), ""],
     });
   };
   useEffect(() => {
@@ -88,7 +97,14 @@ const AddSurveyQuestionComponent = () => {
   const onSubmit = (data: ICreateSurveyFromFields) => {
     if (data) {
       console.log(data, "data");
-      navigate("/app/campaign/create-survey?step_id=3");
+
+      createQuestion(formHook.getValues("question_details")).then(
+        ({ status }) => {
+          if (status) {
+            navigate("/app/campaign/create-survey?step_id=3");
+          }
+        }
+      );
     }
   };
 
@@ -104,7 +120,6 @@ const AddSurveyQuestionComponent = () => {
         <form className="" onSubmit={formHook.handleSubmit(onSubmit)}>
           {questionDetailsFormHook.fields.length > 0 &&
             questionDetailsFormHook?.fields?.map((filed, index) => {
-              console.log(filed, "filed");
               return (
                 <div key={index} className="mb-4">
                   <div className="mx-auto w-full divide-y  rounded-xl bg-white shadow-lg">
@@ -139,7 +154,7 @@ const AddSurveyQuestionComponent = () => {
                                 className="text-xs"
                                 placeholder="Write your question under 240 characters..."
                                 register={formHook.register(
-                                  `question_details.${index}.questionName`,
+                                  `question_details.${index}.question`,
                                   {
                                     required: true,
                                   }
@@ -149,8 +164,7 @@ const AddSurveyQuestionComponent = () => {
                                     ? formHook?.formState?.errors
                                         ?.question_details[index]
                                       ? formHook?.formState?.errors
-                                          ?.question_details[index]
-                                          ?.questionName
+                                          ?.question_details[index]?.question
                                       : null
                                     : null
                                 }
@@ -178,7 +192,7 @@ const AddSurveyQuestionComponent = () => {
                                 onSelectItem={(item) => {
                                   if (item) {
                                     formHook.setValue(
-                                      `question_details.${index}.questionType`,
+                                      `question_details.${index}.question_type_id`,
                                       item.title
                                     );
                                   }
@@ -189,12 +203,12 @@ const AddSurveyQuestionComponent = () => {
                                         ?.question_details[index]
                                       ? formHook?.formState?.errors
                                           ?.question_details[index]
-                                          ?.questionType
+                                          ?.question_type_id
                                       : null
                                     : null
                                 }
                                 register={formHook.register(
-                                  `question_details.${index}.questionType`,
+                                  `question_details.${index}.question_type_id`,
                                   {
                                     required: true,
                                   }
@@ -209,7 +223,7 @@ const AddSurveyQuestionComponent = () => {
                                     (oc) =>
                                       oc.title ===
                                       formHook.watch(
-                                        `question_details.${index}.questionType`
+                                        `question_details.${index}.question_type_id`
                                       )
                                   )[0]
                                 }
@@ -232,7 +246,7 @@ const AddSurveyQuestionComponent = () => {
                                 onSelectItem={(item) => {
                                   if (item) {
                                     formHook.setValue(
-                                      `question_details.${index}.questionSkip`,
+                                      `question_details.${index}.can_skipped`,
                                       item.title
                                     );
                                   }
@@ -242,13 +256,12 @@ const AddSurveyQuestionComponent = () => {
                                     ? formHook?.formState?.errors
                                         ?.question_details[index]
                                       ? formHook?.formState?.errors
-                                          ?.question_details[index]
-                                          ?.questionSkip
+                                          ?.question_details[index]?.can_skipped
                                       : null
                                     : null
                                 }
                                 register={formHook.register(
-                                  `question_details.${index}.questionSkip`,
+                                  `question_details.${index}.can_skipped`,
                                   {
                                     required: true,
                                   }
@@ -263,7 +276,7 @@ const AddSurveyQuestionComponent = () => {
                                     (oc) =>
                                       oc.title ===
                                       formHook.watch(
-                                        `question_details.${index}.questionSkip`
+                                        `question_details.${index}.can_skipped`
                                       )
                                   )[0]
                                 }
@@ -278,7 +291,7 @@ const AddSurveyQuestionComponent = () => {
                               Options
                             </p>
 
-                            {filed?.questionOption?.map((item, id) => {
+                            {filed?.options?.map((item, id) => {
                               return (
                                 <div
                                   className="flex items-center w-full relative mb-2"
@@ -288,7 +301,7 @@ const AddSurveyQuestionComponent = () => {
                                     className="text-xs w-full"
                                     placeholder="Enter Options"
                                     register={formHook.register(
-                                      `question_details.${index}.questionOption.${id}.option`,
+                                      `question_details.${index}.options.${id}`,
                                       {
                                         required: true,
                                       }
@@ -297,11 +310,12 @@ const AddSurveyQuestionComponent = () => {
                                       formHook?.formState?.errors
                                         ?.question_details
                                         ? formHook?.formState?.errors
-                                            ?.question_details[index]
-                                            ?.questionOption[id]?.option
+                                            ?.question_details[index]?.options[
+                                            id
+                                          ]
                                           ? formHook?.formState?.errors
                                               ?.question_details[index]
-                                              ?.questionOption[id]?.option
+                                              ?.options[id]
                                           : null
                                         : null
                                     }
