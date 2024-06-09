@@ -1,15 +1,15 @@
 import { ISelectMenuItemData } from "@/components/ui/interface";
 import SearchableSelectMenu from "@/components/ui/SearchableSelectMenu";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import CalenderComponent from "../../../../ui/CalenderComponent";
 import ToogleComponent from "../../../../ui/ToogleComponent";
 
 export interface ICreateSurveyFromFields {
-  surveyTitle: string;
-  surveyDescription: string;
+  comments: boolean;
+  anonymous: boolean;
   startDate: string;
   endDate: string;
   startTime: string;
@@ -73,34 +73,27 @@ const AudienceLaunchComponent = () => {
       });
   };
 
+  useEffect(() => {
+    formHook.setValue("startDate", formattedStartDate);
+    formHook.setValue("endDate", formattedEndDate);
+  }, [formattedStartDate, formattedEndDate]);
+
   const startTime = generateTimeItems(24, 1);
   const endTime = generateTimeItems(12, 5);
-  /* Actions and Handlers */
-  const validateConditionalFormFields = (data: ICreateSurveyFromFields) => {
-    let isValid = false;
 
-    if (data?.surveyTitle !== "" || data?.surveyDescription !== "") {
-      isValid = true;
-    }
-    return isValid;
-  };
+  /* Actions and Handlers */
+
   const onSubmit = (data: ICreateSurveyFromFields) => {
-    const isFormSubmissionValid = validateConditionalFormFields(data);
-    if (!isFormSubmissionValid) {
-      return;
-    }
-    if (data && isFormSubmissionValid) {
+    if (data) {
       console.log(data, "data");
-      // navigate("/app/campaign/create-survey?step_id=step_2");
+      // navigate("/app/thankyou");
     }
   };
 
   const handelClick = () => {
     console.log("");
   };
-  const handelLive = () => {
-    navigate("/app/thankyou");
-  };
+
   const handelOpenPreview = () => {
     navigate("/app/campaign/survey-preview?step_id=1");
   };
@@ -133,7 +126,13 @@ const AudienceLaunchComponent = () => {
                   <span className="flex items-center gap-2 text-sm text-black  px-2 py-1 rounded-3xl  justify-between">
                     Comments On
                   </span>
-                  <ToogleComponent />
+                  <ToogleComponent
+                    enabled={formHook.watch("comments")}
+                    setEnabled={() => {
+                      const toggleState = formHook.getValues("comments");
+                      formHook.setValue("comments", !toggleState);
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -146,7 +145,13 @@ const AudienceLaunchComponent = () => {
                   <span className="flex items-center gap-2 text-sm text-black  px-2 py-1 rounded-3xl justify-between ">
                     With ID’s
                   </span>
-                  <ToogleComponent />
+                  <ToogleComponent
+                    enabled={formHook.watch("anonymous")}
+                    setEnabled={() => {
+                      const toggleState = formHook.getValues("anonymous");
+                      formHook.setValue("anonymous", !toggleState);
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -188,7 +193,7 @@ const AudienceLaunchComponent = () => {
                     required: true,
                   })}
                   selectItems={startTime}
-                  placeholder="Select HH"
+                  placeholder="HH"
                   showTooltips={true}
                   showTypedErrors={true}
                   showDropdownIcon={true}
@@ -218,7 +223,7 @@ const AudienceLaunchComponent = () => {
                     required: true,
                   })}
                   selectItems={endTime}
-                  placeholder="Select MM"
+                  placeholder="MM"
                   showTooltips={true}
                   showTypedErrors={true}
                   showDropdownIcon={true}
@@ -238,7 +243,6 @@ const AudienceLaunchComponent = () => {
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
           <button
             type="submit"
-            onClick={handelLive}
             className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
           >
             Make it Live!

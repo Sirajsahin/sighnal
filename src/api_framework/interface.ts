@@ -13,5 +13,6 @@ export type SighnalAuthAPIS = {
     | "GROUP_LIST_API"
     | "GROUP_STATS_API"
     | "SURVEY_CREATE_API"
-    | "QUESTION_CREATE_API"]: ISighnalAPI;
+    | "QUESTION_CREATE_API"
+    | "QUESTION_TYPE_API"]: ISighnalAPI;
 };

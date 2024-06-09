@@ -1,6 +1,7 @@
 import { Field, Label } from "@headlessui/react";
 import { useFieldArray, useForm } from "react-hook-form";
 
+import { useGroupQuestionTypeAPI } from "@/app/hooks/api_hooks/Group/useGroupQuestionTypeAPI";
 import { useSurveyQuestionCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyQuestionCreateAPI";
 import Input from "@/components/ui/Input";
 import {
@@ -32,9 +33,8 @@ export interface ICreateSurveyFromFields {
 }
 
 const dataItem = [
-  { id: "1", name: "siraj" },
-  { id: "2", name: "siraj" },
-  { id: "3", name: "siraj" },
+  { id: "true", name: "Yes" },
+  { id: "false", name: "No" },
 ];
 const AddSurveyQuestionComponent = () => {
   const [params, _setparams] = useSearchParams();
@@ -53,6 +53,8 @@ const AddSurveyQuestionComponent = () => {
   const survey_id = params.get("survey_id");
 
   const { execute: createQuestion } = useSurveyQuestionCreateAPI();
+  const { execute: fetchQuestionType, groupQuestionType } =
+    useGroupQuestionTypeAPI();
 
   const handleAddProductItem = () => {
     questionDetailsFormHook.append({
@@ -90,8 +92,7 @@ const AddSurveyQuestionComponent = () => {
     });
   };
   useEffect(() => {
-    // handleAddProductItem();
-    // console.log("bb");
+    fetchQuestionType();
   }, []);
 
   const onSubmit = (data: ICreateSurveyFromFields) => {
@@ -109,10 +110,31 @@ const AddSurveyQuestionComponent = () => {
   };
 
   const dataItemList = useSelectMenuReducer(dataItem, "name", "id");
+  const questionType = useSelectMenuReducer(
+    groupQuestionType,
+    "question_type_name",
+    "question_type_id"
+  );
 
   // const handelLaunchAudions = () => {
   //   navigate("/app/campaign/create-survey?step_id=3");
   // };
+  const hanelOptionChange = (id: number) => {
+    // const formHook.getValues(`q`)
+    const selectedType = formHook.getValues(
+      `question_details.${id}.question_type_id`
+    );
+    const filterType = groupQuestionType?.filter(
+      (id) => id?.question_type_id === selectedType
+    );
+    const optionValue = filterType && filterType[0]?.options;
+
+    questionDetailsFormHook.update(id, {
+      ...formHook.getValues(`question_details.${id}`),
+      options: optionValue,
+    });
+    return null;
+  };
 
   return (
     <div className=" flex justify-center items-center  mr-auto my-3 ">
@@ -193,8 +215,9 @@ const AddSurveyQuestionComponent = () => {
                                   if (item) {
                                     formHook.setValue(
                                       `question_details.${index}.question_type_id`,
-                                      item.title
+                                      item.id
                                     );
+                                    hanelOptionChange(index);
                                   }
                                 }}
                                 fieldError={
@@ -213,15 +236,15 @@ const AddSurveyQuestionComponent = () => {
                                     required: true,
                                   }
                                 )}
-                                selectItems={dataItemList}
+                                selectItems={questionType}
                                 placeholder="Select Parent Theme"
                                 showTooltips={true}
                                 showTypedErrors={true}
                                 showDropdownIcon={true}
                                 defaultSelected={
-                                  dataItemList?.filter(
+                                  questionType?.filter(
                                     (oc) =>
-                                      oc.title ===
+                                      oc.id ===
                                       formHook.watch(
                                         `question_details.${index}.question_type_id`
                                       )
@@ -239,7 +262,7 @@ const AddSurveyQuestionComponent = () => {
                               <SearchableSelectMenu
                                 errorMessages={[
                                   {
-                                    message: " theme is required",
+                                    message: " is required",
                                     type: "required",
                                   },
                                 ]}
@@ -247,7 +270,7 @@ const AddSurveyQuestionComponent = () => {
                                   if (item) {
                                     formHook.setValue(
                                       `question_details.${index}.can_skipped`,
-                                      item.title
+                                      item.id
                                     );
                                   }
                                 }}
@@ -267,14 +290,14 @@ const AddSurveyQuestionComponent = () => {
                                   }
                                 )}
                                 selectItems={dataItemList}
-                                placeholder="Select Parent Theme"
+                                placeholder="Select the value"
                                 showTooltips={true}
                                 showTypedErrors={true}
                                 showDropdownIcon={true}
                                 defaultSelected={
                                   dataItemList?.filter(
                                     (oc) =>
-                                      oc.title ===
+                                      oc.id ===
                                       formHook.watch(
                                         `question_details.${index}.can_skipped`
                                       )

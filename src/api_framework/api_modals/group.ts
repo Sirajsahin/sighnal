@@ -60,3 +60,16 @@ export interface ISurveyCreateResponse {
   status: true;
   message: "Survey Created Successfully";
 }
+
+//Question type
+
+export interface IGroupQuestionTypeResponseData {
+  question_type_name: string;
+  question_type_id: string;
+  options: Array<string>;
+}
+export interface IGroupQuestionTypeResponse {
+  status: boolean;
+  message: string;
+  data: IGroupQuestionTypeResponseData[];
+}

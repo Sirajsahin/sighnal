@@ -1,9 +1,7 @@
 import { Switch } from "@headlessui/react";
 import clsx from "clsx";
-import { useState } from "react";
-export default function ToogleComponent() {
-  const [enabled, setEnabled] = useState(false);
-
+import { IToogleComponentProps } from "./interface";
+const ToogleComponent: React.FC<IToogleComponentProps> = ({enabled,setEnabled}) => {
   return (
     <Switch
       checked={enabled}
@@ -63,4 +61,6 @@ export default function ToogleComponent() {
       </span>
     </Switch>
   );
-}
+};
+
+export default ToogleComponent;
