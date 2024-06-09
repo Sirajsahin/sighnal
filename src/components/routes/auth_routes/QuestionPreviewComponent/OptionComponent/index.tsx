@@ -9,7 +9,7 @@ const OptionComponent = () => {
   return (
     <div>
       <p className="text-xs ">Question 1 to 3</p>
-      <div className="h-auto bg-[#3333] p-4 rounded-md flex flex-col gap-4 mt-2">
+      <div className="h-auto bg-[#4754670D] p-5 rounded-md flex flex-col gap-4 mt-2">
         <p className="text-sm text-[#333333]">
           Have you satisfied with the appointment booking through application?
         </p>

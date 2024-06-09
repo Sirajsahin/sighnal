@@ -1,4 +1,4 @@
-import Input from "@/components/ui/Input";
+import InputWithlable from "@/components/ui/InputWithlable";
 import SearchableSelectMenu from "@/components/ui/SearchableSelectMenu";
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { useForm } from "react-hook-form";
@@ -78,9 +78,11 @@ const UserProfile = () => {
             your profile on Sighnal.
           </p>
           <div className="grid grid-cols-2 gap-6 items-center mt-4">
-            <Input
+            <InputWithlable
               className="text-xs"
               placeholder="Enter Your Name"
+              labelName="Name"
+              isMandatory={true}
               register={formHook.register("name", {
                 required: true,
                 // ...forAlphaNumericWithoutDot.validations
@@ -95,9 +97,10 @@ const UserProfile = () => {
               ]}
             />
             <SearchableSelectMenu
+              label="I’m a citizen of"
               errorMessages={[
                 {
-                  message: " theme is required",
+                  message: "Country is required",
                   type: "required",
                 },
               ]}
@@ -111,7 +114,7 @@ const UserProfile = () => {
                 required: true,
               })}
               selectItems={dataItemList}
-              placeholder="Select Parent Theme"
+              placeholder="Select Country"
               showTooltips={true}
               showTypedErrors={true}
               showDropdownIcon={true}
@@ -124,10 +127,12 @@ const UserProfile = () => {
               className="text-gray-800 "
               containerClassName="w-full"
             />
-            <Input
+            <InputWithlable
               className="text-xs"
               type="email"
               placeholder="Enter Your Email"
+              labelName="Email"
+              isMandatory={true}
               register={formHook.register("email", {
                 required: true,
                 // ...forAlphaNumericWithoutDot.validations
@@ -141,9 +146,11 @@ const UserProfile = () => {
                 // forAlphaNumericWithoutDot.errors
               ]}
             />
-            <Input
+            <InputWithlable
               className="text-xs"
               placeholder="Enter Your Phone"
+              isMandatory={true}
+              labelName="Phone"
               register={formHook.register("phone", {
                 required: true,
                 // ...forAlphaNumericWithoutDot.validations
@@ -158,9 +165,10 @@ const UserProfile = () => {
               ]}
             />
             <SearchableSelectMenu
+              label="Job Title"
               errorMessages={[
                 {
-                  message: " theme is required",
+                  message: " Job title is required",
                   type: "required",
                 },
               ]}
@@ -174,7 +182,7 @@ const UserProfile = () => {
                 required: true,
               })}
               selectItems={dataItemList}
-              placeholder="Select Parent Theme"
+              placeholder="Select Job Title"
               showTooltips={true}
               showTypedErrors={true}
               showDropdownIcon={true}
@@ -198,9 +206,11 @@ const UserProfile = () => {
             used in your communications on the platform.
           </p>
           <div className="grid grid-cols-2 gap-6 items-center mt-4">
-            <Input
+            <InputWithlable
               className="text-xs"
               placeholder="Enter Your Org Name"
+              labelName="Company Name"
+              isMandatory={true}
               register={formHook.register("org_name", {
                 required: true,
                 // ...forAlphaNumericWithoutDot.validations
@@ -244,9 +254,11 @@ const UserProfile = () => {
               className="text-gray-800 "
               containerClassName="w-full"
             />
-            <Input
+            <InputWithlable
               className="text-xs"
-              type="email"
+              type="wbesite"
+              isMandatory={true}
+              labelName="Website"
               placeholder="Enter Your Org Website"
               register={formHook.register("org_website", {
                 required: true,
@@ -261,7 +273,9 @@ const UserProfile = () => {
                 // forAlphaNumericWithoutDot.errors
               ]}
             />
-            <Input
+            <InputWithlable
+              labelName="Company Age"
+              isMandatory
               className="text-xs"
               placeholder="Enter Your Org Age"
               register={formHook.register("org_age", {
@@ -277,23 +291,26 @@ const UserProfile = () => {
                 // forAlphaNumericWithoutDot.errors
               ]}
             />
-            <TextareaComponent
-              className="text-xs"
-              placeholder="About Your Org"
-              register={formHook.register("org_about", {
-                required: true,
-                // ...forAlphaNumericWithoutDot.validations
-              })}
-              fieldError={formHook.formState.errors.org_about}
-              errorMessages={[
-                {
-                  message: "Name is required",
-                  type: "required",
-                },
-                // forAlphaNumericWithoutDot.errors
-              ]}
-            />
+            <div className="col-span-2">
+              <TextareaComponent
+                className="text-xs"
+                placeholder="About Your Org"
+                register={formHook.register("org_about", {
+                  required: true,
+                  // ...forAlphaNumericWithoutDot.validations
+                })}
+                fieldError={formHook.formState.errors.org_about}
+                errorMessages={[
+                  {
+                    message: "Name is required",
+                    type: "required",
+                  },
+                  // forAlphaNumericWithoutDot.errors
+                ]}
+              />
+            </div>
           </div>
+          <button type="submit">submit</button>
         </div>
       </form>
     </div>

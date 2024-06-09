@@ -50,6 +50,8 @@ export interface IInput
   endIcon?: ReactNode;
   startIcon?: ReactNode;
   inputClassName?: string;
+  labelName?:string;
+  isMandatory?:boolean;
 }
 
 export interface IInputWithFileUpload

@@ -1,7 +1,41 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+const data = [
+  {
+    item: "1",
+  },
+  {
+    item: "2",
+  },
+  {
+    item: "3",
+  },
+  {
+    item: "4",
+  },
+  {
+    item: "5",
+  },
+  {
+    item: "6",
+  },
+  {
+    item: "7",
+  },
+  {
+    item: "8",
+  },
+  {
+    item: "9",
+  },
+  {
+    item: "10",
+  },
+];
 const RatingComponent = () => {
   const navigate = useNavigate();
+  const [selected, setSelected] = useState<number>(null);
+
   const handelClick = () => {
     navigate("/app/thankyou");
   };
@@ -11,41 +45,22 @@ const RatingComponent = () => {
   return (
     <div>
       <p className="text-xs ">Question 3 to 3</p>
-      <div className="h-auto bg-[#3333] p-4 rounded-md flex flex-col gap-4 mt-2">
+      <div className="h-auto bg-[#4754670D] p-5 rounded-md flex flex-col gap-4 mt-2">
         <p className="text-sm text-[#333333]">
           Have you satisfied with the appointment booking through application?
         </p>
         <div className="grid grid-cols-12 gap-3">
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            1
-          </div>
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            2
-          </div>
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            3
-          </div>
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            4
-          </div>
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            5
-          </div>
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            6
-          </div>
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            7
-          </div>
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            8
-          </div>
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            9
-          </div>
-          <div className="text-sm font-semibold bg-white p-3 rounded-xl text-center py-4  cursor-pointer hover:bg-indigo-200">
-            10
-          </div>
+          {data?.map((val, index) => {
+            return (
+              <div
+                key={index}
+                className={`text-sm font-semibold  ${selected === index ? "bg-black text-white" : "bg-white hover:bg-indigo-200"} p-3 rounded-lg text-center py-3  cursor-pointer `}
+                onClick={() => setSelected(index)}
+              >
+                {val?.item}
+              </div>
+            );
+          })}
         </div>
         <div className="text-sm justify-between flex items-center my-3">
           <p>Very unsatisfied</p>
