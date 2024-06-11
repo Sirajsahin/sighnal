@@ -34,7 +34,7 @@ const Input: React.FC<IInput> = ({
           autoComplete="false"
           autoCorrect="false"
           className={clsx(
-            ` border-0 py-1.5 p-2 ring-1 ring-inset text-xs shadow-none  focus:ring-2 focus:ring-inset disabled:bg-gray-200 disabled:text-gray-600  sm:leading-6 w-full ${props?.inputClassName}`,
+            ` border-none py-2 p-2 text-xs shadow-none  focus:ring-2 focus:ring-inset disabled:bg-gray-200 disabled:text-gray-600  sm:leading-6 w-full ${props?.inputClassName}`,
             isValid
               ? `text-gray-900 ring-gray-300 placeholder:text-gray-400  w-full `
               : `text-red-900 ring-red-300 placeholder:text-red-400 focus:ring-red-600`,

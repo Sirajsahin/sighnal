@@ -46,7 +46,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
             ?.toLowerCase()
             ?.replace(/\s+/g, "")
             ?.includes(query.toLowerCase()?.replace(/\s+/g, ""))
-        ) ?? []
+        ) ?? [];
 
   const reducedErrorMessages = deduceFormFieldErrors(errorMessages, fieldError);
   const isValid: boolean = isFormFieldValid(reducedErrorMessages);

@@ -63,7 +63,9 @@ const GoogleSigninButton: React.FC<IGoogleSigninButtonProps> = (_props) => {
             fill="#34A853"
           />
         </svg>
-        <span className="text-sm font-semibold leading-6">Google</span>
+        <span className="text-base font-semibold leading-6">
+          Sign up with Google
+        </span>
       </a>
     </button>
   );
