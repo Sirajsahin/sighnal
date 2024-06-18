@@ -11,6 +11,7 @@ import { useGroupCreateAPI } from "@/app/hooks/api_hooks/Group/useGroupCreateAPI
 import Input from "@/components/ui/Input";
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { Field, Label } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +20,7 @@ export interface ICreateGroupFromFields {
   groupDescription: string;
 }
 
-const CreateSurveyModal: React.FC<IFeedbackCreateModalProps> = ({
+const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
   open,
   setOpen,
 }) => {
@@ -85,15 +86,22 @@ const CreateSurveyModal: React.FC<IFeedbackCreateModalProps> = ({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-3 text-left shadow-xl transition-all sm:my-6 sm:w-full sm:max-w-lg sm:p-6">
                 <form
-                  className=" w-full mt-2"
+                  className=" w-full mt-0"
                   onSubmit={formHook.handleSubmit(onSubmit)}
                 >
                   <div>
-                    <p className="text-sm font-bold text-black py-2">
-                      Create a New Group
+                    <p className="text-sm font-semibold text-[#333333] py-2 flex justify-between items-center">
+                      Create a New Group{" "}
+                      <span>
+                        <XMarkIcon
+                          className="w-5 h-5 text-sm cursor-pointer"
+                          onClick={() => setOpen(false)}
+                        />
+                      </span>
                     </p>
+
                     <hr className="py-2" />
 
                     <div>
@@ -152,20 +160,12 @@ const CreateSurveyModal: React.FC<IFeedbackCreateModalProps> = ({
                       </div>
                     </div>
                   </div>
-                  <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
+                  <div className="mt-5 sm:mt-6 w-full flex justify-center">
                     <button
                       type="submit"
-                      className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+                      className="  w-auto justify-center rounded-md bg-[#333333] px-10 py-3 text-sm font-semibold text-white shadow-sm"
                     >
-                      Save
-                    </button>
-                    <button
-                      type="button"
-                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                      onClick={() => setOpen(false)}
-                      data-autofocus
-                    >
-                      Cancel
+                      Create Group
                     </button>
                   </div>
                 </form>
@@ -177,4 +177,4 @@ const CreateSurveyModal: React.FC<IFeedbackCreateModalProps> = ({
     </Transition>
   );
 };
-export default CreateSurveyModal;
+export default GroupCreateModalComponent;
