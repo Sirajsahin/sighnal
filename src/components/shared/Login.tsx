@@ -8,6 +8,7 @@ import { MdDone } from "react-icons/md";
 import { Outlet } from "react-router-dom";
 import Input from "../ui/Input";
 import GoogleSigninButton from "./GoogleSignInButton";
+import MyImage from './Image/login.jpg'
 
 import "primereact/resources/primereact.min.css"; // Core CSS
 import "primereact/resources/themes/saga-blue/theme.css"; // Or the theme you are using
@@ -106,8 +107,8 @@ export default function Login() {
           <div className="">
             <img
               className=" inset-0 h-full w-full object-cover"
-              src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-              alt=""
+              src={MyImage}
+              alt={MyImage}
             />
           </div>
           <div className="flex flex-1 flex-col px-4  sm:px-6 lg:flex-none lg:px-20 xl:px-24">

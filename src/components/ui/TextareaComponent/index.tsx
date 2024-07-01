@@ -26,7 +26,7 @@ const TextareaComponent: React.FC<ITextarea> = ({
 
   return (
     <div className={clsx("", className)}>
-      <div className="w-full relative mt-2 flex justify-start items-center rounded-md border">
+      <div className="w-full relative mt-2 flex justify-start items-center rounded-md ">
         {startIcon && (
           <div className="pointer-events-none inset-y-0 left-0 flex justify-center items-center pl-2 pr-2">
             {startIcon}
@@ -39,7 +39,7 @@ const TextareaComponent: React.FC<ITextarea> = ({
           autoComplete="off"
           autoCorrect="off"
           className={clsx(
-            "border-0 py-1.5 p-2 ring-1 ring-inset text-xs focus:ring-2 focus:ring-inset disabled:bg-gray-200 disabled:text-gray-600 sm:leading-6 w-full",
+            " py-1.5 p-2 ring-1 ring-inset text-xs focus:ring-2 focus:ring-inset disabled:bg-gray-200 disabled:text-gray-600 sm:leading-6 w-full",
             inputClassName,
             isValid
               ? "text-gray-900 ring-gray-300 placeholder:text-gray-400"

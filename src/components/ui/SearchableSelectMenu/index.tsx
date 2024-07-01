@@ -152,7 +152,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                         autoComplete="off"
                         autoCorrect="false"
                         className={clsx(
-                          `w-full text-xs font-medium  rounded-lg py-2 pl-3 pr-10 leading-5  focus:ring-0 ${className}`,
+                          `w-full text-xs font-normal  rounded-lg py-2 pl-3 pr-10 leading-5  focus:ring-0 ${className}`,
                           isValid
                             ? "text-gray-500 border-none outline-none font-medium "
                             : "text-red-600  border border-red-500 outline-red-500 placeholder-red-400 ",
