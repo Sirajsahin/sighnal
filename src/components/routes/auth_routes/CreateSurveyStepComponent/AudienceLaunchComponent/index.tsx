@@ -1,8 +1,12 @@
 import { ISelectMenuItemData } from "@/components/ui/interface";
+import { RiShareBoxLine } from "react-icons/ri";
+
+import GroupUsersCategoryModalComponent from "@/components/ui/Modal/GroupUsersCategoryModalComponent";
 import SearchableSelectMenu from "@/components/ui/SearchableSelectMenu";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import CalenderComponent from "../../../../ui/CalenderComponent";
 import ToogleComponent from "../../../../ui/ToogleComponent";
@@ -34,6 +38,8 @@ const AudienceLaunchComponent = () => {
     endDate: today,
     key: "selectionDate",
   });
+
+  const [open, setOpen] = useState<boolean>(false);
 
   // Calculate Start Date And End Date and Change Date Format Also
   const startDate = new Date(selectionDate.startDate);
@@ -105,18 +111,25 @@ const AudienceLaunchComponent = () => {
         onSubmit={formHook.handleSubmit(onSubmit)}
       >
         <div>
-          <p className="text-base font-bold py-3">Audience & Launch</p>
-          <p className="text-[#333333] font-medium text-sm">
-            Add Target Audience
+          <p className="text-[#475467] font-medium text-xs">Step 3/3</p>
+          <p className="text-base font-bold py-2">Launch It</p>
+          <p className="text-[#333333] font-normal text-sm">
+            Add your target audience and preferences and launch it.
           </p>
-          <div className="text-sm text-[#333333]">
-            <div className="border border-1 border-purple-100 mt-3 p-3 w-full rounded-lg flex justify-between items-center gap-2">
-              <span className="flex items-center gap-2 text-sm text-black bg-[#E7F0EC] px-4 py-2 rounded-3xl ">
+          <div className="text-sm text-[#333333] mt-6">
+            <p className="text-[#333333] font-medium text-sm cursor-pointer">
+              Add Target Audience
+            </p>
+            <div className="border border-1 border-purple-100 mt-2 p-3 w-full rounded-lg flex justify-between items-center gap-2">
+              <span
+                className="flex items-center gap-1 text-xs text-[#333333] bg-[#E7F0EC] px-4 py-1 rounded-3xl cursor-pointer"
+                onClick={() => setOpen(true)}
+              >
                 <PlusIcon className="w-4 h-4" /> Click to add target audience
               </span>
             </div>
           </div>
-          <div className="w-full flex justify-between gap-3 my-4">
+          <div className="w-2/4 flex justify-between gap-3 my-3">
             <div className="w-full ">
               <p className="text-[#333333] font-medium text-sm mb-2">
                 Add Comments
@@ -131,25 +144,6 @@ const AudienceLaunchComponent = () => {
                     setEnabled={() => {
                       const toggleState = formHook.getValues("comments");
                       formHook.setValue("comments", !toggleState);
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-full mb-2">
-              <p className="text-[#333333] font-medium text-sm mb-2">
-                Anonymous Submission
-              </p>
-              <div className="text-sm text-[#333333] ">
-                <div className="border border-1 border-purple-100  p-3 w-full rounded-lg flex justify-between items-center gap-2">
-                  <span className="flex items-center gap-2 text-sm text-black  px-2 py-1 rounded-3xl justify-between ">
-                    With ID’s
-                  </span>
-                  <ToogleComponent
-                    enabled={formHook.watch("anonymous")}
-                    setEnabled={() => {
-                      const toggleState = formHook.getValues("anonymous");
-                      formHook.setValue("anonymous", !toggleState);
                     }}
                   />
                 </div>
@@ -240,22 +234,40 @@ const AudienceLaunchComponent = () => {
             </div>
           </div>
         </div>
-        <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
+        <div className="flex justify-end w-2/4 float-right gap-4 mt-4">
           <button
-            type="submit"
-            className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+            type="button"
+            className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium  ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+            // onClick={() => setOpen(false)}
+            data-autofocus
           >
-            Make it Live!
+            <span>
+              <MdOutlineKeyboardBackspace className="w-4 h-4" />
+            </span>
+            Back
           </button>
           <button
             type="button"
-            className="mt-3 inline-flex w-full justify-center rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+            className="mt-3 inline-flex w-full items-center gap-1 justify-center rounded-md bg-gray-200 px-3 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
             onClick={handelOpenPreview}
           >
+            <span>
+              <RiShareBoxLine className="w-4 h-4" />
+            </span>
             Open Preview
+          </button>
+          <button
+            type="submit"
+            className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+          >
+            Make it Live!
           </button>
         </div>
       </form>
+
+      {open && (
+        <GroupUsersCategoryModalComponent open={open} setOpen={setOpen} />
+      )}
     </div>
   );
 };

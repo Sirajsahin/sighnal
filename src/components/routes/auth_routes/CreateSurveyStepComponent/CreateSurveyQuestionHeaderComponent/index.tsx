@@ -1,9 +1,11 @@
 import { ISurveyCreateProps } from "@/api_framework/api_modals/group";
 import { useSurveyCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyCreateAPI";
 import Input from "@/components/ui/Input";
+
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { Field, Label } from "@headlessui/react";
 import { useForm } from "react-hook-form";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 export interface ICreateSurveyFromFields {
@@ -57,76 +59,85 @@ const CreateSurveyQuestionHeaderComponent = () => {
   };
 
   return (
-    <div className=" flex justify-center items-center  mr-auto my-3">
-      <form
-        className=" mt-2 w-5/6 border-2 border-green-50 p-5 shadow-lg rounded-xl"
-        onSubmit={formHook.handleSubmit(onSubmit)}
-      >
-        <div>
+    <div className=" flex flex-col justify-center items-center mr-auto my-3 w-full">
+      <div className="w-2/5">
+        <p className="text-[#475467] font-medium text-xs">Step 1/3</p>
+        <h4 className="text-base font-semibold my-1">
+          Let’s start with adding a Survey Title & Description
+        </h4>
+        <p className="text-[#475467] text-sm my-1">
+          This fields helps end consumer to understand survey
+        </p>
+        <form className="my-4" onSubmit={formHook.handleSubmit(onSubmit)}>
           <div>
-            <div className="w-full ">
-              <Field>
-                <Label className="text-xs font-medium text-black">
-                  Survey Title <span className="text-red-400 text-xs">*</span>
-                </Label>
-                <Input
-                  className="text-xs"
-                  placeholder="Enter Survey Title"
-                  register={formHook.register("surveyTitle", {
-                    required: true,
-                    // ...forAlphaNumericWithoutDot.validations
-                  })}
-                  fieldError={formHook.formState.errors.surveyTitle}
-                  errorMessages={[
-                    { message: "Survey title is required", type: "required" },
-                    // forAlphaNumericWithoutDot.errors
-                  ]}
-                />
-              </Field>
+            <div>
+              <div className="w-full ">
+                <Field>
+                  <Label className="text-xs font-medium text-[#333333]">
+                    Survey Name <span className="text-red-400 text-xs">*</span>
+                  </Label>
+                  <Input
+                    className="text-xs"
+                    placeholder="Enter Survey Title"
+                    register={formHook.register("surveyTitle", {
+                      required: true,
+                      // ...forAlphaNumericWithoutDot.validations
+                    })}
+                    fieldError={formHook.formState.errors.surveyTitle}
+                    errorMessages={[
+                      { message: "Survey title is required", type: "required" },
+                      // forAlphaNumericWithoutDot.errors
+                    ]}
+                  />
+                </Field>
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="w-full  mt-2">
-              <Field>
-                <Label className="text-xs font-medium text-black">
-                  Survey Description{" "}
-                  <span className="text-red-400 text-xs">*</span>
-                </Label>
+            <div>
+              <div className="w-full  mt-2">
+                <Field>
+                  <Label className="text-xs font-medium text-[#333333]">
+                    Survey Description{" "}
+                    <span className="text-red-400 text-xs">*</span>
+                  </Label>
 
-                <TextareaComponent
-                  className="text-xs"
-                  placeholder="Write your question under 50 Words..."
-                  register={formHook.register("surveyDescription", {
-                    required: true,
-                    // ...forAlphaNumericWithoutDot.validations
-                  })}
-                  fieldError={formHook.formState.errors.surveyDescription}
-                  errorMessages={[
-                    { message: "Description is required", type: "required" },
-                    // forAlphaNumericWithoutDot.errors
-                  ]}
-                />
-              </Field>
+                  <TextareaComponent
+                    className="text-xs"
+                    placeholder="Write few lines about survey"
+                    register={formHook.register("surveyDescription", {
+                      required: true,
+                      // ...forAlphaNumericWithoutDot.validations
+                    })}
+                    fieldError={formHook.formState.errors.surveyDescription}
+                    errorMessages={[
+                      { message: "Description is required", type: "required" },
+                      // forAlphaNumericWithoutDot.errors
+                    ]}
+                  />
+                </Field>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
-          <button
-            type="submit"
-            className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-          >
-            Save Changes
-          </button>
-          <button
-            type="button"
-            className="mt-3 inline-flex w-full justify-center rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-            // onClick={() => setOpen(false)}
-            data-autofocus
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+          <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
+            <button
+              type="submit"
+              className="inline-flex w-full justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-medium text-white  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+            >
+              Next
+            </button>
+            <button
+              type="button"
+              className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium  ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+              // onClick={() => setOpen(false)}
+              data-autofocus
+            >
+              <span>
+                <MdOutlineKeyboardBackspace className="w-4 h-4" />
+              </span>
+              Back
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

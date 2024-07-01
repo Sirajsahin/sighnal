@@ -35,7 +35,7 @@ const TextareaComponent: React.FC<ITextarea> = ({
         <Textarea
           {...register}
           {...props}
-          rows={4}
+          rows={3}
           autoComplete="off"
           autoCorrect="off"
           className={clsx(

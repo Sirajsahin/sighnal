@@ -1,4 +1,3 @@
-import { CheckIcon } from "@heroicons/react/20/solid";
 import { useSearchParams } from "react-router-dom";
 
 const steps = [
@@ -13,28 +12,38 @@ export default function StepComponent() {
 
   const getStatusClass = (stepIdx) => {
     if (step_id > stepIdx + 1) {
-      return "bg-[#0C6243]";
+      return "bg-[#0C6545] text-white";
     }
     return "bg-white";
   };
+  const getStatusClassText = (stepIdx) => {
+    if (step_id > stepIdx + 1) {
+      return "text-[#475467]";
+    }
+    return "text-[#333333]";
+  };
 
   return (
-    <div className="bg-[#F5F5F5] w-full h-auto py-6 flex flex-col items-center rounded-lg">
-      <p className="text-xl text-center font-bold text-[#333333] ">
-        Create Survey
-      </p>
-      <div className="flex items-center gap-20 py-8">
+    <div className=" w-full h-auto py-3 flex flex-col items-center rounded-lg">
+      <div className="flex items-center gap-12 py-8">
         {steps.map((step, stepIdx) => (
-          <div key={step.name} className="flex flex-col items-center gap-2">
-            <a
-              href={step.href}
-              className={`relative flex h-12 w-12 items-center justify-center rounded-full ${getStatusClass(stepIdx)} hover:bg-indigo-900`}
-            >
-              {step_id > stepIdx && (
-                <CheckIcon className="h-6 w-6 text-white" aria-hidden="true" />
-              )}
-            </a>
-            <span className="text-xs text-black font-medium">{step.name}</span>
+          <div key={step.name} className="flex  items-center gap-2">
+            {step_id > stepIdx ? (
+              <span
+                className={`${getStatusClass(stepIdx)} border rounded-full w-5 h-5 justify-center items-center flex text-xs `}
+              >
+                {stepIdx + 1}
+              </span>
+            ) : (
+              <span
+                className={`bg-white border rounded-full w-5 h-5 justify-center items-center flex text-xs`}
+              >
+                {stepIdx + 1}
+              </span>
+            )}
+            <span className={`text-xs ${getStatusClassText} font-medium`}>
+              {step.name}
+            </span>
           </div>
         ))}
       </div>

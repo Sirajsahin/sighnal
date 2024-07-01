@@ -1,14 +1,17 @@
 import { Switch } from "@headlessui/react";
 import clsx from "clsx";
 import { IToogleComponentProps } from "./interface";
-const ToogleComponent: React.FC<IToogleComponentProps> = ({enabled,setEnabled}) => {
+const ToogleComponent: React.FC<IToogleComponentProps> = ({
+  enabled,
+  setEnabled,
+}) => {
   return (
     <Switch
       checked={enabled}
       onChange={setEnabled}
       className={clsx(
-        enabled ? "bg-indigo-600" : "bg-gray-200",
-        "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+        enabled ? "bg-[#E7F0EC]" : "bg-gray-200",
+        "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out "
       )}
     >
       <span className="sr-only">Use setting</span>
@@ -44,14 +47,14 @@ const ToogleComponent: React.FC<IToogleComponentProps> = ({enabled,setEnabled}) 
         <span
           className={clsx(
             enabled
-              ? "opacity-100 duration-200 ease-in"
+              ? "opacity-100 duration-200 ease-in bg-[#0C6243] rounded-full "
               : "opacity-0 duration-100 ease-out",
             "absolute inset-0 flex h-full w-full items-center justify-center transition-opacity"
           )}
           aria-hidden="true"
         >
           <svg
-            className="h-3 w-3 text-indigo-600"
+            className="h-3 w-3 text-[#0C6243]"
             fill="currentColor"
             viewBox="0 0 12 12"
           >

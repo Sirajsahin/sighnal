@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 const data = [
   {
@@ -66,20 +67,24 @@ const RatingComponent = () => {
           <p>Very unsatisfied</p>
           <p>Very Satisfied</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-6">
           <button
             type="submit"
-            onClick={() => handelGoback()}
-            className="inline-flex  w-36 justify-center rounded-md bg-blue-500  px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+            onClick={handelGoback}
+            className={`w-auto justify-center flex items-center gap-1 rounded-md bg-white text-[#333333] border px-4 py-2 text-sm font-medium  `}
           >
-            Go Back
+            <MdOutlineKeyboardBackspace className="w-4 h-4" />
+            Back
+          </button>
+          <button className="text-[#333333] font-medium cursor-pointer">
+            Skip
           </button>
           <button
-            type="submit"
-            onClick={() => handelClick()}
-            className="inline-flex  w-36 justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+            type="button"
+            onClick={handelClick}
+            className="inline-flex  justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-semibold text-white shadow-sm cursor-pointer"
           >
-            Submit
+            Continue
           </button>
         </div>
       </div>

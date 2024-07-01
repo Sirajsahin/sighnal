@@ -16,6 +16,7 @@ import TextareaComponent from "@ui/TextareaComponent";
 import { useSelectMenuReducer } from "@ui/useSelectMenuReducer";
 import { remove } from "lodash";
 import { useEffect } from "react";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 export interface ICampaignQuestionDetailsInfo {
@@ -384,16 +385,22 @@ const AddSurveyQuestionComponent = () => {
               );
             })}
           <div
-            className="bg-[#0C6243] mt-6 p-3 w-full rounded-lg flex justify-between items-center gap-2 cursor-pointer"
+            className=" border-dotted bg-[#F4F5F6] border-2 mt-6 p-3 w-full rounded-lg flex justify-between items-center gap-2 cursor-pointer"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               handleAddProductItem();
             }}
           >
-            <span className="flex items-center gap-2 text-base font-bold text-white">
-              <PlusIcon className="w-4 h-4" /> Add One more Question
-            </span>
+            <div className="flex flex-col ">
+              <span className="flex items-center gap-2 text-base font-bold text-black">
+                <PlusIcon className="w-4 h-4" /> Add One more Question
+              </span>
+              <p className="#333333 font-medium text-xs">
+                Select from Rating scale, Multiple choice, Open field and Mood
+                scale
+              </p>
+            </div>
             <span>
               {" "}
               <ChevronDownIcon className="size-5 fill-white group-data-[hover]:fill-black/50 group-data-[open]:rotate-180" />
@@ -402,18 +409,20 @@ const AddSurveyQuestionComponent = () => {
           <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
             <button
               type="submit"
-              // onClick={() => handelLaunchAudions()}
-              className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+              className="inline-flex w-full justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-medium text-white  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
             >
-              Save Changes
+              Next
             </button>
             <button
               type="button"
-              className="mt-3 inline-flex w-full justify-center rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+              className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium  ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
               // onClick={() => setOpen(false)}
               data-autofocus
             >
-              Go Back
+              <span>
+                <MdOutlineKeyboardBackspace className="w-4 h-4" />
+              </span>
+              Back
             </button>
           </div>
         </form>
