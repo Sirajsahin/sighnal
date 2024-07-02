@@ -8,6 +8,7 @@ import { IFeedbackCreateModalProps } from "./interface";
 
 import { IGroupCreateprops } from "@/api_framework/api_modals/group";
 import { useGroupCreateAPI } from "@/app/hooks/api_hooks/Group/useGroupCreateAPI";
+import useFormValidations from "@/components/shared/UI_Interface/useFormValidation";
 import Input from "@/components/ui/Input";
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { Field, Label } from "@headlessui/react";
@@ -24,7 +25,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
   open,
   setOpen,
 }) => {
-  // const { forOnlyAlphabet, forAlphaNumericWithoutDot } = useFormValidations();
+  const { forAlphaNumeric, forAlphaNumericWithoutDot } = useFormValidations();
   const { execute: createGroup } = useGroupCreateAPI();
   const formHook = useForm<ICreateGroupFromFields>({
     defaultValues: {},
@@ -116,7 +117,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                             placeholder="Enter Group Name"
                             register={formHook.register("groupName", {
                               required: true,
-                              // ...forAlphaNumericWithoutDot.validations
+                              ...forAlphaNumericWithoutDot.validations,
                             })}
                             fieldError={formHook.formState.errors.groupName}
                             errorMessages={[
@@ -124,7 +125,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                                 message: "Group Name is required",
                                 type: "required",
                               },
-                              // forAlphaNumericWithoutDot.errors
+                              forAlphaNumericWithoutDot.errors,
                             ]}
                           />
                         </Field>
@@ -143,7 +144,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                             placeholder="Write few lines about group"
                             register={formHook.register("groupDescription", {
                               required: true,
-                              // ...forAlphaNumericWithoutDot.validations
+                              ...forAlphaNumeric.validations,
                             })}
                             fieldError={
                               formHook.formState.errors.groupDescription
@@ -153,7 +154,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                                 message: "Description is required",
                                 type: "required",
                               },
-                              // forAlphaNumericWithoutDot.errors
+                              forAlphaNumeric.errors,
                             ]}
                           />
                         </Field>

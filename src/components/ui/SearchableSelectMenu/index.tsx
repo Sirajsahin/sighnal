@@ -126,10 +126,10 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                             return item?.title;
                           }}
                           className={clsx(
-                            `w-full text-xs  font-medium  rounded-lg py-2 pl-3 pr-10 leading-5  focus:ring-0 ${className}`,
+                            `w-full text-xs  font-medium  rounded-lg py-2 pl-3 pr-10 leading-6  focus:ring-0 ${className}`,
                             isValid
                               ? "text-gray-500 border-none outline-none font-medium "
-                              : "text-red-600  border border-red-500 outline-red-500 ::place  .placeholder-red-500",
+                              : "text-red-600  ::place  .placeholder-red-500",
                             props?.variant &&
                               props?.variant === "LIKE_INPUT" &&
                               "text-gray-500 border-none outline-none font-medium ",
@@ -152,10 +152,10 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                         autoComplete="off"
                         autoCorrect="false"
                         className={clsx(
-                          `w-full text-xs font-normal  rounded-lg py-2 pl-3 pr-10 leading-5  focus:ring-0 ${className}`,
+                          `w-full text-xs font-normal  rounded-lg py-2 pl-3 pr-10 leading-6  focus:ring-0 ${className}`,
                           isValid
                             ? "text-gray-500 border-none outline-none font-medium "
-                            : "text-red-600  border border-red-500 outline-red-500 placeholder-red-400 ",
+                            : "text-red-600   placeholder-red-400 ",
                           props?.variant &&
                             props?.variant === "LIKE_INPUT" &&
                             "text-gray-500 border-none outline-none font-medium ",
@@ -191,7 +191,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                   )}
                 </div>
                 {showFieldErrors && (
-                  <div className="absolute">
+                  <div className="absolute -mt-1">
                     <FormFieldErrors errors={reducedErrorMessages} />
                   </div>
                 )}

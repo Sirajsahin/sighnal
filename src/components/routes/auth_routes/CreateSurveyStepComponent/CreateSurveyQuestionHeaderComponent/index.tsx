@@ -1,5 +1,6 @@
 import { ISurveyCreateProps } from "@/api_framework/api_modals/group";
 import { useSurveyCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyCreateAPI";
+import useFormValidations from "@/components/shared/UI_Interface/useFormValidation";
 import Input from "@/components/ui/Input";
 
 import TextareaComponent from "@/components/ui/TextareaComponent";
@@ -17,6 +18,8 @@ const CreateSurveyQuestionHeaderComponent = () => {
   const formHook = useForm<ICreateSurveyFromFields>({
     defaultValues: {},
   });
+
+  const { forAlphaNumeric, forAlphaNumericWithoutDot } = useFormValidations();
 
   const navigate = useNavigate();
   const { execute: createSurvey } = useSurveyCreateAPI();
@@ -81,12 +84,12 @@ const CreateSurveyQuestionHeaderComponent = () => {
                     placeholder="Enter Survey Title"
                     register={formHook.register("surveyTitle", {
                       required: true,
-                      // ...forAlphaNumericWithoutDot.validations
+                      ...forAlphaNumericWithoutDot.validations,
                     })}
                     fieldError={formHook.formState.errors.surveyTitle}
                     errorMessages={[
                       { message: "Survey title is required", type: "required" },
-                      // forAlphaNumericWithoutDot.errors
+                      forAlphaNumericWithoutDot.errors,
                     ]}
                   />
                 </Field>
@@ -105,12 +108,12 @@ const CreateSurveyQuestionHeaderComponent = () => {
                     placeholder="Write few lines about survey"
                     register={formHook.register("surveyDescription", {
                       required: true,
-                      // ...forAlphaNumericWithoutDot.validations
+                      ...forAlphaNumeric.validations,
                     })}
                     fieldError={formHook.formState.errors.surveyDescription}
                     errorMessages={[
                       { message: "Description is required", type: "required" },
-                      // forAlphaNumericWithoutDot.errors
+                      forAlphaNumeric.errors,
                     ]}
                   />
                 </Field>

@@ -43,6 +43,8 @@ const AddSurveyQuestionComponent = () => {
     defaultValues: {},
   });
 
+  // const { forAlphaNumeric, forAlphaNumericWithoutDot } = useFormValidations();
+
   const navigate = useNavigate();
   const questionDetailsFormHook = useFieldArray({
     name: "question_details",

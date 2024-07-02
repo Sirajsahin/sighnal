@@ -4,6 +4,18 @@ import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useMemo, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
 const PageSize = 10;
+
+const categories = [
+  "grooming",
+  "grooming consultation",
+  "Bath",
+  "Clinic",
+  "ClinicOps",
+  "Central",
+  "India",
+  "Kolkata",
+];
+
 export default function GroupuserTableComponent({ data, setOpen }) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -16,6 +28,16 @@ export default function GroupuserTableComponent({ data, setOpen }) {
   useEffect(() => {
     setCurrentPage(1);
   }, [data]);
+
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const handleCategoryClick = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((cat) => cat !== category)
+        : [...prev, category]
+    );
+  };
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -35,25 +57,20 @@ export default function GroupuserTableComponent({ data, setOpen }) {
               />
             </span>
           </div>
-          <div className="w-auto flex gap-2 items-center my-4">
-            <p className="p-2 w-auto bg-[#F5F5F5] rounded-2xl text-xs items-center flex justify-center font-medium">
-              grooming
-            </p>
-            <p className="p-2 w-auto bg-[#F5F5F5] rounded-2xl text-xs items-center flex justify-center font-medium">
-              grooming consultation
-            </p>
-            <p className="p-2 w-auto bg-[#F5F5F5] rounded-2xl text-xs items-center flex justify-center font-medium">
-              grooming consultation
-            </p>
-            <p className="p-2 w-auto bg-[#F5F5F5] rounded-2xl text-xs items-center flex justify-center font-medium">
-              grooming consultation
-            </p>
-            <p className="p-2 w-auto bg-[#F5F5F5] rounded-2xl text-xs items-center flex justify-center font-medium">
-              Bath
-            </p>
-            <p className="p-2 w-auto bg-[#F5F5F5] rounded-2xl text-xs items-center flex justify-center font-medium">
-              Clinic
-            </p>
+          <div className="w-auto flex gap-2 items-center my-4 flex-wrap">
+            {categories?.map((category) => (
+              <p
+                key={category}
+                className={`p-2 w-auto rounded-2xl text-xs items-center flex justify-center font-medium cursor-pointer ${
+                  selectedCategories.includes(category)
+                    ? "bg-[#333333] text-white"
+                    : "bg-[#F5F5F5]"
+                }`}
+                onClick={() => handleCategoryClick(category)}
+              >
+                {category}
+              </p>
+            ))}
           </div>
         </div>
       </div>
@@ -67,7 +84,10 @@ export default function GroupuserTableComponent({ data, setOpen }) {
                     scope="col"
                     className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-[#475467] sm:pl-3"
                   >
-                    Name
+                    <div className=" flex items-center gap-2">
+                      <CheckBoxComponent />
+                      Name
+                    </div>
                   </th>
                   <th
                     scope="col"
@@ -96,7 +116,7 @@ export default function GroupuserTableComponent({ data, setOpen }) {
                 {currentTableData?.map((person) => (
                   <tr key={person?.email} className="even:bg-gray-50 border-t">
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-xs  text-[#475467] sm:pl-3">
-                      <div className=" flex items-center gap-1">
+                      <div className=" flex items-center gap-2">
                         <CheckBoxComponent />
                         {person?.Nunavut}
                       </div>

@@ -43,7 +43,7 @@ const TextareaComponent: React.FC<ITextarea> = ({
             inputClassName,
             isValid
               ? "text-gray-900 ring-gray-300 placeholder:text-gray-400"
-              : "text-red-900 ring-red-300 placeholder:text-red-400 focus:ring-red-600",
+              : "text-red-900 ring-red-300 placeholder:text-red-400 border-none ",
             startIcon ? "rounded-r-md" : endIcon ? "rounded-l-md" : "rounded-md"
           )}
         />

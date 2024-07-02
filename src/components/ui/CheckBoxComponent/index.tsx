@@ -1,17 +1,26 @@
 import { Checkbox } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/16/solid";
+import { IoMdCheckmark } from "react-icons/io";
+
 import { useState } from "react";
 
 export default function CheckBoxComponent() {
-  const [enabled, setEnabled] = useState(true);
+  const [enabled, setEnabled] = useState(false);
 
   return (
     <Checkbox
       checked={enabled}
       onChange={setEnabled}
-      className="group size-6  border rounded-md bg-white/10 p-1 ring-1 ring-white/15 ring-inset data-[checked]:bg-white"
+      className={`group size-5 border rounded-md  ring-1 ring-inset flex justify-center items-center ${
+        enabled ? "bg-black ring-black" : "bg-white ring-white"
+      }`}
     >
-      <CheckIcon className="hidden size-4 fill-green-600 group-data-[checked]:block" />
+      <IoMdCheckmark
+        className={` h-4 w-4 ${
+          enabled
+            ? "fill-white   text-white"
+            : "fill-green-600 hidden group-data-[checked]:block"
+        }`}
+      />
     </Checkbox>
   );
 }

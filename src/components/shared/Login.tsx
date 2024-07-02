@@ -1,17 +1,18 @@
 import { ISignalUserCreateProps } from "@/api_framework/api_modals/FirebaseLogin";
 import { useUserCreateAPI } from "@/app/hooks/api_hooks/user/useUserCreateAPI";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Divider } from "primereact/divider";
 import { Password } from "primereact/password";
 import { useForm } from "react-hook-form";
+import { FaArrowLeft } from "react-icons/fa6";
 import { MdDone } from "react-icons/md";
 import { Outlet } from "react-router-dom";
 import Input from "../ui/Input";
 import GoogleSigninButton from "./GoogleSignInButton";
-import MyImage from './Image/login.jpg'
+import MyImage from "./Image/login.jpg";
 
 import "primereact/resources/primereact.min.css"; // Core CSS
 import "primereact/resources/themes/saga-blue/theme.css"; // Or the theme you are using
+import useFormValidations from "./UI_Interface/useFormValidation";
 
 export interface ICreateGroupFromFields {
   name: string;
@@ -23,6 +24,8 @@ export default function Login() {
   const formHook = useForm<ICreateGroupFromFields>({
     defaultValues: {},
   });
+
+  const { forAlphaNumericWithoutDot, forEmail } = useFormValidations();
 
   const { execute: createUserRole } = useUserCreateAPI();
   /* Actions and Handlers */
@@ -62,36 +65,38 @@ export default function Login() {
 
   const footer = (
     <>
-      <Divider />
-      <p className="">Your password must contain:</p>
-      <ul className="pl-2 ml-2 mt-0 line-height-3">
-        <li className="flex items-center  gap-1">
+      <Divider className="text-sm my-1" />
+      <p className="text-sm text-[#000000] font-medium">
+        Your password must contain:
+      </p>
+      <ul className=" ml-2  line-height-3 flex flex-col gap-1 mt-1">
+        <li className="flex items-center  gap-1 text-gray-400 text-xs font-normal">
           <MdDone
-            className={`w-4 h-4 rounded-full items-center text-white text-xs ${
+            className={`w-3 h-3 rounded-full items-center text-white text-xs ${
               criteria.hasUppercase ? "bg-green-600" : "bg-red-600"
             }`}
           />
           an uppercase character
         </li>
-        <li className="flex items-center  gap-1">
+        <li className="flex items-center  gap-1 text-gray-400 text-xs font-normal">
           <MdDone
-            className={`w-4 h-4 rounded-full items-center text-white text-xs ${
+            className={`w-3 h-3 rounded-full items-center text-white text-xs ${
               criteria.hasSpecialChar ? "bg-green-600" : "bg-red-600"
             }`}
           />
           a spacial character
         </li>
-        <li className="flex items-center  gap-1">
+        <li className="flex items-center  gap-1 text-gray-400 text-xs font-normal">
           <MdDone
-            className={`w-4 h-4 rounded-full items-center text-white text-xs ${
+            className={`w-3 h-3 rounded-full items-center text-white text-xs ${
               criteria.hasLowercase ? "bg-green-600" : "bg-red-600"
             }`}
           />
           a lowercase character
         </li>
-        <li className="flex items-center  gap-1">
+        <li className="flex items-center  gap-1 text-gray-400 text-xs font-normal">
           <MdDone
-            className={`w-4 h-4 rounded-full items-center text-white text-xs ${
+            className={`w-3 h-3 rounded-full items-center text-white text-xs ${
               criteria.isValidLength ? "bg-green-600" : "bg-red-600"
             }`}
           />
@@ -115,7 +120,7 @@ export default function Login() {
             <div className="mx-auto w-full max-w-sm lg:w-96 py-12 flex justify-center flex-col mt-20">
               <div>
                 <div className="flex items-center gap-1 ">
-                  <ArrowLeftIcon className="w-4 h-4" />
+                  <FaArrowLeft className="w-4 h-4" />
                   Back
                 </div>
                 <h2 className="mt-4 text-xl font-bold leading-9 tracking-tight text-gray-900">
@@ -157,7 +162,7 @@ export default function Login() {
                           placeholder="Enter Your Name"
                           register={formHook.register("name", {
                             required: true,
-                            // ...forAlphaNumericWithoutDot.validations
+                            ...forAlphaNumericWithoutDot.validations,
                           })}
                           fieldError={formHook.formState.errors.name}
                           errorMessages={[
@@ -165,7 +170,7 @@ export default function Login() {
                               message: "Name is required",
                               type: "required",
                             },
-                            // forAlphaNumericWithoutDot.errors
+                            forAlphaNumericWithoutDot.errors,
                           ]}
                         />
                       </div>
@@ -178,7 +183,7 @@ export default function Login() {
                           type="email"
                           register={formHook.register("email", {
                             required: true,
-                            // ...forAlphaNumericWithoutDot.validations
+                            ...forEmail.validations,
                           })}
                           fieldError={formHook.formState.errors.email}
                           errorMessages={[
@@ -186,7 +191,7 @@ export default function Login() {
                               message: "Email is required",
                               type: "required",
                             },
-                            // forAlphaNumericWithoutDot.errors
+                            forEmail.errors,
                           ]}
                         />
                       </div>
@@ -195,7 +200,8 @@ export default function Login() {
                       <div className="mt-2">
                         <div className="card flex justify-content-center items-center gap-1 w-full">
                           <Password
-                            className="w-full "
+                            className="w-full text-xs leading-5 placeholder:text-xs placeholder:text-gray-50 focus:outline-none right-0"
+                            placeholder="Enter Password"
                             value={formHook.watch("password")}
                             onChange={(e) => {
                               formHook.setValue("password", e.target.value);
@@ -208,7 +214,7 @@ export default function Login() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    {/* <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <input
                           id="remember-me"
@@ -223,7 +229,7 @@ export default function Login() {
                           Remember me
                         </label>
                       </div>
-                    </div>
+                    </div> */}
 
                     <div>
                       <button

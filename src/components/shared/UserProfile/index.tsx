@@ -7,6 +7,7 @@ import TextareaComponent from "@/components/ui/TextareaComponent";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useFormValidations from "../UI_Interface/useFormValidation";
 
 export interface ICreateGroupFromFields {
   name: string;
@@ -23,6 +24,14 @@ export interface ICreateGroupFromFields {
 
 const UserProfile = () => {
   const [open, setOpen] = useState<boolean>(false);
+
+  const {
+    forAlphaNumericWithoutDot,
+    forEmail,
+    forMobile,
+    forAlphaNumeric,
+    forOnlyNumber,
+  } = useFormValidations();
 
   const formHook = useForm<ICreateGroupFromFields>({
     defaultValues: {},
@@ -98,7 +107,7 @@ const UserProfile = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  className="opacity-0 cursor-pointer w-full h-full"
+                  className="opacity-0 cursor-pointer w-full h-full hidden"
                   onChange={handleFileChange}
                 />
               </label>
@@ -111,7 +120,7 @@ const UserProfile = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  className="opacity-0 cursor-pointer w-full h-full"
+                  className="opacity-0 cursor-pointer w-full h-full hidden"
                   onChange={handleFileChange}
                 />
               </label>
@@ -143,7 +152,7 @@ const UserProfile = () => {
               isMandatory={true}
               register={formHook.register("name", {
                 required: true,
-                // ...forAlphaNumericWithoutDot.validations
+                ...forAlphaNumericWithoutDot.validations,
               })}
               fieldError={formHook.formState.errors.name}
               errorMessages={[
@@ -151,7 +160,7 @@ const UserProfile = () => {
                   message: "Name is required",
                   type: "required",
                 },
-                // forAlphaNumericWithoutDot.errors
+                forAlphaNumericWithoutDot.errors,
               ]}
             />
             <SearchableSelectMenu
@@ -193,15 +202,15 @@ const UserProfile = () => {
               isMandatory={true}
               register={formHook.register("email", {
                 required: true,
-                // ...forAlphaNumericWithoutDot.validations
+                ...forEmail.validations,
               })}
               fieldError={formHook.formState.errors.email}
               errorMessages={[
                 {
-                  message: "Name is required",
+                  message: "Email is required",
                   type: "required",
                 },
-                // forAlphaNumericWithoutDot.errors
+                forEmail.errors,
               ]}
             />
             <Input
@@ -211,15 +220,15 @@ const UserProfile = () => {
               // labelName="Phone"
               register={formHook.register("phone", {
                 required: true,
-                // ...forAlphaNumericWithoutDot.validations
+                ...forMobile.validations,
               })}
               fieldError={formHook.formState.errors.phone}
               errorMessages={[
                 {
-                  message: "Name is required",
+                  message: "Phone is required",
                   type: "required",
                 },
-                // forAlphaNumericWithoutDot.errors
+                forMobile.errors,
               ]}
             />
             <SearchableSelectMenu
@@ -271,21 +280,21 @@ const UserProfile = () => {
               isMandatory={true}
               register={formHook.register("org_name", {
                 required: true,
-                // ...forAlphaNumericWithoutDot.validations
+                ...forAlphaNumericWithoutDot.validations,
               })}
               fieldError={formHook.formState.errors.org_name}
               errorMessages={[
                 {
-                  message: "Name is required",
+                  message: "Org Name is required",
                   type: "required",
                 },
-                // forAlphaNumericWithoutDot.errors
+                forAlphaNumericWithoutDot.errors,
               ]}
             />
             <SearchableSelectMenu
               errorMessages={[
                 {
-                  message: " theme is required",
+                  message: "Org Size is required",
                   type: "required",
                 },
               ]}
@@ -320,15 +329,15 @@ const UserProfile = () => {
               placeholder="Enter Your Org Website"
               register={formHook.register("org_website", {
                 required: true,
-                // ...forAlphaNumericWithoutDot.validations
+                ...forAlphaNumeric.validations,
               })}
               fieldError={formHook.formState.errors.org_website}
               errorMessages={[
                 {
-                  message: "Name is required",
+                  message: "Website is required",
                   type: "required",
                 },
-                // forAlphaNumericWithoutDot.errors
+                forAlphaNumeric.errors,
               ]}
             />
             <Input
@@ -338,15 +347,15 @@ const UserProfile = () => {
               placeholder="Enter Your Org Age"
               register={formHook.register("org_age", {
                 required: true,
-                // ...forAlphaNumericWithoutDot.validations
+                ...forOnlyNumber.validations,
               })}
               fieldError={formHook.formState.errors.org_age}
               errorMessages={[
                 {
-                  message: "Name is required",
+                  message: "Org Age is required",
                   type: "required",
                 },
-                // forAlphaNumericWithoutDot.errors
+                forOnlyNumber.errors,
               ]}
             />
             <div className="col-span-2">
@@ -355,15 +364,15 @@ const UserProfile = () => {
                 placeholder="About Company "
                 register={formHook.register("org_about", {
                   required: true,
-                  // ...forAlphaNumericWithoutDot.validations
+                  ...forAlphaNumericWithoutDot.validations,
                 })}
                 fieldError={formHook.formState.errors.org_about}
                 errorMessages={[
                   {
-                    message: "Name is required",
+                    message: "This is required",
                     type: "required",
                   },
-                  // forAlphaNumericWithoutDot.errors
+                  forAlphaNumericWithoutDot.errors,
                 ]}
               />
             </div>

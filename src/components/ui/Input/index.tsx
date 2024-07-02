@@ -21,7 +21,7 @@ const Input: React.FC<IInput> = ({
   const isValid = isFormFieldValid(reducedErrorMessages);
 
   return (
-    <div className={clsx("", className)}>
+    <div className={clsx(" relative w-full", className)}>
       <div className="w-full relative  flex justify-start items-center rounded-md border ">
         {props?.startIcon && (
           <div className="pointer-events-none  inset-y-0 left-0 flex justify-center items-center pl-2 pr-2">
@@ -45,13 +45,10 @@ const Input: React.FC<IInput> = ({
                 : "rounded-md"
           )}
         />
-        {props?.endIcon && (
-          <div className="pointer-events-none  inset-y-0 right-0 flex items-center justify-center pl-2 pr-2 text-xs">
-            {props?.endIcon}
-          </div>
-        )}
       </div>
-      <FormFieldErrors errors={reducedErrorMessages} />
+      <div className="absolute">
+        <FormFieldErrors errors={reducedErrorMessages} />
+      </div>
     </div>
   );
 };
