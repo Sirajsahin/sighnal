@@ -1,4 +1,3 @@
-// craco.config.js
 const path = require("path");
 
 module.exports = {
@@ -21,21 +20,41 @@ module.exports = {
         return (
           rule.oneOf &&
           rule.oneOf.some(
-            (subRule) => subRule.test && subRule.test.test(".svg")
+            (subRule) =>
+              subRule.test &&
+              subRule.test instanceof RegExp &&
+              subRule.test.test(".svg")
           )
         );
       });
 
       if (imageRule) {
         const imageLoader = imageRule.oneOf.find(
-          (subRule) => subRule.test && subRule.test.test(".svg")
+          (subRule) =>
+            subRule.test &&
+            subRule.test instanceof RegExp &&
+            subRule.test.test(".svg")
         );
 
         if (imageLoader) {
-          imageLoader.options = {
-            ...imageLoader.options,
-            limit: 10000, // Adjust the limit as necessary
-          };
+          if (Array.isArray(imageLoader.use)) {
+            imageLoader.use.forEach((loader) => {
+              if (loader.loader && loader.loader.includes("url-loader")) {
+                loader.options = {
+                  ...loader.options,
+                  limit: 10000, // Adjust the limit as necessary
+                };
+              }
+            });
+          } else if (
+            imageLoader.loader &&
+            imageLoader.loader.includes("url-loader")
+          ) {
+            imageLoader.options = {
+              ...imageLoader.options,
+              limit: 10000, // Adjust the limit as necessary
+            };
+          }
         }
       }
 
