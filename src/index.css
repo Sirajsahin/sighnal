@@ -11,3 +11,7 @@
   border: 1px solid rgba(187, 187, 187, 0.3);
   border-radius: 5px;
 }
+
+body {
+  font-family: "Space Grotesk", sans-serif;
+}
