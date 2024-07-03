@@ -16,7 +16,7 @@ const GroupHeaderComponent: React.FC<IFeedbackHeaderComponentProps> = (
         </p>
       </div>
       {props?.para && (
-        <p className="text-sm font-normal text-[#475467] my-1 w-3/5 ">
+        <p className="text-sm font-normal text-[#475467] my-1 w-full ">
           {props?.para}
         </p>
       )}

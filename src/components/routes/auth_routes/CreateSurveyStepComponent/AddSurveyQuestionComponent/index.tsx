@@ -150,7 +150,7 @@ const AddSurveyQuestionComponent = () => {
                   <div className="mx-auto w-full divide-y  rounded-xl bg-white shadow-lg">
                     <Disclosure as="div" className="p-6" defaultOpen={true}>
                       <DisclosureButton className="group flex w-full items-center justify-between">
-                        <span className="text-xl font-medium text-black group-data-[hover]:text-black/80">
+                        <span className="text-base font-medium text-black group-data-[hover]:text-black/80">
                           Question {index + 1}
                         </span>
                         <ChevronDownIcon className="size-5 fill-black group-data-[hover]:fill-black/50 group-data-[open]:rotate-180" />
@@ -204,7 +204,7 @@ const AddSurveyQuestionComponent = () => {
                           </div>
                           <div className="flex items-center justify-between gap-3 w-full my-2">
                             <div className="w-full">
-                              <p className="text-sm font-medium text-[#333333] pb-2">
+                              <p className="text-xs font-medium text-[#333333] pb-2">
                                 Question Type
                               </p>
                               <SearchableSelectMenu
@@ -259,7 +259,7 @@ const AddSurveyQuestionComponent = () => {
                               />
                             </div>
                             <div className="w-full">
-                              <p className="text-sm font-medium text-[#333333] pb-2">
+                              <p className="text-xs font-medium text-[#333333] pb-2">
                                 Can this question can be skipped?
                               </p>
                               <SearchableSelectMenu
@@ -313,7 +313,7 @@ const AddSurveyQuestionComponent = () => {
                             </div>
                           </div>
                           <div>
-                            <p className="text-sm font-medium text-[#333333] py-3">
+                            <p className="text-xs font-medium text-[#333333] py-3">
                               Options
                             </p>
 

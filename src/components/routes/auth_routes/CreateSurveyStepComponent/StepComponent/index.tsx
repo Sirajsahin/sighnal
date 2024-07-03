@@ -14,13 +14,19 @@ export default function StepComponent() {
     if (step_id > stepIdx + 1) {
       return "bg-[#0C6545] text-white";
     }
+    if (stepIdx + 1 === step_id) {
+      return "bg-[#333333] text-white";
+    }
     return "bg-white";
   };
   const getStatusClassText = (stepIdx) => {
     if (step_id > stepIdx + 1) {
-      return "text-[#475467]";
+      return "text-[#47546780]";
     }
-    return "text-[#333333]";
+    if (stepIdx + 1 === step_id) {
+      return "text-[#333333]";
+    }
+    return "text-[#47546780]";
   };
 
   return (
@@ -34,6 +40,12 @@ export default function StepComponent() {
               >
                 {stepIdx + 1}
               </span>
+            ) : step_id === stepIdx + 1 ? (
+              <span
+                className={`bg-[#333333] border rounded-full w-5 h-5 justify-center items-center flex text-xs`}
+              >
+                {stepIdx + 1}
+              </span>
             ) : (
               <span
                 className={`bg-white border rounded-full w-5 h-5 justify-center items-center flex text-xs`}
@@ -41,7 +53,9 @@ export default function StepComponent() {
                 {stepIdx + 1}
               </span>
             )}
-            <span className={`text-xs ${getStatusClassText} font-medium`}>
+            <span
+              className={`text-xs ${getStatusClassText(stepIdx)} font-medium`}
+            >
               {step.name}
             </span>
           </div>

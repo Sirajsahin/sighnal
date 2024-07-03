@@ -62,10 +62,10 @@ const CreateSurveyQuestionHeaderComponent = () => {
   };
 
   return (
-    <div className=" flex flex-col justify-center items-center mr-auto my-3 w-full">
+    <div className=" flex flex-col justify-center items-center mr-auto my-3 mt-0 w-full">
       <div className="w-2/5">
         <p className="text-[#475467] font-medium text-xs">Step 1/3</p>
-        <h4 className="text-base font-semibold my-1">
+        <h4 className="text-xl font-bold my-1">
           Let’s start with adding a Survey Title & Description
         </h4>
         <p className="text-[#475467] text-sm my-1">

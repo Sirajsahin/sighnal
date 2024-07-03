@@ -109,7 +109,7 @@ export default function Login() {
     <>
       <div>
         <div className="grid grid-cols-3 h-screen flex-1 overflow-y-auto">
-          <div className="">
+          <div className="h-auto">
             <img
               className=" inset-0 h-full w-full object-cover"
               src={MyImage}
@@ -119,11 +119,11 @@ export default function Login() {
           <div className="flex flex-1 flex-col px-4  sm:px-6 lg:flex-none lg:px-20 xl:px-24">
             <div className="mx-auto w-full max-w-sm lg:w-96 py-12 flex justify-center flex-col mt-20">
               <div>
-                <div className="flex items-center gap-1 ">
+                <div className="flex items-center gap-1 text-[#333333]">
                   <FaArrowLeft className="w-4 h-4" />
                   Back
                 </div>
-                <h2 className="mt-4 text-xl font-bold leading-9 tracking-tight text-gray-900">
+                <h2 className="mt-4 text-xl font-bold leading-9 tracking-tight text-[#333333]">
                   Sign up as an organisation
                 </h2>
               </div>
@@ -159,7 +159,7 @@ export default function Login() {
                       <div className="mt-2">
                         <Input
                           className="text-xs"
-                          placeholder="Enter Your Name"
+                          placeholder="Enter Name"
                           register={formHook.register("name", {
                             required: true,
                             ...forAlphaNumericWithoutDot.validations,
@@ -179,7 +179,7 @@ export default function Login() {
                       <div className="mt-2">
                         <Input
                           className="text-xs"
-                          placeholder="Enter Email Address"
+                          placeholder="Email Address"
                           type="email"
                           register={formHook.register("email", {
                             required: true,
@@ -201,7 +201,7 @@ export default function Login() {
                         <div className="card flex justify-content-center items-center gap-1 w-full">
                           <Password
                             className="w-full text-xs leading-5 placeholder:text-xs placeholder:text-gray-50 focus:outline-none right-0"
-                            placeholder="Enter Password"
+                            placeholder="Password"
                             value={formHook.watch("password")}
                             onChange={(e) => {
                               formHook.setValue("password", e.target.value);
@@ -242,13 +242,13 @@ export default function Login() {
                   </form>
                 </div>
 
-                <p className="text-xs py-5 font-normal">
+                <p className="text-xs py-8 font-normal text-[#475467]">
                   By confirming your email, you agree to our{" "}
-                  <a className="font-semibold text-black cursor-pointer">
+                  <a className="font-semibold text-[#333333] cursor-pointer">
                     Terms of Services
                   </a>{" "}
                   and that you have read and understood our{" "}
-                  <a className="font-semibold text-black cursor-pointer ">
+                  <a className="font-semibold text-[#333333] cursor-pointer ">
                     Privacy Policy
                   </a>
                   .
@@ -260,7 +260,7 @@ export default function Login() {
             <div className="flex justify-end my-4 pr-6 items-center gap-3 text-sm font-medium text-[#333333]">
               <p>Already have an account?</p>
               <button
-                className=" border border-1 border-gray-600  px-6 py-2 rounded-md text-sm hover:bg-slate-500 hover:text-white flex gap-1 items-center"
+                className=" border border-1 border-gray-600  px-4 py-1 rounded-md text-sm hover:bg-slate-500 hover:text-white flex gap-1 items-center"
                 // onClick={() => clientSignOut()}
               >
                 {/* <LuLogOut /> */}
