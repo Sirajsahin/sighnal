@@ -22,7 +22,10 @@ export interface ICreateGroupFromFields {
 
 export default function Login() {
   const formHook = useForm<ICreateGroupFromFields>({
-    defaultValues: {},
+    mode: "onChange",
+    defaultValues: {
+      password: null,
+    },
   });
 
   const { forAlphaNumericWithoutDot, forEmail } = useFormValidations();
@@ -43,6 +46,7 @@ export default function Login() {
       return;
     }
     if (data && isFormSubmissionValid) {
+      
       const constructedData: ISignalUserCreateProps = {
         name: data.name,
         email: data.email,
@@ -58,9 +62,9 @@ export default function Login() {
   const criteria = {
     hasUppercase: /[A-Z]/.test(passwordValue),
     hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(passwordValue),
-    hasLowercase: /[a-z]/.test(passwordValue),
-    isValidLength:
-      passwordValue && passwordValue.length >= 10 && passwordValue.length <= 50,
+    hasLowercase: passwordValue === null ? false : /[a-z]/.test(passwordValue),
+    isValidLength: passwordValue && passwordValue.length >= 8,
+    hasNumericChar: /[0-9]/.test(passwordValue),
   };
 
   const footer = (
@@ -97,10 +101,18 @@ export default function Login() {
         <li className="flex items-center  gap-1 text-gray-400 text-xs font-normal">
           <MdDone
             className={`w-3 h-3 rounded-full items-center text-white text-xs ${
+              criteria.hasNumericChar ? "bg-green-600" : "bg-red-600"
+            }`}
+          />
+          a numeric character
+        </li>
+        <li className="flex items-center  gap-1 text-gray-400 text-xs font-normal">
+          <MdDone
+            className={`w-3 h-3 rounded-full items-center text-white text-xs ${
               criteria.isValidLength ? "bg-green-600" : "bg-red-600"
             }`}
           />
-          between 10 and 50 characters
+          minimum 8 characters
         </li>
       </ul>
     </>
@@ -234,6 +246,13 @@ export default function Login() {
                     <div>
                       <button
                         type="submit"
+                        disabled={
+                          !criteria?.hasLowercase ||
+                          !criteria?.hasNumericChar ||
+                          !criteria?.hasSpecialChar ||
+                          !criteria?.hasUppercase ||
+                          !criteria?.isValidLength
+                        }
                         className="flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       >
                         Create Account
