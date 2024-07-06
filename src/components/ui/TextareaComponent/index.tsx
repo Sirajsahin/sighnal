@@ -39,7 +39,7 @@ const TextareaComponent: React.FC<ITextarea> = ({
           autoComplete="off"
           autoCorrect="off"
           className={clsx(
-            " py-1.5 p-2 outline-none border  ring-inset text-xs  disabled:bg-gray-200 disabled:text-gray-600 sm:leading-6 w-full",
+            " py-1.5 p-2 outline-none border ring-1  ring-inset text-xs  disabled:bg-gray-200 disabled:text-gray-600 sm:leading-6 w-full",
             inputClassName,
             isValid
               ? "text-gray-900 ring-gray-300 placeholder:text-gray-400"
