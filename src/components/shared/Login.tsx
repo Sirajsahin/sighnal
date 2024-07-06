@@ -31,22 +31,30 @@ export default function Login() {
   const { forAlphaNumericWithoutDot, forEmail } = useFormValidations();
 
   const { execute: createUserRole } = useUserCreateAPI();
+  // const [passwordIsrequired, setPasswordIsrequired] = useState<boolean>(false);
+
   /* Actions and Handlers */
   const validateConditionalFormFields = (data: ICreateGroupFromFields) => {
     let isValid = false;
 
     if (data?.name !== "" || data?.password !== "" || data?.email !== "") {
       isValid = true;
+      // setPasswordIsrequired(false);
+    } else {
+      // setPasswordIsrequired(true);
+      isValid = false;
     }
     return isValid;
   };
+
   const onSubmit = (data: ICreateGroupFromFields) => {
     const isFormSubmissionValid = validateConditionalFormFields(data);
+    console.log(isFormSubmissionValid, "ffhf");
     if (!isFormSubmissionValid) {
       return;
     }
+
     if (data && isFormSubmissionValid) {
-      
       const constructedData: ISignalUserCreateProps = {
         name: data.name,
         email: data.email,
@@ -65,6 +73,16 @@ export default function Login() {
     hasLowercase: passwordValue === null ? false : /[a-z]/.test(passwordValue),
     isValidLength: passwordValue && passwordValue.length >= 8,
     hasNumericChar: /[0-9]/.test(passwordValue),
+  };
+
+  const isValidPassword = () => {
+    return (
+      criteria.hasLowercase &&
+      criteria.hasNumericChar &&
+      criteria.hasSpecialChar &&
+      criteria.hasUppercase &&
+      criteria.isValidLength
+    );
   };
 
   const footer = (
@@ -210,7 +228,7 @@ export default function Login() {
                     </div>
                     <div>
                       <div className="mt-2">
-                        <div className="card flex justify-content-center items-center gap-1 w-full">
+                        <div className="card flex  flex-col gap-1 w-full">
                           <Password
                             className="w-full text-xs leading-5 placeholder:text-xs placeholder:text-gray-50 focus:outline-none right-0"
                             placeholder="Password"
@@ -220,8 +238,19 @@ export default function Login() {
                             }}
                             toggleMask
                             footer={footer}
-                            required
+                            // required
+                            // tooltip="s"
                           />
+                          {!isValidPassword() && passwordValue && (
+                            <p className="text-red-500 text-[10px]">
+                              Invalid Password
+                            </p>
+                          )}
+                          {/* {passwordIsrequired && (
+                            <p className="text-red-500 text-[10px]">
+                              Password is required
+                            </p>
+                          )} */}
                         </div>
                       </div>
                     </div>
@@ -246,13 +275,7 @@ export default function Login() {
                     <div>
                       <button
                         type="submit"
-                        disabled={
-                          !criteria?.hasLowercase ||
-                          !criteria?.hasNumericChar ||
-                          !criteria?.hasSpecialChar ||
-                          !criteria?.hasUppercase ||
-                          !criteria?.isValidLength
-                        }
+                        disabled={!isValidPassword()}
                         className="flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       >
                         Create Account

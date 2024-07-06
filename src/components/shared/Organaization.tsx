@@ -48,6 +48,11 @@ export default function Organaization() {
     fetcCountry();
   }, []);
 
+  useEffect(() => {
+    const email = localStorage.getItem("email")?.split("@")[1]?.split(".")[0];
+    formHook.setValue("name", email);
+  }, [localStorage.getItem("displayName")]);
+
   const countyListItem = useSelectMenuReducer(countyList, "name", "id");
   const onSubmit = (data: ICreateGroupFromFields) => {
     const isFormSubmissionValid = validateConditionalFormFields(data);
@@ -68,6 +73,9 @@ export default function Organaization() {
     }
   };
 
+  const handelBack = () => {
+    navigate("/app/login/sign-in");
+  };
   return (
     <div>
       <div className="grid grid-cols-3 h-screen flex-1 overflow-y-auto">
@@ -81,7 +89,10 @@ export default function Organaization() {
         <div className="flex flex-1 flex-col px-4  sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96 py-12 flex justify-center flex-col mt-20">
             <div>
-              <div className="flex items-center gap-1 font-semibold">
+              <div
+                className="flex items-center gap-1 font-semibold cursor-pointer"
+                onClick={() => handelBack()}
+              >
                 <ArrowLeftIcon className="w-4 h-4" />
                 Back
               </div>
@@ -189,7 +200,7 @@ export default function Organaization() {
                   <div>
                     <button
                       type="submit"
-                      className="flex w-full justify-center rounded-md bg-[#333] px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      className="flex w-full justify-center rounded-md bg-[#333] px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm "
                     >
                       Next
                     </button>
@@ -202,7 +213,7 @@ export default function Organaization() {
         <div className="">
           <div className="flex justify-end my-4 pr-6">
             <button
-              className=" border border-1  px-4 py-2 rounded-md text-sm hover:bg-slate-500 hover:text-white flex gap-1 items-center"
+              className=" border border-1  px-4 py-2 rounded-md text-sm hover:bg-black hover:text-white flex gap-1 items-center"
               onClick={() => clientSignOut()}
             >
               <LuLogOut />

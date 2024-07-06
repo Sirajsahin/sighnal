@@ -33,18 +33,20 @@ const Pagination = (props) => {
 
   const lastPage = paginationRange[paginationRange?.length - 1];
   return (
-    <div className="grid grid-cols-3 my-3">
-      <div>
-        <button
-          className={classnames(
-            " text-[#344054] py-2 px-2 text-xs rounded-md flex items-center gap-1 border font-medium"
-          )}
-          disabled={currentPage === 1}
-          onClick={onPrevious}
-        >
-          <ArrowLeftIcon className="w-4 h-4" />
-          Previous
-        </button>
+    <div className="grid grid-cols-3 ">
+      <div className="relative">
+        {currentPage === 1 ? null : (
+          <button
+            className={classnames(
+              " text-[#344054] py-2 px-2 text-xs rounded-md flex items-center gap-1 border font-medium"
+            )}
+            disabled={currentPage === 1}
+            onClick={onPrevious}
+          >
+            <ArrowLeftIcon className="w-4 h-4" />
+            Previous
+          </button>
+        )}
       </div>
       <ul
         className={classnames("pagination-container", {

@@ -77,30 +77,32 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
 
   return (
     <div>
-      <div
-        {...getRootProps()}
-        className={`border my-5 shadow-sm border-[#EAECF0] rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer ${
-          isDragActive
-            ? "border-blue-500 bg-blue-50"
-            : "border-gray-300 bg-white"
-        }`}
-      >
-        <input {...getInputProps()} />
-        <div className="flex flex-col items-center justify-center gap-3">
-          <div className="border-[#EAECF0] border p-3 rounded-xl">
-            <LuUploadCloud className="w-5 h-5" />
+      {!fileDetails?.name && (
+        <div
+          {...getRootProps()}
+          className={`border my-8 shadow-sm border-[#EAECF0] rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer ${
+            isDragActive
+              ? "border-blue-500 bg-blue-50"
+              : "border-gray-300 bg-white"
+          }`}
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center justify-center gap-3">
+            <div className="border-[#EAECF0] border p-3 rounded-xl">
+              <LuUploadCloud className="w-5 h-5" />
+            </div>
+            <p className="text-[#34A853] text-sm font-semibold ">
+              Click to upload{" "}
+              <span className="text-[#475467] font-normal">
+                or drag and drop CSV File
+              </span>
+            </p>
           </div>
-          <p className="text-[#34A853] text-sm font-semibold ">
-            Click to upload{" "}
-            <span className="text-[#475467] font-normal">
-              or drag and drop CSV File
-            </span>
-          </p>
         </div>
-      </div>
+      )}
       {fileDetails?.name && (
         <div
-          className={`border my-4 shadow-sm border-[#EAECF0] rounded-xl p-3 py-4 `}
+          className={`border my-8 shadow-sm border-[#EAECF0] rounded-xl p-3 py-4  `}
         >
           <div className="flex  justify-between">
             <div className="flex items-start gap-2">

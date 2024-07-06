@@ -146,14 +146,15 @@ export default function GroupuserTableComponent({ data, setOpen }) {
                 ))}
               </tbody>
             </table>
-
-            <Pagination
-              className="pagination-bar"
-              currentPage={currentPage}
-              totalCount={data?.length}
-              pageSize={PageSize}
-              onPageChange={(page) => setCurrentPage(page)}
-            />
+            <div className="my-4">
+              <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={data?.length}
+                pageSize={PageSize}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            </div>
           </div>
         </div>
       </div>

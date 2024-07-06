@@ -46,7 +46,9 @@ const EQUIPMENT_NAME_REGEX = /^[a-zA-Z\s-_0-9]+$/;
 const LAT_REGEX = /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)$/;
 const LONG_REGEX = /^[-+]?([1-9]?\d(\.\d+)?|1[0-7]\d(\.\d+)?|180(\.0+)?)$/;
 const MOBILE_REGEX = /^[6-9]\d{9}$/i;
-const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+const EMAIL_REGEX =
+  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(com|org|net|info|biz|edu|gov|mil|in|uk|jp|de|au|ca|app|tech|shop|blog|online)$/;
+
 const ADDRESS_LINE_REGEX = /^[a-zA-Z0-9, ]+$/i;
 const NUMERIC_WITH_DECIMAL = /^\d+(\.\d{1,2})?$/i;
 const INDIAN_PAN_NUMBER_REGEX = /[A-Z]{5}[0-9]{4}[A-Z]{1}/i;

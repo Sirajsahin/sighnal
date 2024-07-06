@@ -61,9 +61,11 @@ const UserProfile = () => {
     }
   };
   const dataItemList = [
-    { id: "1", title: "siraj" },
-    { id: "2", title: "siraj" },
-    { id: "3", title: "siraj" },
+    { id: "1", title: "0-10" },
+    { id: "2", title: "11-30" },
+    { id: "3", title: "30-100" },
+    { id: "3", title: "100-150" },
+    { id: "3", title: "151-300" },
   ];
 
   const [logo, setLogo] = useState<File | null>(null);
@@ -146,6 +148,7 @@ const UserProfile = () => {
           </p>
           <div className="grid grid-cols-2 gap-6 items-center mt-4">
             <Input
+              autoComplete="false"
               className="text-xs"
               placeholder="Enter Your Name"
               // labelName="Name"

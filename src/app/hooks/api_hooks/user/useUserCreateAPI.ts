@@ -35,10 +35,7 @@ export const useUserCreateAPI = () => {
             );
             localStorage.setItem("displayName", res?.data?.data?.name);
             localStorage.setItem("email", res?.data?.data?.email);
-            localStorage.setItem(
-              "photoURL",
-              "https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_640.png"
-            );
+            localStorage.setItem("photoURL", "null");
 
             dispatch(
               setAuthorization({
@@ -74,7 +71,7 @@ export const useUserCreateAPI = () => {
           if (e.code === "ERR_BAD_REQUEST") {
             toast.error("Error while fetching org services");
           }
-          if (e.status === 400) {
+          if (e.response?.status === 400) {
             toast("Services records not found");
           }
           if (e.response.status === 500) {
@@ -82,7 +79,7 @@ export const useUserCreateAPI = () => {
           }
         });
     } catch (e: any) {
-      toast.error("Server Error: " + e.message);
+      toast.error("User Already Exist");
     }
   }, []);
   return { execute };
