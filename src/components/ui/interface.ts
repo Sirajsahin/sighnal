@@ -50,8 +50,12 @@ export interface IInput
   endIcon?: ReactNode;
   startIcon?: ReactNode;
   inputClassName?: string;
-  labelName?:string;
-  isMandatory?:boolean;
+  labelName?: string;
+  isMandatory?: boolean;
+  fieldError?:
+    | Merge<FieldError, FieldErrorsImpl<ISelectMenuItemData>>
+    | FieldError
+    | undefined;
 }
 
 export interface IInputWithFileUpload
@@ -59,12 +63,20 @@ export interface IInputWithFileUpload
     IFormComponents,
     IUseFormRegister {
   variant: "DRAG_AND_DROP" | "SIMPLE";
+  fieldError?:
+    | Merge<FieldError, FieldErrorsImpl<ISelectMenuItemData>>
+    | FieldError
+    | undefined;
   inputClassName?: string;
   onClear?: () => void;
   onFileRemove?: (Files?: File[]) => void;
   isMultiple?: boolean;
   dragAndDropIcon?: React.ReactNode;
   files?: FileList;
+  onFileUploaded: (data: any[]) => void;
+  type?: string;
+  fileType?: string;
+
   dragAndDropDescription?: {
     allowedFormats: string[];
     maxFileSize: string;

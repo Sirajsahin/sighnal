@@ -6,7 +6,7 @@ const UIContainer: React.FC<React.PropsWithChildren<IUIContainerProps>> = (
   props
 ) => {
   return (
-    <div className="bg-gradient-to-r min-h-screen">
+    <div className="bg-gradient-to-r ">
       <SidebarComponent />
 
       <div className="lg:pl-64">

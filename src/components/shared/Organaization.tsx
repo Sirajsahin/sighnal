@@ -143,6 +143,7 @@ export default function Organaization() {
                         if (item) {
                           formHook.setValue(`country`, item.title);
                         }
+                        formHook.clearErrors("country");
                       }}
                       fieldError={formHook?.formState?.errors?.country}
                       register={formHook.register(`country`, {
@@ -175,6 +176,7 @@ export default function Organaization() {
                           if (item) {
                             formHook.setValue(`org_detp`, item.title);
                           }
+                          formHook.clearErrors("org_detp");
                         }}
                         fieldError={formHook?.formState?.errors?.org_detp}
                         register={formHook.register(`org_detp`, {

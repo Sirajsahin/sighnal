@@ -178,6 +178,7 @@ const UserProfile = () => {
                 if (item) {
                   formHook.setValue(`citizen`, item.title);
                 }
+                formHook.clearErrors(`citizen`);
               }}
               fieldError={formHook?.formState?.errors?.citizen}
               register={formHook.register(`citizen`, {
@@ -246,6 +247,7 @@ const UserProfile = () => {
                 if (item) {
                   formHook.setValue(`jobTitle`, item.title);
                 }
+                formHook.clearErrors("jobTitle")
               }}
               fieldError={formHook?.formState?.errors?.jobTitle}
               register={formHook.register(`jobTitle`, {
@@ -305,6 +307,7 @@ const UserProfile = () => {
                 if (item) {
                   formHook.setValue(`org_size`, item.title);
                 }
+                formHook.clearErrors("org_size")
               }}
               fieldError={formHook?.formState?.errors?.org_size}
               register={formHook.register(`org_size`, {

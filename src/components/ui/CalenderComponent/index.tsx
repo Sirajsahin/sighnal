@@ -26,7 +26,7 @@ const CalenderComponent: React.FC<ICalenderComponentProps> = ({
   return (
     <>
       <button
-        className="border border-solid border-gray-300 rounded-md bg-primary-color cursor-pointer text-black text-xs py-1 px-3 flex items-center gap-2"
+        className="border border-solid border-gray-300 rounded-md bg-primary-color cursor-pointer text-black text-xs py-2 px-3 flex items-center gap-2"
         onClick={handleOpen}
       >
         <span>

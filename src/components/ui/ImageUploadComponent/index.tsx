@@ -10,6 +10,8 @@ type FileUploadProps = {
   onFileUploaded: (data: any[]) => void;
   type?: string;
   fileType?: string;
+  setIsFileRequired?: (r: boolean) => void;
+  isFileRequired?: boolean;
 };
 
 export function bytesToKB(bytes) {
@@ -24,6 +26,8 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
   onFileUploaded,
   type,
   fileType,
+  setIsFileRequired,
+  isFileRequired,
 }) => {
   const [fileDetails, setFileDetails] = useState<
     { name: string; size: number; data: ParseResult<any> | string }[]
@@ -31,6 +35,7 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
+      setIsFileRequired(false); // Reset the required state on file drop
       const files = acceptedFiles.map((file) => {
         const reader = new FileReader();
         return new Promise<{ name: string; size: number; data: string }>(
@@ -85,6 +90,14 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
     [onFileUploaded, type]
   );
 
+  const handleSubmit = () => {
+    if (fileDetails.length === 0) {
+      setIsFileRequired(true);
+      return;
+    }
+    // Proceed with form submission
+  };
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: type === "image" ? { "image/*": [] } : { "text/csv": [] },
@@ -114,7 +127,7 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
             isDragActive
               ? "border-blue-500 bg-blue-50"
               : "border-gray-300 bg-white"
-          }`}
+          } ${isFileRequired ? "border-red-500" : ""}`}
         >
           <input {...getInputProps()} />
           <div className="flex flex-col items-center justify-center gap-3">
@@ -127,6 +140,9 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
                 or drag and drop {type === "image" ? "Image Files" : "CSV File"}
               </span>
             </p>
+            {isFileRequired && (
+              <p className="text-red-500 text-sm">File upload is required</p>
+            )}
           </div>
         </div>
       )}
@@ -156,6 +172,12 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
             </div>
           ))}
         </div>
+      )}
+      <button onClick={handleSubmit} className="btn btn-primary">
+        Submit
+      </button>
+      {isFileRequired && (
+        <p className="text-red-500 text-sm mt-2">File upload is required</p>
       )}
     </div>
   );

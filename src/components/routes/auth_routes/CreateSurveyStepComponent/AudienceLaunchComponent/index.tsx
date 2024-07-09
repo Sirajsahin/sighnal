@@ -105,9 +105,9 @@ const AudienceLaunchComponent = () => {
   };
 
   return (
-    <div className=" flex justify-center items-center  mr-auto my-3">
+    <div className="w-full flex justify-center items-center">
       <form
-        className=" mt-2 w-5/6 border-2 border-green-50 p-5 shadow-lg rounded-xl"
+        className=" w-2/4 border-2 border-green-50 p-5 shadow-lg rounded-xl"
         onSubmit={formHook.handleSubmit(onSubmit)}
       >
         <div>
@@ -136,7 +136,7 @@ const AudienceLaunchComponent = () => {
               </p>
               <div className="text-sm text-[#333333]">
                 <div className="border border-1 border-purple-100  p-3 w-full rounded-lg flex justify-between items-center gap-2">
-                  <span className="flex items-center gap-2 text-sm text-black  px-2 py-1 rounded-3xl  justify-between">
+                  <span className="flex items-center gap-2 text-sm text-black  px-2 py-0 rounded-3xl  justify-between">
                     Comments On
                   </span>
                   <ToogleComponent
@@ -181,6 +181,9 @@ const AudienceLaunchComponent = () => {
                     if (item) {
                       formHook.setValue("startTime", item.title);
                     }
+                    formHook.clearErrors(
+                      `startTime`
+                    ); 
                   }}
                   fieldError={formHook?.formState?.errors?.startTime}
                   register={formHook.register("startTime", {
@@ -211,6 +214,9 @@ const AudienceLaunchComponent = () => {
                     if (item) {
                       formHook.setValue("endTime", item.title);
                     }
+                    formHook.clearErrors(
+                      `endTime`
+                    ); 
                   }}
                   fieldError={formHook?.formState?.errors?.endTime}
                   register={formHook.register("endTime", {
@@ -234,10 +240,10 @@ const AudienceLaunchComponent = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-end w-2/4 float-right gap-4 mt-4">
+        <div className="flex justify-end w-2/3 float-right gap-4 mt-6">
           <button
             type="button"
-            className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium  ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+            className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium  ring-1 ring-inset ring-gray-300  sm:col-start-1 sm:mt-0"
             // onClick={() => setOpen(false)}
             data-autofocus
           >
@@ -248,7 +254,7 @@ const AudienceLaunchComponent = () => {
           </button>
           <button
             type="button"
-            className="mt-3 inline-flex w-full items-center gap-1 justify-center rounded-md bg-gray-200 px-3 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+            className="mt-3 inline-flex w-full items-center gap-1 justify-center rounded-md bg-gray-200 px-3 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300  sm:col-start-1 sm:mt-0"
             onClick={handelOpenPreview}
           >
             <span>
@@ -258,7 +264,7 @@ const AudienceLaunchComponent = () => {
           </button>
           <button
             type="submit"
-            className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+            className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-medium text-white shadow-sm "
           >
             Make it Live!
           </button>

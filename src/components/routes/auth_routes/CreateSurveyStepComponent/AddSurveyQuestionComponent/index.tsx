@@ -106,6 +106,8 @@ const AddSurveyQuestionComponent = () => {
 
   const [selected, setSelected] = useState<number>(null);
 
+  const [isFileRequired, setIsFileRequired] = useState(false);
+
   // const [openText, setOpenText] = useState<boolean>(false);
 
   const formHook = useForm<ICreateSurveyFromFields>({
@@ -172,6 +174,7 @@ const AddSurveyQuestionComponent = () => {
   }, []);
 
   const onSubmit = (data: ICreateSurveyFromFields) => {
+    setIsFileRequired(true);
     if (data) {
       console.log(data, "data");
       console.log(selected, "data");
@@ -347,6 +350,9 @@ const AddSurveyQuestionComponent = () => {
                                       item.id
                                     );
                                     hanelOptionChange(index);
+                                    formHook.clearErrors(
+                                      `question_details.${index}.question_type_id`
+                                    ); // Clear error on change
                                   }
                                 }}
                                 fieldError={
@@ -447,6 +453,9 @@ const AddSurveyQuestionComponent = () => {
                                       `question_details.${index}.can_skipped`,
                                       item.id
                                     );
+                                    formHook.clearErrors(
+                                      `question_details.${index}.can_skipped`
+                                    ); 
                                   }
                                 }}
                                 fieldError={
@@ -501,6 +510,8 @@ const AddSurveyQuestionComponent = () => {
                                 type="image"
                                 fileType={imageMultipleUpload ? "multiple" : ""}
                                 onFileUploaded={handelUpload}
+                                setIsFileRequired={setIsFileRequired}
+                                isFileRequired={isFileRequired}
                               />
                             ) : (
                               filed?.options?.map((item, id) => {
