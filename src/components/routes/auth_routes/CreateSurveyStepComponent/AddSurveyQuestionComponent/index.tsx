@@ -332,7 +332,7 @@ const AddSurveyQuestionComponent = () => {
                           </div>
                           <div className="flex items-center justify-between gap-3 w-full my-2">
                             <div className="w-full">
-                              <p className="text-sm font-medium text-[#333333] pb-2">
+                              <p className="text-sm font-medium text-[#333333]">
                                 Question Type
                               </p>
 
@@ -392,7 +392,7 @@ const AddSurveyQuestionComponent = () => {
                             </div>
                             {rating && (
                               <div className="w-full">
-                                <p className="text-sm font-medium text-[#333333] pb-2">
+                                <p className="text-sm font-medium text-[#333333] ">
                                   Limit
                                 </p>
 
@@ -437,8 +437,8 @@ const AddSurveyQuestionComponent = () => {
                               </div>
                             )}
                             <div className="w-full">
-                              <p className="text-sm font-medium text-[#333333] pb-2">
-                                Can this question can be skipped?
+                              <p className="text-sm font-medium text-[#333333] ">
+                                Can this question be skipped? *
                               </p>
                               <SearchableSelectMenu
                                 errorMessages={[
@@ -455,7 +455,7 @@ const AddSurveyQuestionComponent = () => {
                                     );
                                     formHook.clearErrors(
                                       `question_details.${index}.can_skipped`
-                                    ); 
+                                    );
                                   }
                                 }}
                                 fieldError={

@@ -90,14 +90,6 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
     [onFileUploaded, type]
   );
 
-  const handleSubmit = () => {
-    if (fileDetails.length === 0) {
-      setIsFileRequired(true);
-      return;
-    }
-    // Proceed with form submission
-  };
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: type === "image" ? { "image/*": [] } : { "text/csv": [] },
@@ -172,12 +164,6 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
             </div>
           ))}
         </div>
-      )}
-      <button onClick={handleSubmit} className="btn btn-primary">
-        Submit
-      </button>
-      {isFileRequired && (
-        <p className="text-red-500 text-sm mt-2">File upload is required</p>
       )}
     </div>
   );

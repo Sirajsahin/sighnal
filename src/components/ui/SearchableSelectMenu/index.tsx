@@ -98,7 +98,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
               {open && props?.variant && props?.variant === "LIKE_TEXT" && (
                 <div className="absolute top-[35px] left-2 shadow-md rounded-sm rotate-45 bg-white p-3 "></div>
               )}
-              <div className="relative  w-full">
+              <div className="relative  w-full mt-1">
                 {props?.label && (
                   <span className="absolute text-xs left-1 -top-4 text-gray-500">
                     {props?.label}

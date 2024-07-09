@@ -107,7 +107,7 @@ const AudienceLaunchComponent = () => {
   return (
     <div className="w-full flex justify-center items-center">
       <form
-        className=" w-2/4 border-2 border-green-50 p-5 shadow-lg rounded-xl"
+        className=" w-2/4  bg-white shadow-sm border  p-5  rounded-xl"
         onSubmit={formHook.handleSubmit(onSubmit)}
       >
         <div>
@@ -181,9 +181,7 @@ const AudienceLaunchComponent = () => {
                     if (item) {
                       formHook.setValue("startTime", item.title);
                     }
-                    formHook.clearErrors(
-                      `startTime`
-                    ); 
+                    formHook.clearErrors(`startTime`);
                   }}
                   fieldError={formHook?.formState?.errors?.startTime}
                   register={formHook.register("startTime", {
@@ -214,9 +212,7 @@ const AudienceLaunchComponent = () => {
                     if (item) {
                       formHook.setValue("endTime", item.title);
                     }
-                    formHook.clearErrors(
-                      `endTime`
-                    ); 
+                    formHook.clearErrors(`endTime`);
                   }}
                   fieldError={formHook?.formState?.errors?.endTime}
                   register={formHook.register("endTime", {

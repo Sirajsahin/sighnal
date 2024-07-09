@@ -1,4 +1,5 @@
 import { HomeIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 const navigation = [
   {
@@ -15,15 +16,22 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function SidebarComponent() {
+export default function SidebarComponent({ collapsed, setCollapsed }) {
   return (
-    <div className="fixed z-50 h-full bg-gray-800   lg:inset-y-0 lg:z-0 lg:flex lg:w-[15rem] lg:flex-col">
-      <div className="flex h-16 shrink-0 items-center">
-        <img
-          className="h-8 w-auto"
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-          alt="Your Company"
-        />
+    <div
+      className={`fixed z-50 h-full mt-16 bg-gray-800 ${collapsed ? "w-10" : "lg:w-[15rem]"} lg:inset-y-0 lg:z-0 lg:flex lg:flex-col`}
+    >
+      <div className="flex h-16 shrink-0 items-center justify-end px-4">
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="text-gray-400 hover:text-white"
+        >
+          {collapsed ? (
+            <ChevronRightIcon className="h-6 w-6" />
+          ) : (
+            <ChevronLeftIcon className="h-6 w-6" />
+          )}
+        </button>
       </div>
       <nav className="flex flex-1 flex-col w-full">
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -44,7 +52,7 @@ export default function SidebarComponent() {
                       className="h-6 w-6 shrink-0"
                       aria-hidden="true"
                     />
-                    {item.name}
+                    {!collapsed && item.name}
                   </a>
                 </li>
               ))}
