@@ -55,7 +55,7 @@ const RatingComponent = () => {
             return (
               <div
                 key={index}
-                className={`text-sm font-semibold  ${selected === index ? "bg-black text-white" : "bg-white hover:bg-indigo-200"} p-3 rounded-lg text-center py-3  cursor-pointer `}
+                className={`text-sm font-semibold  ${selected === index ? "bg-black text-white" : "bg-white "} p-3 rounded-lg text-center py-3  cursor-pointer `}
                 onClick={() => setSelected(index)}
               >
                 {val?.item}

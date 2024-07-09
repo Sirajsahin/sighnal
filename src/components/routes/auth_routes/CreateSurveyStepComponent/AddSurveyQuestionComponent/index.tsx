@@ -3,6 +3,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 
 import { useGroupQuestionTypeAPI } from "@/app/hooks/api_hooks/Group/useGroupQuestionTypeAPI";
 import { useSurveyQuestionCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyQuestionCreateAPI";
+import ImageUploadComponent from "@/components/ui/ImageUploadComponent";
 import Input from "@/components/ui/Input";
 import {
   Disclosure,
@@ -15,9 +16,11 @@ import SearchableSelectMenu from "@ui/SearchableSelectMenu";
 import TextareaComponent from "@ui/TextareaComponent";
 import { useSelectMenuReducer } from "@ui/useSelectMenuReducer";
 import { remove } from "lodash";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import MoodScaleComponent from "../MoodScalComponent";
+import RatingScaleComponent from "../RatingScaleCoponent";
 
 export interface ICampaignQuestionDetailsInfo {
   question: string;
@@ -28,8 +31,62 @@ export interface ICampaignQuestionDetailsInfo {
   business_id: string;
   survey_id: string;
 }
+const ratingRange = [
+  { id: "1", title: "5" },
+  { id: "2", title: "10" },
+];
+const data = [
+  {
+    item: "1",
+  },
+  {
+    item: "2",
+  },
+  {
+    item: "3",
+  },
+  {
+    item: "4",
+  },
+  {
+    item: "5",
+  },
+];
+const data2 = [
+  {
+    item: "1",
+  },
+  {
+    item: "2",
+  },
+  {
+    item: "3",
+  },
+  {
+    item: "4",
+  },
+  {
+    item: "5",
+  },
+  {
+    item: "6",
+  },
+  {
+    item: "7",
+  },
+  {
+    item: "8",
+  },
+  {
+    item: "9",
+  },
+  {
+    item: "10",
+  },
+];
 
 export interface ICreateSurveyFromFields {
+  rating_scale?: string;
   question_details: ICampaignQuestionDetailsInfo[];
 }
 
@@ -39,8 +96,22 @@ const dataItem = [
 ];
 const AddSurveyQuestionComponent = () => {
   const [params, _setparams] = useSearchParams();
+  const [openText, setOpenText] = useState<boolean>(false);
+  const [rating, setRating] = useState<boolean>(false);
+  const [moodScale, setMoodScale] = useState<boolean>(false);
+  const [imageUpload, setImageUpload] = useState<boolean>(false);
+  const [imageMultipleUpload, setImageMultipleUpload] =
+    useState<boolean>(false);
+  const [ratingData, setRatingData] = useState([]);
+
+  const [selected, setSelected] = useState<number>(null);
+
+  // const [openText, setOpenText] = useState<boolean>(false);
+
   const formHook = useForm<ICreateSurveyFromFields>({
-    defaultValues: {},
+    defaultValues: {
+      rating_scale: "5",
+    },
   });
 
   // const { forAlphaNumeric, forAlphaNumericWithoutDot } = useFormValidations();
@@ -89,11 +160,13 @@ const AddSurveyQuestionComponent = () => {
 
   const handleAddProductOptions = (id: number) => {
     // formHook.setValue(`question_details.${id}.options`,[])
+
     questionDetailsFormHook.update(id, {
       ...formHook.getValues(`question_details.${id}`),
       options: [...formHook.getValues(`question_details.${id}.options`), ""],
     });
   };
+
   useEffect(() => {
     fetchQuestionType();
   }, []);
@@ -101,6 +174,7 @@ const AddSurveyQuestionComponent = () => {
   const onSubmit = (data: ICreateSurveyFromFields) => {
     if (data) {
       console.log(data, "data");
+      console.log(selected, "data");
 
       createQuestion(formHook.getValues("question_details")).then(
         ({ status }) => {
@@ -130,53 +204,104 @@ const AddSurveyQuestionComponent = () => {
     const filterType = groupQuestionType?.filter(
       (id) => id?.question_type_id === selectedType
     );
-    const optionValue = filterType && filterType[0]?.options;
+    const optionValue = filterType && filterType[0]?.question_type_id;
+    console.log(optionValue, "id");
+    if (optionValue === "open_text_response") {
+      setOpenText(true);
+      setRating(false);
+    } else {
+      setOpenText(false);
+      setRating(false);
+    }
+    if (optionValue === "rating_scale") {
+      setRatingData(data);
+      setRating(true);
+    } else {
+      setRating(false);
+    }
+    if (optionValue === "mood_scale") {
+      setMoodScale(true);
+    } else {
+      setMoodScale(false);
+    }
+    if (optionValue === "image_single_choice") {
+      setImageUpload(true);
+    } else {
+      setImageUpload(false);
+    }
+    if (optionValue === "image_multiple_choice") {
+      setImageUpload(true);
+      setImageMultipleUpload(true);
+    } else {
+      // setImageUpload(false);
+      setImageMultipleUpload(false);
+    }
 
     questionDetailsFormHook.update(id, {
       ...formHook.getValues(`question_details.${id}`),
-      options: optionValue,
+      options: optionValue === "open_text_response" ? [""] : ["", ""],
     });
     return null;
   };
 
+  useEffect(() => {
+    const rating = formHook.getValues("rating_scale");
+    if (rating === "5") {
+      setRatingData(data);
+    } else {
+      setRatingData(data2);
+    }
+  }, [formHook.watch("rating_scale")]);
+  const handelUpload = () => {
+    ///
+  };
+
   return (
-    <div className=" flex justify-center items-center  mr-auto my-3 ">
-      <div className=" px-4 w-5/6">
+    <div className=" flex justify-center items-center  mr-auto  ">
+      <div className=" px-4 w-2/3">
+        <div className="flex flex-col gap-1 px-10 my-3">
+          <p className="text-[#475467] font-medium text-sm">Step 2/3</p>
+          <p className="text-[#333333] text-xl font-bold">Add your Questions</p>
+          <p className="text-[#475467] text-sm ">
+            Create as number of questions required for your survey.
+          </p>
+        </div>
         <form className="" onSubmit={formHook.handleSubmit(onSubmit)}>
           {questionDetailsFormHook.fields.length > 0 &&
             questionDetailsFormHook?.fields?.map((filed, index) => {
               return (
                 <div key={index} className="mb-4">
-                  <div className="mx-auto w-full divide-y  rounded-xl bg-white shadow-lg">
+                  <div className="mx-auto w-full divide-y  rounded-xl bg-white shadow-sm border">
                     <Disclosure as="div" className="p-6" defaultOpen={true}>
                       <DisclosureButton className="group flex w-full items-center justify-between">
-                        <span className="text-base font-medium text-black group-data-[hover]:text-black/80">
+                        <span className="text-base font-bold text-[#333333] ">
                           Question {index + 1}
                         </span>
-                        <ChevronDownIcon className="size-5 fill-black group-data-[hover]:fill-black/50 group-data-[open]:rotate-180" />
+                        <div className="flex items-center gap-2 justify-center">
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              questionDetailsFormHook.remove(index);
+                            }}
+                          >
+                            <TrashIcon className="w-5 h-5 text-red-500" />
+                          </button>
+
+                          <ChevronDownIcon className="size-8 fill-[#333333]  group-data-[open]:rotate-180" />
+                        </div>
                       </DisclosureButton>
                       <DisclosurePanel className="mt-2 text-sm/5 ">
                         <div>
                           <div className="w-full  mt-4">
                             <Field>
-                              <Label className="text-xs font-medium text-[#333333] items-center gap-1 flex">
+                              <Label className="text-sm font-medium text-[#333333] items-center gap-1 flex">
                                 Ask your question{" "}
-                                <span className="text-red-400 text-xs">*</span>
-                                <span>
-                                  <button
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      questionDetailsFormHook.remove(index);
-                                    }}
-                                  >
-                                    <TrashIcon className="w-3 h-3 text-red-500" />
-                                  </button>
-                                </span>
+                                <span className="text-red-400 text-sm">*</span>
                               </Label>
 
                               <TextareaComponent
-                                className="text-xs"
+                                className="text-sm w-full"
                                 placeholder="Write your question under 240 characters..."
                                 register={formHook.register(
                                   `question_details.${index}.question`,
@@ -204,9 +329,10 @@ const AddSurveyQuestionComponent = () => {
                           </div>
                           <div className="flex items-center justify-between gap-3 w-full my-2">
                             <div className="w-full">
-                              <p className="text-xs font-medium text-[#333333] pb-2">
+                              <p className="text-sm font-medium text-[#333333] pb-2">
                                 Question Type
                               </p>
+
                               <SearchableSelectMenu
                                 errorMessages={[
                                   {
@@ -240,7 +366,7 @@ const AddSurveyQuestionComponent = () => {
                                   }
                                 )}
                                 selectItems={questionType}
-                                placeholder="Select Parent Theme"
+                                placeholder="Select Questions type"
                                 showTooltips={true}
                                 showTypedErrors={true}
                                 showDropdownIcon={true}
@@ -258,8 +384,54 @@ const AddSurveyQuestionComponent = () => {
                                 containerClassName="w-full"
                               />
                             </div>
+                            {rating && (
+                              <div className="w-full">
+                                <p className="text-sm font-medium text-[#333333] pb-2">
+                                  Limit
+                                </p>
+
+                                <SearchableSelectMenu
+                                  errorMessages={[
+                                    {
+                                      message: "Parent theme is required",
+                                      type: "required",
+                                    },
+                                  ]}
+                                  onSelectItem={(item) => {
+                                    if (item) {
+                                      formHook.setValue(
+                                        `rating_scale`,
+                                        item.title
+                                      );
+                                      hanelOptionChange(index);
+                                    }
+                                  }}
+                                  fieldError={
+                                    formHook?.formState?.errors?.rating_scale
+                                  }
+                                  register={formHook.register(`rating_scale`, {
+                                    required: true,
+                                  })}
+                                  selectItems={ratingRange}
+                                  placeholder="Select Range"
+                                  showTooltips={true}
+                                  showTypedErrors={true}
+                                  showDropdownIcon={true}
+                                  defaultSelected={
+                                    ratingRange?.filter(
+                                      (oc) =>
+                                        oc.title ===
+                                        formHook.watch("rating_scale")
+                                    )[0]
+                                  }
+                                  listBoxClassName="w-full"
+                                  className="text-gray-800 "
+                                  containerClassName="w-full"
+                                />
+                              </div>
+                            )}
                             <div className="w-full">
-                              <p className="text-xs font-medium text-[#333333] pb-2">
+                              <p className="text-sm font-medium text-[#333333] pb-2">
                                 Can this question can be skipped?
                               </p>
                               <SearchableSelectMenu
@@ -312,72 +484,119 @@ const AddSurveyQuestionComponent = () => {
                               />
                             </div>
                           </div>
-                          <div>
-                            <p className="text-xs font-medium text-[#333333] py-3">
-                              Options
+                          <div className="mt-8">
+                            <p className="text-sm font-medium text-[#333333] ">
+                              {rating ? "Preview" : "Options Preview"}
                             </p>
-
-                            {filed?.options?.map((item, id) => {
-                              return (
-                                <div
-                                  className="flex items-center w-full relative mb-2"
-                                  key={`${id} +${item}`}
-                                >
-                                  <Input
-                                    className="text-xs w-full"
-                                    placeholder="Enter Options"
-                                    register={formHook.register(
-                                      `question_details.${index}.options.${id}`,
-                                      {
-                                        required: true,
-                                      }
-                                    )}
-                                    fieldError={
-                                      formHook?.formState?.errors
-                                        ?.question_details
-                                        ? formHook?.formState?.errors
-                                            ?.question_details[index]?.options[
-                                            id
-                                          ]
-                                          ? formHook?.formState?.errors
-                                              ?.question_details[index]
-                                              ?.options[id]
-                                          : null
-                                        : null
-                                    }
-                                    errorMessages={[
-                                      {
-                                        message: "Option is required",
-                                        type: "required",
-                                      },
-                                      // forAlphaNumericWithoutDot.errors
-                                    ]}
-                                  />
-                                  <p
-                                    className=" pr-3 items-center absolute right-0 pt-2"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      handleDeleteProductOptions(index, id);
-                                    }}
+                            {rating ? (
+                              <RatingScaleComponent
+                                data={ratingData}
+                                setSelected={setSelected}
+                                selected={selected}
+                              />
+                            ) : moodScale ? (
+                              <MoodScaleComponent />
+                            ) : imageUpload ? (
+                              <ImageUploadComponent
+                                type="image"
+                                fileType={imageMultipleUpload ? "multiple" : ""}
+                                onFileUploaded={handelUpload}
+                              />
+                            ) : (
+                              filed?.options?.map((item, id) => {
+                                return (
+                                  <div
+                                    className={`flex items-center w-full relative mb-2 mt-1`}
+                                    key={`${id} +${item}`}
                                   >
-                                    <XMarkIcon className="w-4 h-4" />
-                                  </p>
-                                </div>
-                              );
-                            })}
+                                    {openText ? (
+                                      <TextareaComponent
+                                        className="text-sm w-full "
+                                        placeholder="Your end consumer can write their response here without any limitations.                                      "
+                                        register={formHook.register(
+                                          `question_details.${index}.options.${id}`,
+                                          {
+                                            required: true,
+                                          }
+                                        )}
+                                        fieldError={
+                                          formHook?.formState?.errors
+                                            ?.question_details
+                                            ? formHook?.formState?.errors
+                                                ?.question_details[index]
+                                                ?.options[id]
+                                              ? formHook?.formState?.errors
+                                                  ?.question_details[index]
+                                                  ?.options[id]
+                                              : null
+                                            : null
+                                        }
+                                        errorMessages={[
+                                          {
+                                            message: "Option is required",
+                                            type: "required",
+                                          },
+                                        ]}
+                                      />
+                                    ) : (
+                                      <Input
+                                        className="text-sm w-full mt-2"
+                                        placeholder={`Add Options ${id + 1}`}
+                                        register={formHook.register(
+                                          `question_details.${index}.options.${id}`,
+                                          {
+                                            required: true,
+                                          }
+                                        )}
+                                        fieldError={
+                                          formHook?.formState?.errors
+                                            ?.question_details
+                                            ? formHook?.formState?.errors
+                                                ?.question_details[index]
+                                                ?.options[id]
+                                              ? formHook?.formState?.errors
+                                                  ?.question_details[index]
+                                                  ?.options[id]
+                                              : null
+                                            : null
+                                        }
+                                        errorMessages={[
+                                          {
+                                            message: "Option is required",
+                                            type: "required",
+                                          },
+                                          // forAlphaNumericWithoutDot.errors
+                                        ]}
+                                      />
+                                    )}
+                                    <p
+                                      className={` pr-3 items-center absolute cursor-pointer right-0 `}
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleDeleteProductOptions(index, id);
+                                      }}
+                                    >
+                                      <XMarkIcon className="w-4 h-4" />
+                                    </p>
+                                  </div>
+                                );
+                              })
+                            )}
 
-                            <button
-                              className="mt-6 inline-flex items-center w-auto justify-center bg-gray-200  py-3 text-xs   text-[#333333]  rounded-xl px-4 gap-1"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                handleAddProductOptions(index);
-                              }}
-                            >
-                              <PlusIcon className="w-4 h-4" /> Add another
-                              option
-                            </button>
+                            {!rating && (
+                              <button
+                                className="mt-6 inline-flex items-center w-auto justify-center bg-gray-200  py-3 text-sm   text-[#333333]  rounded-xl px-4 gap-1"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleAddProductOptions(index);
+                                }}
+                              >
+                                <PlusIcon className="w-4 h-4" /> Add another
+                                option
+                              </button>
+                            )}
                           </div>
                         </div>
                       </DisclosurePanel>
@@ -387,7 +606,7 @@ const AddSurveyQuestionComponent = () => {
               );
             })}
           <div
-            className=" border-dotted bg-[#F4F5F6] border-2 mt-6 p-3 w-full rounded-lg flex justify-between items-center gap-2 cursor-pointer"
+            className=" border-dotted bg-[#F4F5F6] border-2 mt-6 p-3 w-full rounded-xl flex justify-between items-center gap-2 cursor-pointer"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -395,10 +614,10 @@ const AddSurveyQuestionComponent = () => {
             }}
           >
             <div className="flex flex-col ">
-              <span className="flex items-center gap-2 text-base font-bold text-black">
-                <PlusIcon className="w-4 h-4" /> Add One more Question
+              <span className="flex items-center gap-2 text-xl font-bold text-[#333333]">
+                <PlusIcon className="w-4 h-4" /> Add one more question
               </span>
-              <p className="#333333 font-medium text-xs">
+              <p className="#333333 font-medium text-sm text-[#333333]">
                 Select from Rating scale, Multiple choice, Open field and Mood
                 scale
               </p>

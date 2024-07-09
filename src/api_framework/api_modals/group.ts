@@ -64,6 +64,7 @@ export interface ISurveyCreateResponse {
 //Question type
 
 export interface IGroupQuestionTypeResponseData {
+  open_text_response: IGroupQuestionTypeResponseData[];
   question_type_name: string;
   question_type_id: string;
   options: Array<string>;

@@ -106,7 +106,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                 )}
                 <div
                   className={clsx(
-                    "relative w-full cursor-default overflow-hidden  text-left rounded-lg border border-gray-300   focus:outline-none  bg-none  sm:text-sm ",
+                    "relative w-full  cursor-default overflow-hidden  text-left rounded-lg border border-gray-300   focus:outline-none  bg-none  sm:text-sm ",
 
                     props?.variant && props?.variant === "LIKE_TEXT"
                       ? "border-none outline-none ring-0 bg-transparent"
@@ -126,7 +126,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                             return item?.title;
                           }}
                           className={clsx(
-                            `w-full text-xs  font-medium  rounded-lg py-2 pl-3 pr-10 leading-6  focus:ring-0 ${className}`,
+                            `w-full text-xs  font-medium focus:border-[#333333] rounded-lg py-2 pl-3 pr-10 leading-6   ${className}`,
                             isValid
                               ? "text-gray-500 border-none outline-none font-medium "
                               : "text-red-600  ::place  .placeholder-red-500",
@@ -152,7 +152,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                         autoComplete="off"
                         autoCorrect="false"
                         className={clsx(
-                          `w-full text-xs font-normal  rounded-lg py-2 pl-3 pr-10 leading-6  focus:ring-0 ${className}`,
+                          `w-full text-xs font-normal focus:border-[#333333] rounded-lg py-2 pl-3 pr-10 leading-6  focus:ring-0 ${className}`,
                           isValid
                             ? "text-gray-500 border-none outline-none font-medium "
                             : "text-red-600   placeholder-red-400 ",

@@ -8,6 +8,8 @@ import { LuUploadCloud } from "react-icons/lu";
 
 type FileUploadProps = {
   onFileUploaded: (data: any[]) => void;
+  type?: string;
+  fileType?: string;
 };
 
 export function bytesToKB(bytes) {
@@ -20,47 +22,75 @@ export function bytesToMB(bytes) {
 
 const ImageUploadComponent: React.FC<FileUploadProps> = ({
   onFileUploaded,
+  type,
+  fileType,
 }) => {
-  const [fileDetails, setFileDetails] = useState<{
-    name: string;
-    size: number;
-    data: ParseResult<any>;
-  } | null>(null);
+  const [fileDetails, setFileDetails] = useState<
+    { name: string; size: number; data: ParseResult<any> | string }[]
+  >([]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-      const reader = new FileReader();
+      const files = acceptedFiles.map((file) => {
+        const reader = new FileReader();
+        return new Promise<{ name: string; size: number; data: string }>(
+          (resolve, reject) => {
+            reader.onload = () => {
+              resolve({
+                name: file.name,
+                size: file.size,
+                data: reader.result as string,
+              });
+            };
+            reader.onerror = reject;
 
-      reader.onload = () => {
-        const csvData = reader.result as string;
-        Papa.parse(csvData, {
-          header: true,
-          complete: (result) => {
-            setFileDetails({
-              name: file.name,
-              size: file.size,
-              data: result,
+            if (type === "image") {
+              reader.readAsDataURL(file);
+            } else {
+              reader.readAsText(file);
+            }
+          }
+        );
+      });
+
+      Promise.all(files)
+        .then((fileDetails) => {
+          setFileDetails((prevDetails) => [...prevDetails, ...fileDetails]);
+          if (type === "image") {
+            onFileUploaded(fileDetails.map((file) => file.data));
+          } else {
+            const csvData = fileDetails[0].data as string;
+            Papa.parse(csvData, {
+              header: true,
+              complete: (result) => {
+                setFileDetails([
+                  {
+                    name: fileDetails[0].name,
+                    size: fileDetails[0].size,
+                    data: result,
+                  },
+                ]);
+                onFileUploaded(result.data);
+              },
+              error: (error) => {
+                console.error("CSV Parsing Error:", error);
+              },
             });
-            onFileUploaded(result.data);
-          },
-          error: (error) => {
-            console.error("CSV Parsing Error:", error);
-          },
+          }
+        })
+        .catch((error) => {
+          console.error("File Reading Error:", error);
         });
-      };
-
-      reader.readAsText(file);
     },
-    [onFileUploaded]
+    [onFileUploaded, type]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      "text/csv": [".csv"],
-    },
+    accept: type === "image" ? { "image/*": [] } : { "text/csv": [] },
+    multiple: fileType === "multiple" && type === "image",
   });
+
   const convertByteToMBKB = (fileSize: number) => {
     let sizeDisplay = "";
     if (fileSize < 1024) {
@@ -77,7 +107,7 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
 
   return (
     <div>
-      {!fileDetails?.name && (
+      {fileDetails.length === 0 && (
         <div
           {...getRootProps()}
           className={`border my-8 shadow-sm border-[#EAECF0] rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer ${
@@ -94,33 +124,37 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
             <p className="text-[#34A853] text-sm font-semibold ">
               Click to upload{" "}
               <span className="text-[#475467] font-normal">
-                or drag and drop CSV File
+                or drag and drop {type === "image" ? "Image Files" : "CSV File"}
               </span>
             </p>
           </div>
         </div>
       )}
-      {fileDetails?.name && (
+      {fileDetails.length > 0 && (
         <div
-          className={`border my-8 shadow-sm border-[#EAECF0] rounded-xl p-3 py-4  `}
+          className={`border my-8 shadow-sm border-[#EAECF0] rounded-xl p-3 py-4`}
         >
-          <div className="flex  justify-between">
-            <div className="flex items-start gap-2">
-              <CiFileOn className="w-4 h-4" />
-              <div className="flex flex-col -mt-1">
-                <p className="text-sm font-medium text-[#475467]">
-                  {fileDetails?.name}
-                </p>
-                <p className="text-sm text-[#475467]">
-                  {convertByteToMBKB(fileDetails?.size)}
-                </p>
+          {fileDetails.map((file, index) => (
+            <div key={index} className="flex justify-between mb-2">
+              <div className="flex items-start gap-2">
+                <CiFileOn className="w-4 h-4" />
+                <div className="flex flex-col -mt-1">
+                  <p className="text-sm font-medium text-[#475467]">
+                    {file.name}
+                  </p>
+                  <p className="text-sm text-[#475467]">
+                    {convertByteToMBKB(file.size)}
+                  </p>
+                </div>
               </div>
+              <TrashIcon
+                className="mr-3 h-5 w-5 text-[#475467] cursor-pointer"
+                onClick={() =>
+                  setFileDetails((prev) => prev.filter((_, i) => i !== index))
+                }
+              />
             </div>
-            <TrashIcon
-              className="mr-3 h-5 w-5 text-[#475467] cursor-pointer "
-              onClick={() => setFileDetails(null)}
-            />
-          </div>
+          ))}
         </div>
       )}
     </div>

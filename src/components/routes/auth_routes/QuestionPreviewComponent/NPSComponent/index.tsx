@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 const NPSComponent = () => {
   const navigate = useNavigate();
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  const handleOptionClick = (option) => {
+  const handleOptionClick = (option: number) => {
     setSelectedOption(option);
   };
 
@@ -33,21 +33,21 @@ const NPSComponent = () => {
           {[
             { emoji: "😍", label: "Very Satisfied" },
             { emoji: "😃", label: "Satisfied" },
-            { emoji: "😐", label: "It’s Okay" },
+            { emoji: "😐", label: "It's Okay" },
             { emoji: "😕", label: "Unsatisfied" },
             { emoji: "😡", label: "Very unsatisfied" },
           ].map((option, index) => (
             <div
               key={index}
-              className={`bg-white p-3 w-full flex items-center justify-between rounded-lg gap-3 text-sm flex-col cursor-pointer ${
+              className={`p-3 w-full flex items-center justify-between rounded-lg gap-3 text-sm flex-col cursor-pointer transition-colors duration-500 ${
                 selectedOption === index
-                  ? "border-2 border-gray-400 "
-                  : "border-none transparent"
+                  ? "border-[#333333] text-black bg-white border"
+                  : "bg-white text-[#333333]"
               }`}
               onClick={() => handleOptionClick(index)}
             >
               <p className="text-2xl">{option.emoji}</p>
-              <p className="text-xs text-[#333333]">{option.label}</p>
+              <p className="text-xs">{option.label}</p>
             </div>
           ))}
         </div>

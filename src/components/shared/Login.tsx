@@ -139,7 +139,7 @@ export default function Login() {
     <>
       <div>
         <div className="grid grid-cols-3 h-screen flex-1 overflow-y-auto">
-          <div className="h-auto">
+          <div className="h-screen">
             <img
               className=" inset-0 h-full w-full object-cover"
               src={MyImage}

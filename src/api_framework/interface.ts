@@ -6,6 +6,7 @@ export type SighnalAuthAPIS = {
   [key in
     | "LOGIN_API"
     | "CREATE_USER_API"
+    | "USER_ORG_LIST_API"
     | "USER_ORG_CREATE_API"
     | "COUNTRY_LIST_API"
     | "GROUP_CREATE_API"
