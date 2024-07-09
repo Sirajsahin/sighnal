@@ -151,7 +151,7 @@ export default function Organaization() {
                       })}
                       selectItems={countyListItem}
                       placeholder="Select Country"
-                      showTooltips={true}
+                      showTooltips={false}
                       showTypedErrors={true}
                       showDropdownIcon={true}
                       defaultSelected={
@@ -184,7 +184,7 @@ export default function Organaization() {
                         })}
                         selectItems={dataItemList}
                         placeholder="Your Department"
-                        showTooltips={true}
+                        showTooltips={false}
                         showTypedErrors={true}
                         showDropdownIcon={true}
                         defaultSelected={

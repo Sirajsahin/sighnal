@@ -189,7 +189,7 @@ const AudienceLaunchComponent = () => {
                   })}
                   selectItems={startTime}
                   placeholder="HH"
-                  showTooltips={true}
+                  showTooltips={false}
                   showTypedErrors={true}
                   showDropdownIcon={true}
                   defaultSelected={
@@ -220,7 +220,7 @@ const AudienceLaunchComponent = () => {
                   })}
                   selectItems={endTime}
                   placeholder="MM"
-                  showTooltips={true}
+                  showTooltips={false}
                   showTypedErrors={true}
                   showDropdownIcon={true}
                   defaultSelected={

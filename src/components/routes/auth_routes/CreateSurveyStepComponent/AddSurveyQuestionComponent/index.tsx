@@ -35,6 +35,12 @@ const ratingRange = [
   { id: "1", title: "5" },
   { id: "2", title: "10" },
 ];
+const moodRange = [
+  { id: "1", title: "2" },
+  { id: "2", title: "3" },
+  { id: "3", title: "4" },
+  { id: "4", title: "5" },
+];
 const data = [
   {
     item: "1",
@@ -87,6 +93,7 @@ const data2 = [
 
 export interface ICreateSurveyFromFields {
   rating_scale?: string;
+  mood_scale?: string;
   question_details: ICampaignQuestionDetailsInfo[];
 }
 
@@ -94,15 +101,40 @@ const dataItem = [
   { id: "true", name: "Yes" },
   { id: "false", name: "No" },
 ];
+
+const moodScaleDate = [
+  { emoji: "😍", label: "Very Satisfied" },
+  { emoji: "😃", label: "Satisfied" },
+  { emoji: "😐", label: "It's Okay" },
+  { emoji: "😕", label: "Unsatisfied" },
+  { emoji: "😡", label: "Very unsatisfied" },
+];
+const moodScaleDate4 = [
+  { emoji: "😍", label: "Very Satisfied" },
+  { emoji: "😃", label: "Satisfied" },
+  { emoji: "😐", label: "It's Okay" },
+  { emoji: "😕", label: "Unsatisfied" },
+];
+const moodScaleDate2 = [
+  { emoji: "😍", label: "Very Satisfied" },
+  { emoji: "😃", label: "Satisfied" },
+];
+const moodScaleDate3 = [
+  { emoji: "😍", label: "Very Satisfied" },
+  { emoji: "😃", label: "Satisfied" },
+  { emoji: "😐", label: "It's Okay" },
+];
+
 const AddSurveyQuestionComponent = () => {
   const [params, _setparams] = useSearchParams();
   const [openText, setOpenText] = useState<boolean>(false);
   const [rating, setRating] = useState<boolean>(false);
   const [moodScale, setMoodScale] = useState<boolean>(false);
   const [imageUpload, setImageUpload] = useState<boolean>(false);
-  const [imageMultipleUpload, setImageMultipleUpload] =
-    useState<boolean>(false);
+  // const [imageMultipleUpload, setImageMultipleUpload] =
+  //   useState<boolean>(false);
   const [ratingData, setRatingData] = useState([]);
+  const [moodData, setMoodData] = useState([]);
 
   const [selected, setSelected] = useState<number>(null);
 
@@ -113,6 +145,7 @@ const AddSurveyQuestionComponent = () => {
   const formHook = useForm<ICreateSurveyFromFields>({
     defaultValues: {
       rating_scale: "5",
+      mood_scale: "5",
     },
   });
 
@@ -217,12 +250,13 @@ const AddSurveyQuestionComponent = () => {
       setRating(false);
     }
     if (optionValue === "rating_scale") {
-      setRatingData(data);
+      // setRatingData(data);
       setRating(true);
     } else {
       setRating(false);
     }
     if (optionValue === "mood_scale") {
+      // setMoodData(moodScaleDate);
       setMoodScale(true);
     } else {
       setMoodScale(false);
@@ -234,10 +268,10 @@ const AddSurveyQuestionComponent = () => {
     }
     if (optionValue === "image_multiple_choice") {
       setImageUpload(true);
-      setImageMultipleUpload(true);
+      // setImageMultipleUpload(true);
     } else {
       // setImageUpload(false);
-      setImageMultipleUpload(false);
+      // setImageMultipleUpload(false);
     }
 
     questionDetailsFormHook.update(id, {
@@ -255,6 +289,20 @@ const AddSurveyQuestionComponent = () => {
       setRatingData(data2);
     }
   }, [formHook.watch("rating_scale")]);
+
+  useEffect(() => {
+    const rating = formHook.getValues("mood_scale");
+    if (rating === "2") {
+      setMoodData(moodScaleDate2);
+    } else if (rating === "3") {
+      setMoodData(moodScaleDate3);
+    } else if (rating === "4") {
+      setMoodData(moodScaleDate4);
+    } else {
+      setMoodData(moodScaleDate);
+    }
+  }, [formHook.watch("mood_scale")]);
+
   const handelUpload = () => {
     ///
   };
@@ -373,7 +421,7 @@ const AddSurveyQuestionComponent = () => {
                                 )}
                                 selectItems={questionType}
                                 placeholder="Select Questions type"
-                                showTooltips={true}
+                                showTooltips={false}
                                 showTypedErrors={true}
                                 showDropdownIcon={true}
                                 defaultSelected={
@@ -392,7 +440,7 @@ const AddSurveyQuestionComponent = () => {
                             </div>
                             {rating && (
                               <div className="w-full">
-                                <p className="text-sm font-medium text-[#333333] ">
+                                <p className="text-sm font-medium text-[#333333]">
                                   Limit
                                 </p>
 
@@ -406,7 +454,7 @@ const AddSurveyQuestionComponent = () => {
                                   onSelectItem={(item) => {
                                     if (item) {
                                       formHook.setValue(
-                                        `rating_scale`,
+                                        "rating_scale",
                                         item.title
                                       );
                                       hanelOptionChange(index);
@@ -415,12 +463,12 @@ const AddSurveyQuestionComponent = () => {
                                   fieldError={
                                     formHook?.formState?.errors?.rating_scale
                                   }
-                                  register={formHook.register(`rating_scale`, {
+                                  register={formHook.register("rating_scale", {
                                     required: true,
                                   })}
                                   selectItems={ratingRange}
                                   placeholder="Select Range"
-                                  showTooltips={true}
+                                  showTooltips={false}
                                   showTypedErrors={true}
                                   showDropdownIcon={true}
                                   defaultSelected={
@@ -431,11 +479,58 @@ const AddSurveyQuestionComponent = () => {
                                     )[0]
                                   }
                                   listBoxClassName="w-full"
-                                  className="text-gray-800 "
+                                  className="text-gray-800"
                                   containerClassName="w-full"
                                 />
                               </div>
                             )}
+                            {moodScale && (
+                              <div className="w-full">
+                                <p className="text-sm font-medium text-[#333333]">
+                                  Limit
+                                </p>
+
+                                <SearchableSelectMenu
+                                  errorMessages={[
+                                    {
+                                      message: "Parent theme is required",
+                                      type: "required",
+                                    },
+                                  ]}
+                                  onSelectItem={(item) => {
+                                    if (item) {
+                                      formHook.setValue(
+                                        "mood_scale",
+                                        item.title
+                                      );
+                                      hanelOptionChange(index);
+                                    }
+                                  }}
+                                  fieldError={
+                                    formHook?.formState?.errors?.mood_scale
+                                  }
+                                  register={formHook.register("mood_scale", {
+                                    required: true,
+                                  })}
+                                  selectItems={moodRange}
+                                  placeholder="Select Range"
+                                  showTooltips={false}
+                                  showTypedErrors={true}
+                                  showDropdownIcon={true}
+                                  defaultSelected={
+                                    moodRange?.filter(
+                                      (oc) =>
+                                        oc.title ===
+                                        formHook.watch("mood_scale")
+                                    )[0]
+                                  }
+                                  listBoxClassName="w-full"
+                                  className="text-gray-800"
+                                  containerClassName="w-full"
+                                />
+                              </div>
+                            )}
+
                             <div className="w-full">
                               <p className="text-sm font-medium text-[#333333] ">
                                 Can this question be skipped? *
@@ -475,7 +570,7 @@ const AddSurveyQuestionComponent = () => {
                                 )}
                                 selectItems={dataItemList}
                                 placeholder="Select the value"
-                                showTooltips={true}
+                                showTooltips={false}
                                 showTypedErrors={true}
                                 showDropdownIcon={true}
                                 defaultSelected={
@@ -504,11 +599,11 @@ const AddSurveyQuestionComponent = () => {
                                 selected={selected}
                               />
                             ) : moodScale ? (
-                              <MoodScaleComponent />
+                              <MoodScaleComponent data={moodData} />
                             ) : imageUpload ? (
                               <ImageUploadComponent
                                 type="image"
-                                fileType={imageMultipleUpload ? "multiple" : ""}
+                                fileType={"multiple"}
                                 onFileUploaded={handelUpload}
                                 setIsFileRequired={setIsFileRequired}
                                 isFileRequired={isFileRequired}
@@ -595,7 +690,7 @@ const AddSurveyQuestionComponent = () => {
                               })
                             )}
 
-                            {!rating && (
+                            {rating || imageUpload ? null : (
                               <button
                                 className="mt-6 inline-flex items-center w-auto justify-center bg-gray-200  py-3 text-sm   text-[#333333]  rounded-xl px-4 gap-1"
                                 onClick={(e) => {

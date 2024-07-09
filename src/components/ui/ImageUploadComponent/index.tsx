@@ -112,7 +112,7 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
 
   return (
     <div>
-      {fileDetails.length === 0 && (
+      {(fileDetails.length === 0 || type === "image") && (
         <div
           {...getRootProps()}
           className={`border my-8 shadow-sm border-[#EAECF0] rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer ${

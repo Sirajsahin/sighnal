@@ -186,7 +186,7 @@ const UserProfile = () => {
               })}
               selectItems={dataItemList}
               placeholder="Select Country"
-              showTooltips={true}
+              showTooltips={false}
               showTypedErrors={true}
               showDropdownIcon={true}
               defaultSelected={
@@ -247,7 +247,7 @@ const UserProfile = () => {
                 if (item) {
                   formHook.setValue(`jobTitle`, item.title);
                 }
-                formHook.clearErrors("jobTitle")
+                formHook.clearErrors("jobTitle");
               }}
               fieldError={formHook?.formState?.errors?.jobTitle}
               register={formHook.register(`jobTitle`, {
@@ -255,7 +255,7 @@ const UserProfile = () => {
               })}
               selectItems={dataItemList}
               placeholder="Select Job Title"
-              showTooltips={true}
+              showTooltips={false}
               showTypedErrors={true}
               showDropdownIcon={true}
               defaultSelected={
@@ -307,7 +307,7 @@ const UserProfile = () => {
                 if (item) {
                   formHook.setValue(`org_size`, item.title);
                 }
-                formHook.clearErrors("org_size")
+                formHook.clearErrors("org_size");
               }}
               fieldError={formHook?.formState?.errors?.org_size}
               register={formHook.register(`org_size`, {
@@ -315,7 +315,7 @@ const UserProfile = () => {
               })}
               selectItems={dataItemList}
               placeholder="Organisation Size"
-              showTooltips={true}
+              showTooltips={false}
               showTypedErrors={true}
               showDropdownIcon={true}
               defaultSelected={

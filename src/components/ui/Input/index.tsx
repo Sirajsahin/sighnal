@@ -21,7 +21,7 @@ const Input: React.FC<IInput> = ({
   const isValid = isFormFieldValid(reducedErrorMessages);
 
   return (
-    <div className={clsx(" relative w-full", className)}>
+    <div className={clsx(" relative w-full mt-1", className)}>
       <div className="w-full relative  flex justify-start items-center rounded-md border ">
         {props?.startIcon && (
           <div className="pointer-events-none  inset-y-0 left-0 flex justify-center items-center pl-2 pr-2">
@@ -31,7 +31,7 @@ const Input: React.FC<IInput> = ({
         <input
           {...register}
           {...props}
-          autoComplete="false"
+          autoComplete="off"
           autoCorrect="false"
           className={clsx(
             `  border  outline-none p-2 text-xs focus:border-[#333333]   disabled:bg-gray-200 disabled:text-gray-600  sm:leading-6 w-full ${props?.inputClassName}`,
