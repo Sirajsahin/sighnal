@@ -1,5 +1,4 @@
 import { USER_LOGIN_APIS } from "@/api_framework/api_config";
-import { ROUTES } from "@/app/routes/routes";
 import { useAppDispatch } from "@/app_redux/hooks/root_hook";
 import {
   setAuthorization,
@@ -9,6 +8,7 @@ import axios, { AxiosError } from "axios";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useOrgListAPI } from "../user/useOrgListAPI";
 
 export const useUserAuthenticationTokenAPI = () => {
   const [logStatus, setLogStatus] = useState<boolean>(false);
@@ -16,6 +16,7 @@ export const useUserAuthenticationTokenAPI = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { execute: fetchOrgListAPI } = useOrgListAPI();
 
   const callback = useCallback(
     async (googleOAuthToken: string) => {
@@ -25,11 +26,13 @@ export const useUserAuthenticationTokenAPI = () => {
         });
 
         if (response.status === 200) {
+          fetchOrgListAPI(response?.data?.data?.token);
           if (response?.data?.data?.business_id) {
             localStorage.setItem(
               "business_id",
               response?.data?.data?.business_id
             );
+
             setBusinessId(true);
           } else {
             setBusinessId(false);
@@ -38,13 +41,13 @@ export const useUserAuthenticationTokenAPI = () => {
           dispatch(setUserValid({ isValid: true }));
           dispatch(
             setAuthorization({
-              accessToken: `Bearer ${response.data.data.auth_token}`,
+              accessToken: `Bearer ${response.data.data.token}`,
               isValid: true,
             })
           );
           localStorage.setItem(
             "AuthToken",
-            `Bearer ${response.data.data.auth_token}`
+            `Bearer ${response.data.data.token}`
           );
           setLogStatus(true);
         }
@@ -59,7 +62,7 @@ export const useUserAuthenticationTokenAPI = () => {
             accessToken: null,
           })
         );
-        navigate(ROUTES.LOGIN_PAGE.url);
+        navigate("/app/login/sign-in");
         toast.error(`Error fetching IAM User: ${error.message}`);
       }
     },

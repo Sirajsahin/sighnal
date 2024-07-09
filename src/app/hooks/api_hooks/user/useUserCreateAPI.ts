@@ -1,7 +1,6 @@
 // import { ROTA_APIS } from "@/api_framework/api_config";
 import { USER_LOGIN_APIS } from "@/api_framework/api_config";
 import { ISignalUserCreateProps } from "@/api_framework/api_modals/FirebaseLogin";
-import { ROUTES } from "@/app/routes/routes";
 import { useAppDispatch } from "@/app_redux/hooks/root_hook";
 import {
   setAuthorization,
@@ -27,24 +26,21 @@ export const useUserCreateAPI = () => {
           },
         })
         .then((res: AxiosResponse<any>) => {
-          if (res.data.status === true) {
+          if (res.data?.status === true) {
             dispatch(setUserValid({ isValid: true }));
-            localStorage.setItem(
-              "AuthToken",
-              `Bearer ${res.data.data.auth_token}`
-            );
+            localStorage.setItem("AuthToken", `Bearer ${res.data.data.token}`);
             localStorage.setItem("displayName", res?.data?.data?.name);
             localStorage.setItem("email", res?.data?.data?.email);
             localStorage.setItem("photoURL", "null");
 
             dispatch(
               setAuthorization({
-                accessToken: `Bearer ${res.data.data.auth_token}`,
+                accessToken: `Bearer ${res.data.data.token}`,
                 isValid: true,
               })
             );
             const token = res.data.data as any;
-            localStorage.setItem("AuthToken", `Bearer ${token.auth_token}`);
+            localStorage.setItem("AuthToken", `Bearer ${token.token}`);
             navigate("/app/login/onboard");
           } else {
             localStorage.setItem("AuthToken", null);
@@ -59,7 +55,7 @@ export const useUserCreateAPI = () => {
           }
         })
         .catch((e: AxiosError) => {
-          navigate(ROUTES.LOGIN_PAGE.url);
+          navigate("/app/login/sign-in");
           localStorage.setItem("AuthToken", null);
           dispatch(setUserValid({ isValid: false }));
           dispatch(

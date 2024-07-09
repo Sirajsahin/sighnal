@@ -14,6 +14,7 @@ export const useGroupListAPI = () => {
   const execute = useCallback(async () => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
+      console.log(accessToken, "accessTokennaccessTokenaccessToken");
       await axios
         .get(USER_LOGIN_APIS.GROUP_LIST_API.baseURL ?? "", {
           headers: {

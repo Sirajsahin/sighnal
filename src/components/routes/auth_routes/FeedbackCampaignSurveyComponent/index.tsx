@@ -23,14 +23,14 @@ const FeedbackCampaignSurveyComponent = () => {
       <div className="grid grid-cols-8">
         <div className="col-span-7">
           <GroupHeaderComponent
-            header={groupDetails?.name}
-            para={groupDetails?.description}
+            header={groupDetails?.group_name}
+            para={groupDetails?.group_description}
           />
           <AddGroupUserComponent />
         </div>
         <div className="col-span-1">
           <div className="flex justify-end">
-          <ThreeDotComponent />
+            <ThreeDotComponent />
           </div>
         </div>
       </div>

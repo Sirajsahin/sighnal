@@ -61,9 +61,10 @@ export default function Organaization() {
     }
     if (data && isFormSubmissionValid) {
       const constructedData: IUserOrgCreateProps = {
-        business_name: data?.name,
+        org_name: data?.name,
         country: data.country,
-        department: data.org_detp,
+        industry: data.org_detp,
+        team_size: data.org_size,
       };
       createUserOrg(constructedData).then(({ status }) => {
         if (status) {
@@ -125,6 +126,24 @@ export default function Organaization() {
                       errorMessages={[
                         {
                           message: "Name is required",
+                          type: "required",
+                        },
+                        // forAlphaNumericWithoutDot.errors
+                      ]}
+                    />
+                  </div>
+                  <div className="my-6">
+                    <Input
+                      className="text-xs"
+                      placeholder="Organisation Size"
+                      register={formHook.register("org_size", {
+                        required: true,
+                        // ...forAlphaNumericWithoutDot.validations
+                      })}
+                      fieldError={formHook.formState.errors.org_size}
+                      errorMessages={[
+                        {
+                          message: "Size is required",
                           type: "required",
                         },
                         // forAlphaNumericWithoutDot.errors

@@ -1,19 +1,15 @@
 export interface IGroupCreateprops {
-  business_id: string;
-  description: string;
-  name: string;
+  group_description: string;
+  group_name: string;
 }
 
 //GROUP DETALS AND LIST
 
 export interface IgroupDetailsData {
   group_id: string;
-  user_id: string;
-  name: string;
-  description: string;
-  business_id: string;
-  created_at: number;
-  updated_at: number;
+  group_name: string;
+  group_description?: string;
+  tags: string;
 }
 export interface IgroupDetailsResponse {
   status: boolean;

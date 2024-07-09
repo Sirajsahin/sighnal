@@ -48,9 +48,8 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
     }
     if (data && isFormSubmissionValid) {
       const constructedData: IGroupCreateprops = {
-        business_id: localStorage.getItem("business_id"),
-        name: data.groupName,
-        description: data.groupDescription,
+        group_name: data.groupName,
+        group_description: data.groupDescription,
       };
 
       createGroup(constructedData).then(({ status, message }) => {

@@ -5,9 +5,11 @@ import { IUserOrgCreateProps } from "@/api_framework/api_modals/user";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 type InventoryTaxCreateAPIResponse = { status: boolean; message: string };
 
 export const useUserOrgCreateAPI = () => {
+  const navigate = useNavigate();
   const execute = useCallback(async (paramProps: IUserOrgCreateProps) => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
@@ -18,20 +20,22 @@ export const useUserOrgCreateAPI = () => {
           },
         })
         .then((res: AxiosResponse<any>) => {
-          console.log(res, "res");
           if (res.data.status === true) {
-            localStorage.setItem("business_id", res?.data?.data?.business_id);
+            localStorage.setItem("AuthToken", `Bearer ${res?.data?.token}`);
+
             toast.success("User Onboard Successful");
 
             return { status: true, message: "" };
           } else {
-            localStorage.setItem("business_id", null);
+            navigate("/app/login/sign-in");
+            localStorage.setItem("AuthToken", null);
             toast.error("User Onboard Faild");
             return { status: false, message: "" };
           }
         })
         .catch((e: AxiosError) => {
-          localStorage.setItem("business_id", null);
+          navigate("/app/login/sign-in");
+          localStorage.setItem("AuthToken", null);
           console.log(e, "res");
           if (e.code === "ERR_BAD_REQUEST") {
             toast.error("User Onboard Faild");
