@@ -1,18 +1,17 @@
-import { useGroupStatsListAPI } from "@/app/hooks/api_hooks/Group/useGroupStatsListAPI";
+import { useSurveyStatsListAPI } from "@/app/hooks/api_hooks/Group/useSurveyStatsListAPI";
 import StatsCardComponent from "@/components/ui/StatsCardComponent";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
-const SurveyCreateComponent = () => {
+const SurveyStatsComponent = () => {
   const [params, _setparams] = useSearchParams();
-  const { execute: fetchGroupStats, groupStats } = useGroupStatsListAPI();
+  const { execute: fetchGroupStats, groupStats } = useSurveyStatsListAPI();
   useEffect(() => {
-    const buisnessId = params.get("business_id");
     const groupId = params.get("group_id");
-    if (buisnessId && groupId) {
-      fetchGroupStats(buisnessId, groupId);
+    if (groupId) {
+      fetchGroupStats(groupId);
     }
-  }, [params.get("business_id"), params.get("group_id")]);
+  }, [params.get("group_id")]);
 
   return (
     <div className=" grid grid-cols-5 gap-6">
@@ -27,4 +26,4 @@ const SurveyCreateComponent = () => {
   );
 };
 
-export default SurveyCreateComponent;
+export default SurveyStatsComponent;

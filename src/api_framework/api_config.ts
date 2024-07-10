@@ -32,7 +32,7 @@ export const USER_LOGIN_APIS: SighnalAuthAPIS = {
     params: {},
   },
   GROUP_DETAILS_API: {
-    baseURL: `${BASE_URL}/business/group/details/`,
+    baseURL: `${BASE_URL}/group/`,
     params: {},
   },
   GROUP_LIST_API: {
@@ -40,11 +40,11 @@ export const USER_LOGIN_APIS: SighnalAuthAPIS = {
     params: {},
   },
   GROUP_STATS_API: {
-    baseURL: `${BASE_URL}/business/survey/stats/`,
+    baseURL: `${BASE_URL}/survey/stats/`,
     params: {},
   },
   SURVEY_CREATE_API: {
-    baseURL: `${BASE_URL}/business/survey/create/`,
+    baseURL: `${BASE_URL}/survey/`,
     params: {},
   },
   QUESTION_CREATE_API: {

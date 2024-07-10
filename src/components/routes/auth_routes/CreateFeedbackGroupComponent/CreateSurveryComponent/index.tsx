@@ -4,13 +4,10 @@ const CreateSurveryComponent = () => {
 
   const [params, _setparams] = useSearchParams();
 
-  const buisnessId = params.get("business_id");
   const groupId = params.get("group_id");
 
   const handelRouteSurvey = () => {
-    navigate(
-      `/app/campaign/create-survey?step_id=1&business_id=${buisnessId}&group_id=${groupId}`
-    );
+    navigate(`/app/campaign/create-survey?step_id=1&group_id=${groupId}`);
   };
   return (
     <div className="mt-14 flex justify-center items-center gap-2 flex-col">

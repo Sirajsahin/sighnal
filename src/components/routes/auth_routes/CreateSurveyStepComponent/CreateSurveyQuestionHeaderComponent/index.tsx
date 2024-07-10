@@ -26,7 +26,6 @@ const CreateSurveyQuestionHeaderComponent = () => {
 
   const [params, _setparams] = useSearchParams();
 
-  const buisnessId = params.get("business_id");
   const groupId = params.get("group_id");
 
   /* Actions and Handlers */
@@ -46,7 +45,6 @@ const CreateSurveyQuestionHeaderComponent = () => {
     }
     if (data && isFormSubmissionValid) {
       const constructedData: ISurveyCreateProps = {
-        business_id: buisnessId,
         name: data.surveyTitle,
         description: data.surveyDescription,
         group_id: groupId,
@@ -54,7 +52,7 @@ const CreateSurveyQuestionHeaderComponent = () => {
       createSurvey(constructedData).then(({ status, message }) => {
         if (status) {
           navigate(
-            `/app/campaign/create-survey?step_id=2&business_id=${buisnessId}&group_id=${groupId}&survey_id=${message}`
+            `/app/campaign/create-survey?step_id=2&group_id=${groupId}&survey_id=${message}`
           );
         }
       });
@@ -108,7 +106,7 @@ const CreateSurveyQuestionHeaderComponent = () => {
                     placeholder="Write few lines about survey"
                     register={formHook.register("surveyDescription", {
                       required: true,
-                      ...forAlphaNumeric.validations,
+                      // ...forAlphaNumeric.validations,
                     })}
                     fieldError={formHook.formState.errors.surveyDescription}
                     errorMessages={[

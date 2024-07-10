@@ -38,7 +38,6 @@ export interface ISurveyCreateProps {
   name: string;
   description: string;
   group_id: string;
-  business_id: string;
 }
 
 // Survey response

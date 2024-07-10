@@ -1,15 +1,20 @@
 import { useGroupListAPI } from "@/app/hooks/api_hooks/Group/useGroupListAPI";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import GroupCreateModalComponent from "../GroupCreateModalComponent";
 
 export default function GroupListComponent() {
   const [open, setOpen] = useState(false);
 
   const { execute: fetchGroupList, groupList } = useGroupListAPI();
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchGroupList();
   }, []);
+
+  const handelClick = (id: string) => {
+    navigate(`/app/campaign/campaign-list?group_id=${id}`);
+  };
 
   return (
     <>
@@ -38,7 +43,7 @@ export default function GroupListComponent() {
             </button>
           </div>
         </div>
-        {groupList?.map((item, id) => {
+        {groupList?.slice(0, 2)?.map((item, id) => {
           return (
             <div
               className=" p-4 rounded-2xl shadow-md h-auto border-solid border-2 border-[#F5F5F5]"
@@ -61,7 +66,7 @@ export default function GroupListComponent() {
               <div className="mt-8">
                 <button
                   className="text-[##333333] border   w-full font-bold p-3 rounded-lg text-sm  border-[#333333]"
-                  onClick={() => setOpen(true)}
+                  onClick={() => handelClick(item?.group_id)}
                 >
                   View Indetails
                 </button>

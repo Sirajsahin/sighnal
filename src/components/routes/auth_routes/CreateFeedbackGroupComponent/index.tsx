@@ -1,6 +1,5 @@
-import { useCategoryListAPI } from "@/app/hooks/api_hooks/Campaign/useCampaignListApi";
 import GroupHeaderComponent from "@/components/ui/GroupHeaderComponent";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdChevronRight } from "react-icons/md";
 import GroupListComponent from "./GroupListComponent";
 import GroupListTableComponent from "./GroupListTableComponent";
@@ -8,14 +7,7 @@ import GroupStatsComponent from "./GroupStatsComponent";
 import ViewAllGroupModalComponent from "./ViewAllGroupModalComponent";
 
 const CreateFeedbackGroupComponent = () => {
-  const { categoryList, execute: fetchCategory } = useCategoryListAPI();
   const [viewAll, setViewAll] = useState<boolean>(false);
-
-  useEffect(() => {
-    fetchCategory();
-  }, []);
-
-  console.log(categoryList, "categoryList");
 
   return (
     <div>

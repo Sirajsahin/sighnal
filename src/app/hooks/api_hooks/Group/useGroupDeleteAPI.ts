@@ -13,7 +13,7 @@ export const useGroupDeleteAPI = () => {
       const accessToken = localStorage.getItem("AuthToken");
       const response: InventoryTaxCreateAPIResponse = await axios
         .delete(
-          `${USER_LOGIN_APIS.GROUP_CREATE_API.baseURL}${group_id}}` ?? "",
+          `${USER_LOGIN_APIS.GROUP_CREATE_API.baseURL}${group_id}` ?? "",
           {
             headers: {
               Authorization: `${accessToken}`,

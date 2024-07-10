@@ -9,21 +9,17 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
-export const useGroupStatsListAPI = () => {
+export const useGroupStatsAPI = () => {
   const [groupStats, setGroupStats] = useState<IGroupStatsresponseData[]>([]);
-  const execute = useCallback(async (business_id: string, group_id: string) => {
+  const execute = useCallback(async () => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
       await axios
-        .get(
-          `${USER_LOGIN_APIS.GROUP_STATS_API.baseURL}?business_id=${business_id}&group_id=${group_id} ` ??
-            "",
-          {
-            headers: {
-              Authorization: `${accessToken}`,
-            },
-          }
-        )
+        .get(`${USER_LOGIN_APIS.GROUP_STATS_API.baseURL}` ?? "", {
+          headers: {
+            Authorization: `${accessToken}`,
+          },
+        })
         .then((res: AxiosResponse<IGroupStatsresponse>) => {
           if (res.data.status === true) {
             setGroupStats(res.data?.data);

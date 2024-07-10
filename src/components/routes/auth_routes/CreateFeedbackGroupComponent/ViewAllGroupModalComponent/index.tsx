@@ -1,3 +1,4 @@
+import { useGroupListAPI } from "@/app/hooks/api_hooks/Group/useGroupListAPI";
 import {
   Dialog,
   DialogPanel,
@@ -5,36 +6,30 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { IFeedbackCreateModalProps } from "./interface";
 
 export interface ICreateGroupFromFields {
   groupName: string;
   groupDescription: string;
 }
-const data = [
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-  { item: "" },
-];
 
 const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
   open,
   setOpen,
 }) => {
+  const { execute: fetchGroupList, groupList } = useGroupListAPI();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchGroupList();
+  }, []);
+
+  const handelClick = (id: string) => {
+    navigate(`/app/campaign/campaign-list?group_id=${id}`);
+  };
+
   return (
     <Transition show={open}>
       <Dialog className="relative z-30" onClose={() => setOpen(false)}>
@@ -66,7 +61,7 @@ const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                       Total Groups{" "}
                       <span className="bg-[#cde6dd] text-[#0C6243] border border-[#333333] w-auto h-auto p-1 rounded-lg text-xs">
                         {" "}
-                        {data.length}
+                        {groupList?.length}
                       </span>
                     </p>
                     <p>
@@ -76,14 +71,19 @@ const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                       />
                     </p>
                   </div>
-                  <div className="grid grid-cols-3 gap-4 overflow-auto h-[700px] ">
-                    {data.map(() => {
+                  <div
+                    className={`grid grid-cols-3 gap-4 overflow-auto ${groupList?.length > 7 ? "h-[700px]" : "auto"} `}
+                  >
+                    {groupList?.map((item, id) => {
                       return (
-                        <div className=" p-4 rounded-2xl shadow-md h-auto border-solid border-2 border-[#F5F5F5]">
+                        <div
+                          className=" p-4 rounded-2xl shadow-md h-48 border-solid border-2 border-[#F5F5F5]"
+                          key={id}
+                        >
                           <div className="flex  items-center gap-3">
                             <div className="bg-[#F5F5F5] h-6 w-6 rounded-lg"></div>
                             <p className="text-sm font-bold text-[#333333]">
-                              App Feedback
+                              {item?.group_name}
                             </p>
                           </div>
                           <div className="py-4">
@@ -91,13 +91,12 @@ const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                           </div>
 
                           <p className="text-[#475467] text-xs">
-                            Create a group and launch your survey to receive
-                            responses in minutes.
+                            {item?.group_description}
                           </p>
                           <div className="mt-8">
                             <button
                               className="text-[##333333] border   w-full font-bold p-3 rounded-lg text-sm  border-[#333333]"
-                              onClick={() => setOpen(true)}
+                              onClick={() => handelClick(item?.group_id)}
                             >
                               View Indetails
                             </button>

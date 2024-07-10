@@ -8,13 +8,16 @@ import { IFeedbackCreateModalProps } from "./interface";
 
 import { IGroupCreateprops } from "@/api_framework/api_modals/group";
 import { useGroupCreateAPI } from "@/app/hooks/api_hooks/Group/useGroupCreateAPI";
+import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsAPI";
+import { useGroupUpdateAPI } from "@/app/hooks/api_hooks/Group/useGroupUpdateAPI";
 import useFormValidations from "@/components/shared/UI_Interface/useFormValidation";
 import Input from "@/components/ui/Input";
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { Field, Label } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export interface ICreateGroupFromFields {
   groupName: string;
@@ -32,6 +35,27 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
   });
 
   const navigate = useNavigate();
+  const [params, _setparams] = useSearchParams();
+
+  const { execute: fetchGroupDetails, groupDetails } = useGroupDetailsAPI();
+  const { execute: updateGroup } = useGroupUpdateAPI();
+
+  useEffect(() => {
+    const groupId = params.get("group_id");
+    if (groupId) {
+      fetchGroupDetails(groupId);
+    }
+  }, [params.get("group_id")]);
+
+  const group_id = params.get("group_id");
+
+  useEffect(() => {
+    if (groupDetails) {
+      formHook.setValue("groupName", groupDetails?.group_name);
+      formHook.setValue("groupDescription", groupDetails?.group_description);
+    }
+  }, [groupDetails]);
+
   /* Actions and Handlers */
   const validateConditionalFormFields = (data: ICreateGroupFromFields) => {
     let isValid = false;
@@ -51,14 +75,20 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
         group_name: data.groupName,
         group_description: data.groupDescription,
       };
-
-      createGroup(constructedData).then(({ status, message }) => {
-        if (status) {
-          navigate(
-            `/app/campaign/campaign-list?business_id=${localStorage.getItem("business_id")}&group_id=${message}`
-          );
-        }
-      });
+      if (group_id) {
+        updateGroup(constructedData, group_id).then(({ status }) => {
+          if (status) {
+            navigate(`/app/campaign/campaign-list?group_id=${group_id}`);
+            setOpen(false);
+          }
+        });
+      } else {
+        createGroup(constructedData).then(({ status, message }) => {
+          if (status) {
+            navigate(`/app/campaign/campaign-list?group_id=${message}`);
+          }
+        });
+      }
     }
   };
 
@@ -93,7 +123,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                 >
                   <div>
                     <p className="text-sm font-semibold text-[#333333] py-2 flex justify-between items-center">
-                      Create a New Group{" "}
+                      {group_id ? "Update The Group" : "Create a New Group"}
                       <span>
                         <XMarkIcon
                           className="w-5 h-5 text-sm cursor-pointer"
@@ -143,7 +173,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                             placeholder="Write few lines about group"
                             register={formHook.register("groupDescription", {
                               required: true,
-                              ...forAlphaNumeric.validations,
+                              // ...forAlphaNumeric.validations,
                             })}
                             fieldError={
                               formHook.formState.errors.groupDescription
@@ -165,7 +195,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                       type="submit"
                       className="  w-auto justify-center rounded-md bg-[#333333] px-10 py-3 text-sm font-semibold text-white shadow-sm"
                     >
-                      Create Group
+                      {group_id ? "Update Group" : "Create Group"}
                     </button>
                   </div>
                 </form>

@@ -1,34 +1,38 @@
 // import { ROTA_APIS } from "@/api_framework/api_config";
 import { USER_LOGIN_APIS } from "@/api_framework/api_config";
 import {
-  IgroupDetailsData,
-  IgroupDetailsResponse,
+  IGroupStatsresponse,
+  IGroupStatsresponseData,
 } from "@/api_framework/api_modals/group";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
-export const useGroupDetailsAPI = () => {
-  const [groupDetails, setGroupDetails] = useState<IgroupDetailsData>(null);
+export const useSurveyStatsListAPI = () => {
+  const [groupStats, setGroupStats] = useState<IGroupStatsresponseData[]>([]);
   const execute = useCallback(async (group_id: string) => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
       await axios
-        .get(`${USER_LOGIN_APIS.GROUP_DETAILS_API.baseURL}${group_id} ` ?? "", {
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        })
-        .then((res: AxiosResponse<IgroupDetailsResponse>) => {
+        .get(
+          `${USER_LOGIN_APIS.GROUP_STATS_API.baseURL}?group_id=${group_id} ` ??
+            "",
+          {
+            headers: {
+              Authorization: `${accessToken}`,
+            },
+          }
+        )
+        .then((res: AxiosResponse<IGroupStatsresponse>) => {
           if (res.data.status === true) {
-            setGroupDetails(res.data?.data);
+            setGroupStats(res.data?.data);
           } else {
-            setGroupDetails(null);
+            setGroupStats([]);
           }
         })
         .catch((e: AxiosError) => {
-          setGroupDetails(null);
+          setGroupStats([]);
           if (e.code === "ERR_BAD_REQUEST") {
             //
           }
@@ -43,5 +47,5 @@ export const useGroupDetailsAPI = () => {
       toast.error("Server Error: " + e.message);
     }
   }, []);
-  return { execute, groupDetails };
+  return { execute, groupStats };
 };

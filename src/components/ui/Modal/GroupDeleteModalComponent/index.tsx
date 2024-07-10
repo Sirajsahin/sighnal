@@ -19,12 +19,10 @@ const GroupDeleteModalComponent: React.FC<IGroupDeleteModalComponent> = ({
   const navigate = useNavigate();
 
   const handelDelete = () => {
-    deleteGroup(group_id).then(({ status, message }) => {
+    deleteGroup(group_id).then(({ status }) => {
       if (status) {
         setOpen(false);
-        navigate(
-          `/app/campaign/campaign-list?business_id=${localStorage.getItem("business_id")}&group_id=${message}`
-        );
+        navigate(`/app/home`);
       }
     });
   };

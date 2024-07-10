@@ -4,19 +4,19 @@ import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsA
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateSurveryComponent from "../CreateFeedbackGroupComponent/CreateSurveryComponent";
-import SurveyCreateComponent from "../CreateFeedbackGroupComponent/SurveyCreateComponent";
+
+import SurveyStatsComponent from "../CreateFeedbackGroupComponent/SurveyCreateComponent";
 import AddGroupUserComponent from "./AddGroupUserComponent";
 import ThreeDotComponent from "./ThreeDotComponent";
 const FeedbackCampaignSurveyComponent = () => {
   const [params, _setparams] = useSearchParams();
   const { execute: fetchGroupDetails, groupDetails } = useGroupDetailsAPI();
   useEffect(() => {
-    const buisnessId = params.get("business_id");
     const groupId = params.get("group_id");
-    if (buisnessId && groupId) {
-      fetchGroupDetails(buisnessId, groupId);
+    if (groupId) {
+      fetchGroupDetails(groupId);
     }
-  }, [params.get("business_id"), params.get("group_id")]);
+  }, [params.get("group_id")]);
 
   return (
     <div>
@@ -37,7 +37,7 @@ const FeedbackCampaignSurveyComponent = () => {
       <div className="my-5 mt-10">
         <GroupHeaderComponent header="Survey" />
       </div>
-      <SurveyCreateComponent />
+      <SurveyStatsComponent />
       <CreateSurveryComponent />
     </div>
   );
