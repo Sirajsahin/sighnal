@@ -21,12 +21,15 @@ export const useUserOrgCreateAPI = () => {
         })
         .then((res: AxiosResponse<any>) => {
           if (res.data.status === true) {
-            localStorage.setItem("AuthToken", `Bearer ${res?.data?.token}`);
-
+            console.log(res, "res");
+            localStorage.setItem(
+              "AuthToken",
+              `Bearer ${res?.data?.data?.token}`
+            );
             toast.success("User Onboard Successful");
-
             return { status: true, message: "" };
           } else {
+            toast.error("User Auth Faild");
             navigate("/app/login/sign-in");
             localStorage.setItem("AuthToken", null);
             toast.error("User Onboard Faild");
@@ -34,6 +37,7 @@ export const useUserOrgCreateAPI = () => {
           }
         })
         .catch((e: AxiosError) => {
+          toast.error("User Auth Faild");
           navigate("/app/login/sign-in");
           localStorage.setItem("AuthToken", null);
           console.log(e, "res");
@@ -52,6 +56,7 @@ export const useUserOrgCreateAPI = () => {
         });
       return response;
     } catch (e: any) {
+      navigate("/app/login/sign-in");
       toast.error("Server Error: " + e.message);
     }
   }, []);

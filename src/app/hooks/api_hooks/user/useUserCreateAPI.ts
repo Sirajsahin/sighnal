@@ -29,7 +29,7 @@ export const useUserCreateAPI = () => {
           if (res.data?.status === true) {
             dispatch(setUserValid({ isValid: true }));
             localStorage.setItem("AuthToken", `Bearer ${res.data.data.token}`);
-            localStorage.setItem("displayName", res?.data?.data?.name);
+            localStorage.setItem("displayName", res?.data?.name);
             localStorage.setItem("email", res?.data?.data?.email);
             localStorage.setItem("photoURL", "null");
 
@@ -39,8 +39,7 @@ export const useUserCreateAPI = () => {
                 isValid: true,
               })
             );
-            const token = res.data.data as any;
-            localStorage.setItem("AuthToken", `Bearer ${token.token}`);
+
             navigate("/app/login/onboard");
           } else {
             localStorage.setItem("AuthToken", null);

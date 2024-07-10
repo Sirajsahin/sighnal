@@ -8,6 +8,8 @@ import { BsThreeDots } from "react-icons/bs";
 import { CgSoftwareUpload } from "react-icons/cg";
 import { FiEdit2 } from "react-icons/fi";
 import { IoShareSocialOutline } from "react-icons/io5";
+import { useSearchParams } from "react-router-dom";
+import GroupCreateModalComponent from "../../CreateFeedbackGroupComponent/GroupCreateModalComponent";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -16,6 +18,10 @@ function classNames(...classes) {
 export default function ThreeDotComponent() {
   const [open, setOpen] = useState<boolean>(false);
   const [adduser, setAdduser] = useState<boolean>(false);
+  const [editGroup, setEditGroup] = useState<boolean>(false);
+  const [params, _setParams] = useSearchParams();
+
+  const groupId = params.get("group_id");
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -37,6 +43,7 @@ export default function ThreeDotComponent() {
                     : "text-[#475467] ",
                   "group flex items-center px-4 py-2 text-sm"
                 )}
+                onClick={() => setEditGroup(true)}
               >
                 <FiEdit2
                   className="mr-3 h-4 w-4 text-[#475467] group-hover:text-gray-500"
@@ -109,7 +116,20 @@ export default function ThreeDotComponent() {
           </MenuItem>
         </div>
       </MenuItems>
-      {open && <GroupDeleteModalComponent open={open} setOpen={setOpen} />}
+      {open && (
+        <GroupDeleteModalComponent
+          open={open}
+          setOpen={setOpen}
+          group_id={groupId}
+        />
+      )}
+      {editGroup && (
+        <GroupCreateModalComponent
+          open={editGroup}
+          setOpen={setEditGroup}
+          group_id={groupId}
+        />
+      )}
       {adduser && (
         <GroupUploadUsersModalComponent open={adduser} setOpen={setAdduser} />
       )}
