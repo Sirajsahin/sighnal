@@ -34,6 +34,7 @@ export type RouteKeys =
   | "LOGIN"
   | "LOGIN_PAGE"
   | "ORGANAIZATION_DETAILS"
+  | "ORGANIZATION"
   | "HOME_PAGE"
   | "CAMPAIGN"
   | "ONBOARD_PAGE"

@@ -8,6 +8,7 @@ export const ROUTES_MAPPINGS = {
   "/app/login": "LOGIN",
   "/app/login/sign-in": "LOGIN_PAGE",
   "/app/login/onboard": "ONBOARD_PAGE",
+  "/app/login/organization": "ORGANIZATION",
   "/app/org-details": "ORGANAIZATION_DETAILS",
   "/app/home": "HOME_PAGE",
   "/app/user-profile": "USER_PROFILE",
@@ -26,6 +27,15 @@ export const LOGINSUBNAVIGATION: IRoutesDefined = {
     description: "Vetic VMS Product",
     url: "/app/login/onboard",
     path: "onboard",
+    children: {},
+  },
+  ORGANIZATION: {
+    id: "ORGANIZATION",
+    icon: "HiOutlineHome",
+    title: "Vetic VMS Product",
+    description: "Vetic VMS Product",
+    url: "/app/login/organization",
+    path: "organization",
     children: {},
   },
   LOGIN_PAGE: {

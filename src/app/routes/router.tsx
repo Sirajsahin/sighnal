@@ -16,6 +16,7 @@ import QuestionPreviewComponent from "@/components/routes/auth_routes/QuestionPr
 import ThankyouPage from "@/components/routes/auth_routes/ThankyouPage";
 import Login from "@/components/shared/Login";
 import Organaization from "@/components/shared/Organaization";
+import OrganaizationListComponent from "@/components/shared/OrganaizationListComponent";
 import UserProfile from "@/components/shared/UserProfile";
 import { useRouter } from "../hooks/useRouter";
 
@@ -103,6 +104,10 @@ const Router: React.FC<IRouterProps> = () => {
         {
           path: getRouteKey("ONBOARD_PAGE", "path"),
           element: <Organaization />,
+        },
+        {
+          path: getRouteKey("ORGANIZATION", "path"),
+          element: <OrganaizationListComponent />,
         },
       ],
     },

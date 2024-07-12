@@ -35,8 +35,8 @@ export interface IGroupStatsresponse {
 //Survey Create
 
 export interface ISurveyCreateProps {
-  name: string;
-  description: string;
+  survey_name: string;
+  survey_description: string;
   group_id: string;
 }
 

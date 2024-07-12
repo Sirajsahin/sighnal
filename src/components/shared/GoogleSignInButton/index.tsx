@@ -1,37 +1,20 @@
 import { useFirebaseLogin } from "@/app/hooks/api_hooks/auth/useFirebaseLogin";
-import { useUserAuthenticationTokenAPI } from "@/app/hooks/api_hooks/auth/useUserAuthenticationTokenAPI";
-import { useRouter } from "@/app/hooks/useRouter";
+
 import React, { useEffect } from "react";
 
-import { useNavigate } from "react-router";
+import { useUserAuthenticationTokenAPI } from "@/app/hooks/api_hooks/auth/useUserAuthenticationTokenAPI";
 import { IGoogleSigninButtonProps } from "./interface";
 
 const GoogleSigninButton: React.FC<IGoogleSigninButtonProps> = (_props) => {
   const { signInWithGoogle, accessToken } = useFirebaseLogin();
-  const { getRouteKey } = useRouter();
-  const {
-    callback: IAMAuthorizationAPI,
-    logStatus,
-    businessId,
-  } = useUserAuthenticationTokenAPI();
 
-  const navigate = useNavigate();
+  const { callback: IAMAuthorgaizationAPI } = useUserAuthenticationTokenAPI();
 
   useEffect(() => {
     if (accessToken) {
-      IAMAuthorizationAPI(accessToken?.accessToken);
+      IAMAuthorgaizationAPI(accessToken?.accessToken);
     }
   }, [accessToken]);
-
-  useEffect(() => {
-    if (logStatus) {
-      if (logStatus && businessId) {
-        navigate(getRouteKey("HOME_PAGE", "url"));
-      } else {
-        navigate(getRouteKey("ONBOARD_PAGE", "url"));
-      }
-    }
-  }, [logStatus, businessId]);
 
   return (
     <button

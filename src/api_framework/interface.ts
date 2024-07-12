@@ -13,6 +13,7 @@ export type SighnalAuthAPIS = {
     | "GROUP_CREATE_API"
     | "GROUP_DETAILS_API"
     | "GROUP_LIST_API"
+    | "SELECT_ORG_API"
     | "GROUP_STATS_API"
     | "SURVEY_CREATE_API"
     | "QUESTION_CREATE_API"

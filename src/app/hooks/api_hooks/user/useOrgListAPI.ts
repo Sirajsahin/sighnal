@@ -11,27 +11,27 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export const useOrgListAPI = () => {
-  const [countyList, setCountryList] = useState<IUserOrgList[]>([]);
+  const [orgList, seTorgList] = useState<IUserOrgList[]>([]);
   const navigate = useNavigate();
 
   const execute = useCallback(async (accessToken: string) => {
-    console.log(accessToken, "accessToken");
     try {
       await axios
         .get(USER_LOGIN_APIS.ORG_LIST_API.baseURL ?? "", {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `${accessToken}`,
           },
         })
         .then((res: AxiosResponse<IUserOrgListResponse>) => {
-          if (res.data.data.length > 0) {
-            navigate("/app/home");
-            setCountryList(res.data?.data);
+          if (res.data?.data?.length > 0) {
+            seTorgList(res.data?.data);
           } else {
+            seTorgList([]);
             navigate("/app/login/onboard");
           }
         })
         .catch((e: AxiosError) => {
+          seTorgList([]);
           navigate("/app/login/onboard");
           if (e.code === "ERR_BAD_REQUEST") {
             //
@@ -48,5 +48,5 @@ export const useOrgListAPI = () => {
       toast.error("Server Error: " + e.message);
     }
   }, []);
-  return { execute, countyList };
+  return { execute, orgList };
 };

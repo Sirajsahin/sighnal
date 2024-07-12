@@ -21,7 +21,7 @@ export const useUserOrgCreateAPI = () => {
         })
         .then((res: AxiosResponse<any>) => {
           if (res.data.status === true) {
-            console.log(res, "res");
+            
             localStorage.setItem(
               "AuthToken",
               `Bearer ${res?.data?.data?.token}`

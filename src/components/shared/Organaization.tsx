@@ -51,7 +51,7 @@ export default function Organaization() {
   useEffect(() => {
     const email = localStorage.getItem("email")?.split("@")[1]?.split(".")[0];
     formHook.setValue("name", email);
-  }, [localStorage.getItem("displayName")]);
+  }, [localStorage.getItem("email")]);
 
   const countyListItem = useSelectMenuReducer(countyList, "name", "id");
   const onSubmit = (data: ICreateGroupFromFields) => {

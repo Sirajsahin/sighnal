@@ -60,7 +60,7 @@ export const useFirebaseLogin = () => {
         window.location.replace(ROUTES.LOGIN_PAGE.url);
         return null;
       }
-
+      
       localStorage.setItem("displayName", result?.user?.displayName);
       localStorage.setItem("email", result?.user?.email);
       localStorage.setItem("photoURL", result?.user?.photoURL);

@@ -45,8 +45,8 @@ const CreateSurveyQuestionHeaderComponent = () => {
     }
     if (data && isFormSubmissionValid) {
       const constructedData: ISurveyCreateProps = {
-        name: data.surveyTitle,
-        description: data.surveyDescription,
+        survey_name: data.surveyTitle,
+        survey_description: data.surveyDescription,
         group_id: groupId,
       };
       createSurvey(constructedData).then(({ status, message }) => {
