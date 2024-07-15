@@ -40,10 +40,12 @@ export interface IUserDetails {
   name: string | null;
   email: string | null;
   is_email_verified: boolean | null;
-  created_at: string | null;
-  updated_at: string | null;
-  created_by: string | null;
-  updated_by: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  created_by?: string | null;
+  updated_by?: string | null;
+  department?: string | null;
+  phone?: string | null;
 }
 export interface IUserDetailsResponse {
   message: string;
@@ -59,13 +61,31 @@ export interface IOrganizationDetails {
   industry: string | null;
   team_size: string | null;
   country: string | null;
-  created_by: string | null;
-  updated_by: string | null;
-  created_at: string | null;
-  updated_at: string | null;
+  created_by?: string | null;
+  updated_by?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  about?: string | null;
+  age?: string | null;
+  website?: string | null;
 }
 export interface IOrganizationDetailsResponse {
   message: string;
   data: IOrganizationDetails | null;
+  status: boolean;
+}
+
+// Job type list
+export interface IJobTypeListData {}
+export interface IJobTypeListResponse {
+  message: string;
+  data: IJobTypeListData[];
+  status: boolean;
+}
+// Industry  list
+export interface IIndustryListData {}
+export interface IIndustryListResponse {
+  message: string;
+  data: IIndustryListData[];
   status: boolean;
 }

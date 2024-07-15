@@ -23,5 +23,7 @@ export type SighnalAuthAPIS = {
     | "DEPARTMENT_LIST"
     | "USER_DETAILS"
     | "ORGANIZATION_DETAILS"
+    | "INDUSTRY_LIST"
+    | "JOB_TYPE"
     | "QUESTION_TYPE_API"]: ISighnalAPI;
 };

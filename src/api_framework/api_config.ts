@@ -83,4 +83,12 @@ export const USER_LOGIN_APIS: SighnalAuthAPIS = {
     baseURL: `${BASE_URL}/org/organisation-details/`,
     params: {},
   },
+  JOB_TYPE: {
+    baseURL: `${BASE_URL}/org/organisation-details/`,
+    params: {},
+  },
+  INDUSTRY_LIST: {
+    baseURL: `${BASE_URL}/org/organisation-details/`,
+    params: {},
+  },
 };

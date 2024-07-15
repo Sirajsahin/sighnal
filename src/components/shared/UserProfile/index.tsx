@@ -1,6 +1,14 @@
 import { IoMdArrowDropright } from "react-icons/io";
 
+import {
+  IOrganizationDetails,
+  IUserDetails,
+} from "@/api_framework/api_modals/user";
+import { useIndratryListAPI } from "@/app/hooks/api_hooks/user/useIndratryListAPI";
+import { useJobTypetListAPI } from "@/app/hooks/api_hooks/user/useJobTypeListAPI";
 import { useOrganizationDetailsAPI } from "@/app/hooks/api_hooks/user/useOrganizationDetailsAPI";
+import { useUpdatedOrganizationDetailsAPI } from "@/app/hooks/api_hooks/user/useUpdatedOrganizationDetailsAPI";
+import { useUpdateUserDetailsAPI } from "@/app/hooks/api_hooks/user/useUpdateUserDetailsAPI";
 import { useUserCountyListAPI } from "@/app/hooks/api_hooks/user/useUserCountyListAPI";
 import { useUserDetailsAPI } from "@/app/hooks/api_hooks/user/useUserDetailsAPI";
 import Input from "@/components/ui/Input";
@@ -24,6 +32,7 @@ export interface ICreateGroupFromFields {
   org_website: string;
   org_age: string;
   org_about: string;
+  Industry: string;
 }
 
 const UserProfile = () => {
@@ -41,6 +50,10 @@ const UserProfile = () => {
     useOrganizationDetailsAPI();
   const { execute: fetchUserDetails, userDetails } = useUserDetailsAPI();
   const { execute: fetcCountry, countyList } = useUserCountyListAPI();
+  const { execute: fetchIndustry, industry } = useIndratryListAPI();
+  const { execute: fetchJobType, jobType } = useJobTypetListAPI();
+  const { execute: updateOrganization } = useUpdatedOrganizationDetailsAPI();
+  const { execute: updateUserDetails } = useUpdateUserDetailsAPI();
 
   const formHook = useForm<ICreateGroupFromFields>({
     mode: "onChange",
@@ -62,12 +75,34 @@ const UserProfile = () => {
       return;
     }
     if (data && isFormSubmissionValid) {
-      //   const constructedData: ISignalUserCreateProps = {
-      //     name: data.name,
-      //     email: data.email,
-      //     password: data.password,
-      //   };
-      //   createUserRole(constructedData);
+      const constructedData: IOrganizationDetails = {
+        country: data.citizen,
+        updated_at: "",
+        updated_by: localStorage.getItem("email"),
+        industry: data.Industry,
+        org_id: organization?.org_id,
+        org_name: data.org_name,
+        team_size: data.org_size,
+        about: data.org_about,
+        age: data.org_age,
+        website: data.org_website,
+      };
+      const constructedDataUser: IUserDetails = {
+        name: data.name,
+        updated_at: "",
+        updated_by: localStorage.getItem("email"),
+        email: data.email,
+        is_email_verified: true,
+        user_id: userDetails?.user_id,
+        phone: data.phone,
+        department: data.jobTitle,
+      };
+      updateOrganization(constructedData).then(() => {
+        fetchOrganizationDetailsAPI();
+      });
+      updateUserDetails(constructedDataUser).then(() => {
+        fetchUserDetails();
+      });
     }
   };
 
@@ -75,19 +110,31 @@ const UserProfile = () => {
     fetchOrganizationDetailsAPI();
     fetchUserDetails();
     fetcCountry();
+    fetchIndustry();
+    fetchJobType();
   }, []);
 
   useEffect(() => {
     if (userDetails && organization) {
       formHook.setValue("email", userDetails.email);
       formHook.setValue("name", userDetails.name);
+      formHook.setValue("phone", userDetails.phone);
+      formHook.setValue("jobTitle", userDetails.department);
+
+      //organization
       formHook.setValue("org_name", organization.org_name);
       formHook.setValue("org_size", organization.team_size);
-      // formHook.setValue("org_about",organization.country)
+      formHook.setValue("org_website", organization.website);
+      formHook.setValue("org_age", organization.age);
+      formHook.setValue("Industry", organization.industry);
+      formHook.setValue("citizen", organization.country);
+      formHook.setValue("org_about", organization.about);
     }
   }, [userDetails, organization]);
 
   const countyListItem = useSelectMenuReducer(countyList, "name", "id");
+  const industryListItem = useSelectMenuReducer(industry, "name", "id");
+  const jobTypeListItem = useSelectMenuReducer(jobType, "name", "id");
 
   const [logo, setLogo] = useState<File | null>(null);
 
@@ -172,7 +219,6 @@ const UserProfile = () => {
               autoComplete="false"
               className="text-xs"
               placeholder="Enter Your Name"
-              // labelName="Name"
               isMandatory={true}
               register={formHook.register("name", {
                 required: true,
@@ -187,43 +233,13 @@ const UserProfile = () => {
                 forAlphaNumericWithoutDot.errors,
               ]}
             />
-            <SearchableSelectMenu
-              // label="I’m a citizen of"
-              errorMessages={[
-                {
-                  message: "Country is required",
-                  type: "required",
-                },
-              ]}
-              onSelectItem={(item) => {
-                if (item) {
-                  formHook.setValue(`citizen`, item.title);
-                }
-                formHook.clearErrors(`citizen`);
-              }}
-              fieldError={formHook?.formState?.errors?.citizen}
-              register={formHook.register(`citizen`, {
-                required: true,
-              })}
-              selectItems={countyListItem}
-              placeholder="Select Country"
-              showTooltips={false}
-              showTypedErrors={true}
-              showDropdownIcon={true}
-              defaultSelected={
-                countyListItem?.filter(
-                  (oc) => oc.title === formHook.watch(`citizen`)
-                )[0]
-              }
-              listBoxClassName="w-full"
-              className="text-gray-400 "
-              containerClassName="w-full"
-            />
+
             <Input
               className="text-xs"
               type="email"
               placeholder="Enter Your Email"
               // labelName="Email"
+              disabled
               isMandatory={true}
               register={formHook.register("email", {
                 required: true,
@@ -243,6 +259,7 @@ const UserProfile = () => {
               placeholder="Enter Your Phone"
               isMandatory={true}
               // labelName="Phone"
+              maxLength={10}
               register={formHook.register("phone", {
                 required: true,
                 ...forMobile.validations,
@@ -274,13 +291,13 @@ const UserProfile = () => {
               register={formHook.register(`jobTitle`, {
                 required: true,
               })}
-              selectItems={countyListItem}
+              selectItems={jobTypeListItem}
               placeholder="Select Job Title"
               showTooltips={false}
               showTypedErrors={true}
               showDropdownIcon={true}
               defaultSelected={
-                countyListItem?.filter(
+                jobTypeListItem?.filter(
                   (oc) => oc.title === formHook.watch(`jobTitle`)
                 )[0]
               }
@@ -372,6 +389,70 @@ const UserProfile = () => {
                 },
                 forOnlyNumber.errors,
               ]}
+            />
+            <SearchableSelectMenu
+              // label="I’m a citizen of"
+              errorMessages={[
+                {
+                  message: "Country is required",
+                  type: "required",
+                },
+              ]}
+              onSelectItem={(item) => {
+                if (item) {
+                  formHook.setValue(`citizen`, item.title);
+                }
+                formHook.clearErrors(`citizen`);
+              }}
+              fieldError={formHook?.formState?.errors?.citizen}
+              register={formHook.register(`citizen`, {
+                required: true,
+              })}
+              selectItems={countyListItem}
+              placeholder="Select Country"
+              showTooltips={false}
+              showTypedErrors={true}
+              showDropdownIcon={true}
+              defaultSelected={
+                countyListItem?.filter(
+                  (oc) => oc.title === formHook.watch(`citizen`)
+                )[0]
+              }
+              listBoxClassName="w-full"
+              className="text-gray-400 "
+              containerClassName="w-full"
+            />
+            <SearchableSelectMenu
+              // label="I’m a citizen of"
+              errorMessages={[
+                {
+                  message: "Industry  is required",
+                  type: "required",
+                },
+              ]}
+              onSelectItem={(item) => {
+                if (item) {
+                  formHook.setValue(`Industry`, item.title);
+                }
+                formHook.clearErrors(`Industry`);
+              }}
+              fieldError={formHook?.formState?.errors?.Industry}
+              register={formHook.register(`Industry`, {
+                required: true,
+              })}
+              selectItems={industryListItem}
+              placeholder="Select Industry"
+              showTooltips={false}
+              showTypedErrors={true}
+              showDropdownIcon={true}
+              defaultSelected={
+                industryListItem?.filter(
+                  (oc) => oc.title === formHook.watch(`Industry`)
+                )[0]
+              }
+              listBoxClassName="w-full"
+              className="text-gray-400 "
+              containerClassName="w-full"
             />
             <div className="col-span-2">
               <TextareaComponent
