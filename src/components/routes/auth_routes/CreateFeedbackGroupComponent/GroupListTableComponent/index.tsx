@@ -1,3 +1,6 @@
+import { useSurveyListAPI } from "@/app/hooks/api_hooks/Group/useSurveyListAPI";
+import { useEffect } from "react";
+
 const tableHeader = [
   {
     item: "S.No",
@@ -145,6 +148,13 @@ const customerBookings = [
 ];
 
 const GroupListTableComponent = () => {
+  const { execute: fetchSurveyList, surveyList } = useSurveyListAPI();
+  
+  useEffect(() => {
+    fetchSurveyList();
+  }, []);
+
+  console.log(surveyList);
   return (
     <div className="overflow-x-auto overflow-y-auto mt-3 max-h-[438px] shadow-md rounded-md">
       <table className="min-w-full divide-y divide-gray-200 rounded-md">

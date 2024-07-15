@@ -1,10 +1,14 @@
 import { IoMdArrowDropright } from "react-icons/io";
 
+import { useOrganizationDetailsAPI } from "@/app/hooks/api_hooks/user/useOrganizationDetailsAPI";
+import { useUserCountyListAPI } from "@/app/hooks/api_hooks/user/useUserCountyListAPI";
+import { useUserDetailsAPI } from "@/app/hooks/api_hooks/user/useUserDetailsAPI";
 import Input from "@/components/ui/Input";
 import GroupUploadUsersModalComponent from "@/components/ui/Modal/GroupUploadUsersModalComponent";
 import SearchableSelectMenu from "@/components/ui/SearchableSelectMenu";
 import TextareaComponent from "@/components/ui/TextareaComponent";
-import { useState } from "react";
+import { useSelectMenuReducer } from "@/components/ui/useSelectMenuReducer";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useFormValidations from "../UI_Interface/useFormValidation";
@@ -33,7 +37,13 @@ const UserProfile = () => {
     forOnlyNumber,
   } = useFormValidations();
 
+  const { execute: fetchOrganizationDetailsAPI, organization } =
+    useOrganizationDetailsAPI();
+  const { execute: fetchUserDetails, userDetails } = useUserDetailsAPI();
+  const { execute: fetcCountry, countyList } = useUserCountyListAPI();
+
   const formHook = useForm<ICreateGroupFromFields>({
+    mode: "onChange",
     defaultValues: {},
   });
 
@@ -60,13 +70,24 @@ const UserProfile = () => {
       //   createUserRole(constructedData);
     }
   };
-  const dataItemList = [
-    { id: "1", title: "0-10" },
-    { id: "2", title: "11-30" },
-    { id: "3", title: "30-100" },
-    { id: "3", title: "100-150" },
-    { id: "3", title: "151-300" },
-  ];
+
+  useEffect(() => {
+    fetchOrganizationDetailsAPI();
+    fetchUserDetails();
+    fetcCountry();
+  }, []);
+
+  useEffect(() => {
+    if (userDetails && organization) {
+      formHook.setValue("email", userDetails.email);
+      formHook.setValue("name", userDetails.name);
+      formHook.setValue("org_name", organization.org_name);
+      formHook.setValue("org_size", organization.team_size);
+      // formHook.setValue("org_about",organization.country)
+    }
+  }, [userDetails, organization]);
+
+  const countyListItem = useSelectMenuReducer(countyList, "name", "id");
 
   const [logo, setLogo] = useState<File | null>(null);
 
@@ -184,13 +205,13 @@ const UserProfile = () => {
               register={formHook.register(`citizen`, {
                 required: true,
               })}
-              selectItems={dataItemList}
+              selectItems={countyListItem}
               placeholder="Select Country"
               showTooltips={false}
               showTypedErrors={true}
               showDropdownIcon={true}
               defaultSelected={
-                dataItemList?.filter(
+                countyListItem?.filter(
                   (oc) => oc.title === formHook.watch(`citizen`)
                 )[0]
               }
@@ -253,13 +274,13 @@ const UserProfile = () => {
               register={formHook.register(`jobTitle`, {
                 required: true,
               })}
-              selectItems={dataItemList}
+              selectItems={countyListItem}
               placeholder="Select Job Title"
               showTooltips={false}
               showTypedErrors={true}
               showDropdownIcon={true}
               defaultSelected={
-                dataItemList?.filter(
+                countyListItem?.filter(
                   (oc) => oc.title === formHook.watch(`jobTitle`)
                 )[0]
               }
@@ -296,37 +317,25 @@ const UserProfile = () => {
                 forAlphaNumericWithoutDot.errors,
               ]}
             />
-            <SearchableSelectMenu
+            <Input
+              className="text-xs"
+              placeholder="Organisation Size"
+              // labelName="Company Name"
+              isMandatory={true}
+              register={formHook.register("org_size", {
+                required: true,
+                ...forOnlyNumber.validations,
+              })}
+              fieldError={formHook.formState.errors.org_size}
               errorMessages={[
                 {
                   message: "Org Size is required",
                   type: "required",
                 },
+                forOnlyNumber.errors,
               ]}
-              onSelectItem={(item) => {
-                if (item) {
-                  formHook.setValue(`org_size`, item.title);
-                }
-                formHook.clearErrors("org_size");
-              }}
-              fieldError={formHook?.formState?.errors?.org_size}
-              register={formHook.register(`org_size`, {
-                required: true,
-              })}
-              selectItems={dataItemList}
-              placeholder="Organisation Size"
-              showTooltips={false}
-              showTypedErrors={true}
-              showDropdownIcon={true}
-              defaultSelected={
-                dataItemList?.filter(
-                  (oc) => oc.title === formHook.watch(`org_size`)
-                )[0]
-              }
-              listBoxClassName="w-full"
-              className="text-gray-800 "
-              containerClassName="w-full"
             />
+
             <Input
               className="text-xs"
               type="wbesite"

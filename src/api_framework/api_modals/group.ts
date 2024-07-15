@@ -69,3 +69,18 @@ export interface IGroupQuestionTypeResponse {
   message: string;
   data: IGroupQuestionTypeResponseData[];
 }
+// SURVEY LIST
+export interface ISurveyListResponseData {
+  created_at: string;
+  updated_at: string;
+  survey_name: string;
+  survey_description: string;
+  survey_id: string;
+  created_by: string;
+  updated_by: string;
+}
+export interface ISurveyListResponse {
+  status: boolean;
+  message: string;
+  data: ISurveyListResponseData[];
+}

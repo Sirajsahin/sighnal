@@ -5,13 +5,16 @@ import { Password } from "primereact/password";
 import { useForm } from "react-hook-form";
 import { FaArrowLeft } from "react-icons/fa6";
 import { MdDone } from "react-icons/md";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Input from "../ui/Input";
 import GoogleSigninButton from "./GoogleSignInButton";
 import MyImage from "./Image/login.jpg";
 
+import { useSendOtpAPI } from "@/app/hooks/api_hooks/user/useSendOtpAPI";
 import "primereact/resources/primereact.min.css"; // Core CSS
 import "primereact/resources/themes/saga-blue/theme.css"; // Or the theme you are using
+import { useState } from "react";
+import OTPModalComponent from "../ui/Modal/OTPModalComponent";
 import useFormValidations from "./UI_Interface/useFormValidation";
 
 export interface ICreateGroupFromFields {
@@ -31,6 +34,11 @@ export default function Login() {
   const { forAlphaNumericWithoutDot, forEmail } = useFormValidations();
 
   const { execute: createUserRole } = useUserCreateAPI();
+  const { execute: sendOTP } = useSendOtpAPI();
+
+  const navigate = useNavigate();
+  const [open, setOpen] = useState<boolean>(false);
+
   // const [passwordIsrequired, setPasswordIsrequired] = useState<boolean>(false);
 
   /* Actions and Handlers */
@@ -49,7 +57,7 @@ export default function Login() {
 
   const onSubmit = (data: ICreateGroupFromFields) => {
     const isFormSubmissionValid = validateConditionalFormFields(data);
-    console.log(isFormSubmissionValid, "ffhf");
+
     if (!isFormSubmissionValid) {
       return;
     }
@@ -61,7 +69,19 @@ export default function Login() {
         password: data.password,
       };
 
-      createUserRole(constructedData);
+      createUserRole(constructedData).then(({ status, message }) => {
+        if (status) {
+          sendOTP(message).then(({ status }) => {
+            if (status) {
+              setOpen(true);
+            }
+          });
+        } else {
+          navigate("/app/login/sign-in");
+        }
+      });
+      // navigate("/app/login/sign-in");
+      // navigate("/app/login/onboard");
     }
   };
 
@@ -298,6 +318,7 @@ export default function Login() {
               </div>
             </div>
           </div>
+          {open && <OTPModalComponent open={open} setOpen={setOpen} email={formHook.watch("email")} />}
           <div className="">
             <div className="flex justify-end my-4 pr-6 items-center gap-3 text-sm font-medium text-[#333333]">
               <p>Already have an account?</p>

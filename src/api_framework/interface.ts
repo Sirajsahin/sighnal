@@ -14,8 +14,14 @@ export type SighnalAuthAPIS = {
     | "GROUP_DETAILS_API"
     | "GROUP_LIST_API"
     | "SELECT_ORG_API"
+    | "SURVEY_LIST"
     | "GROUP_STATS_API"
     | "SURVEY_CREATE_API"
     | "QUESTION_CREATE_API"
+    | "SEND_OTP"
+    | "VERIFY_OTP"
+    | "DEPARTMENT_LIST"
+    | "USER_DETAILS"
+    | "ORGANIZATION_DETAILS"
     | "QUESTION_TYPE_API"]: ISighnalAPI;
 };

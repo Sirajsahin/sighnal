@@ -72,7 +72,7 @@ const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                     </p>
                   </div>
                   <div
-                    className={`grid grid-cols-3 gap-4 overflow-auto ${groupList?.length > 7 ? "h-[700px]" : "auto"} `}
+                    className={`grid grid-cols-3 gap-4 overflow-auto h-[700px] `}
                   >
                     {groupList?.map((item, id) => {
                       return (

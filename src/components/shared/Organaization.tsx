@@ -1,5 +1,6 @@
 import { IUserOrgCreateProps } from "@/api_framework/api_modals/user";
 import { useFirebaseLogin } from "@/app/hooks/api_hooks/auth/useFirebaseLogin";
+import { useDepartmentListAPI } from "@/app/hooks/api_hooks/user/useDepartmentListAPI";
 import { useUserCountyListAPI } from "@/app/hooks/api_hooks/user/useUserCountyListAPI";
 import { useUserOrgCreateAPI } from "@/app/hooks/api_hooks/user/useUserOrgCreateAPI";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
@@ -10,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "../ui/Input";
 import SearchableSelectMenu from "../ui/SearchableSelectMenu";
 import { useSelectMenuReducer } from "../ui/useSelectMenuReducer";
+import useFormValidations from "./UI_Interface/useFormValidation";
 
 export interface ICreateGroupFromFields {
   name: string;
@@ -17,20 +19,19 @@ export interface ICreateGroupFromFields {
   org_size: string;
   org_detp: string;
 }
-const dataItemList = [
-  { id: "1", title: "siraj" },
-  { id: "2", title: "siraj" },
-  { id: "3", title: "siraj" },
-];
 
 export default function Organaization() {
   const formHook = useForm<ICreateGroupFromFields>({
+    mode: "onChange",
     defaultValues: {},
   });
 
   const { clientSignOut } = useFirebaseLogin();
+  const { forOnlyNumber, forAlphaNumericWithoutDot } = useFormValidations();
+
   const { execute: createUserOrg } = useUserOrgCreateAPI();
   const { execute: fetcCountry, countyList } = useUserCountyListAPI();
+  const { execute: fetchDepartment, department } = useDepartmentListAPI();
 
   /* Actions and Handlers */
   const validateConditionalFormFields = (data: ICreateGroupFromFields) => {
@@ -46,6 +47,7 @@ export default function Organaization() {
 
   useEffect(() => {
     fetcCountry();
+    fetchDepartment();
   }, []);
 
   useEffect(() => {
@@ -54,6 +56,7 @@ export default function Organaization() {
   }, [localStorage.getItem("email")]);
 
   const countyListItem = useSelectMenuReducer(countyList, "name", "id");
+  const departmentList = useSelectMenuReducer(department, "name", "id");
   const onSubmit = (data: ICreateGroupFromFields) => {
     const isFormSubmissionValid = validateConditionalFormFields(data);
     if (!isFormSubmissionValid) {
@@ -120,7 +123,7 @@ export default function Organaization() {
                       placeholder="Organisation Name"
                       register={formHook.register("name", {
                         required: true,
-                        // ...forAlphaNumericWithoutDot.validations
+                        ...forAlphaNumericWithoutDot.validations,
                       })}
                       fieldError={formHook.formState.errors.name}
                       errorMessages={[
@@ -128,7 +131,7 @@ export default function Organaization() {
                           message: "Name is required",
                           type: "required",
                         },
-                        // forAlphaNumericWithoutDot.errors
+                        forAlphaNumericWithoutDot.errors,
                       ]}
                     />
                   </div>
@@ -138,7 +141,7 @@ export default function Organaization() {
                       placeholder="Organisation Size"
                       register={formHook.register("org_size", {
                         required: true,
-                        // ...forAlphaNumericWithoutDot.validations
+                        ...forOnlyNumber.validations,
                       })}
                       fieldError={formHook.formState.errors.org_size}
                       errorMessages={[
@@ -146,7 +149,7 @@ export default function Organaization() {
                           message: "Size is required",
                           type: "required",
                         },
-                        // forAlphaNumericWithoutDot.errors
+                        forOnlyNumber.errors,
                       ]}
                     />
                   </div>
@@ -201,13 +204,13 @@ export default function Organaization() {
                         register={formHook.register(`org_detp`, {
                           required: true,
                         })}
-                        selectItems={dataItemList}
+                        selectItems={departmentList}
                         placeholder="Your Department"
                         showTooltips={false}
                         showTypedErrors={true}
                         showDropdownIcon={true}
                         defaultSelected={
-                          dataItemList?.filter(
+                          departmentList?.filter(
                             (oc) => oc.title === formHook.watch(`org_detp`)
                           )[0]
                         }

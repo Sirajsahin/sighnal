@@ -10,16 +10,15 @@ import {
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+type InventoryTaxCreateAPIResponse = { status: boolean; message: string };
 
 export const useUserCreateAPI = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const execute = useCallback(async (paramProps: ISignalUserCreateProps) => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
-      await axios
+      const response: InventoryTaxCreateAPIResponse = await axios
         .post(USER_LOGIN_APIS.CREATE_USER_API.baseURL ?? "", paramProps, {
           headers: {
             Authorization: `${accessToken}`,
@@ -39,8 +38,7 @@ export const useUserCreateAPI = () => {
                 isValid: true,
               })
             );
-
-            navigate("/app/login/onboard");
+            return { status: true, message: `Bearer ${res.data.data.token}` };
           } else {
             localStorage.setItem("AuthToken", null);
             dispatch(setUserValid({ isValid: false }));
@@ -50,11 +48,10 @@ export const useUserCreateAPI = () => {
                 accessToken: null,
               })
             );
-            navigate("/app/login/sign-in");
+            return { status: false, message: "" };
           }
         })
         .catch((e: AxiosError) => {
-          navigate("/app/login/sign-in");
           localStorage.setItem("AuthToken", null);
           dispatch(setUserValid({ isValid: false }));
           dispatch(
@@ -72,9 +69,12 @@ export const useUserCreateAPI = () => {
           if (e.response.status === 500) {
             toast.error("Server error 500");
           }
+          return { status: false, message: "" };
         });
+      return response;
     } catch (e: any) {
       toast.error("User Already Exist");
+      return { status: false, message: "" };
     }
   }, []);
   return { execute };

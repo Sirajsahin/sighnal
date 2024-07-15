@@ -52,11 +52,35 @@ export const USER_LOGIN_APIS: SighnalAuthAPIS = {
     params: {},
   },
   QUESTION_CREATE_API: {
-    baseURL: `${BASE_URL}/business/question/create-list/`,
+    baseURL: `${BASE_URL}/question/create-multiple/`,
     params: {},
   },
   QUESTION_TYPE_API: {
-    baseURL: `${BASE_URL}/business/question/types/`,
+    baseURL: `${BASE_URL}/question/types/`,
+    params: {},
+  },
+  SURVEY_LIST: {
+    baseURL: `${BASE_URL}/survey/list/`,
+    params: {},
+  },
+  SEND_OTP: {
+    baseURL: `${BASE_URL}/org/send-otp/`,
+    params: {},
+  },
+  VERIFY_OTP: {
+    baseURL: `${BASE_URL}/org/verify-otp/`,
+    params: {},
+  },
+  DEPARTMENT_LIST: {
+    baseURL: `${BASE_URL}/static/department-list/`,
+    params: {},
+  },
+  USER_DETAILS: {
+    baseURL: `${BASE_URL}/org/user-details/`,
+    params: {},
+  },
+  ORGANIZATION_DETAILS: {
+    baseURL: `${BASE_URL}/org/organisation-details/`,
     params: {},
   },
 };

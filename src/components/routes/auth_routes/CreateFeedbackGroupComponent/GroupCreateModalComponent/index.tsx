@@ -31,6 +31,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
   const { forAlphaNumeric, forAlphaNumericWithoutDot } = useFormValidations();
   const { execute: createGroup } = useGroupCreateAPI();
   const formHook = useForm<ICreateGroupFromFields>({
+    mode: "onChange",
     defaultValues: {},
   });
 

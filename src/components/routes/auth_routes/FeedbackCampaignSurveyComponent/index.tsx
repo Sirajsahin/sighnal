@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateSurveryComponent from "../CreateFeedbackGroupComponent/CreateSurveryComponent";
 
+import GroupListTableComponent from "../CreateFeedbackGroupComponent/GroupListTableComponent";
 import SurveyStatsComponent from "../CreateFeedbackGroupComponent/SurveyCreateComponent";
 import AddGroupUserComponent from "./AddGroupUserComponent";
 import ThreeDotComponent from "./ThreeDotComponent";
@@ -38,6 +39,7 @@ const FeedbackCampaignSurveyComponent = () => {
         <GroupHeaderComponent header="Survey" />
       </div>
       <SurveyStatsComponent />
+      <GroupListTableComponent />
       <CreateSurveryComponent />
     </div>
   );

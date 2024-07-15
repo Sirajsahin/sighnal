@@ -26,6 +26,7 @@ const GroupUploadUsersModalComponent: React.FC<IGroupDeleteModalComponent> = ({
   const [usertable, setUsertable] = useState<boolean>(false);
 
   const formHook = useForm<ICreateGroupFromFields>({
+    mode: "onChange",
     defaultValues: {},
   });
 

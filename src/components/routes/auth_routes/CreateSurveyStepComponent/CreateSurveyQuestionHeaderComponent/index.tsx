@@ -16,6 +16,7 @@ export interface ICreateSurveyFromFields {
 
 const CreateSurveyQuestionHeaderComponent = () => {
   const formHook = useForm<ICreateSurveyFromFields>({
+    mode: "onChange",
     defaultValues: {},
   });
 
