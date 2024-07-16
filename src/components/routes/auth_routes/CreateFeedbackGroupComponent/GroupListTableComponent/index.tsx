@@ -1,5 +1,9 @@
 import { useSurveyListAPI } from "@/app/hooks/api_hooks/Group/useSurveyListAPI";
+import useRouteInfo from "@/app/hooks/useRouteInfo";
+import { useRouter } from "@/app/hooks/useRouter";
+import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
 import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const tableHeader = [
   {
@@ -27,213 +31,166 @@ const tableHeader = [
     item: "Action",
   },
 ];
-const customerBookings = [
+const tableHeader2 = [
   {
-    id: 1,
-    group_name: "App Feedback",
-    survey_name: "App Feedback",
-    group_category: ["Gromming", "Clinic", "Opd Consultation"],
-    startDate: "22 Jun 2024",
-    endDate: "22 Jun 2024",
-    startTime: "12:00 PM",
-    endTime: "12:00 PM",
-    responders: "455",
-    percenteofresponder: "20%",
-    status: "Live",
+    item: "S.No",
   },
   {
-    id: 1,
-    group_name: "App Feedback",
-    survey_name: "App Feedback",
-    group_category: ["Gromming", "Clinic", "Opd Consultation"],
-    startDate: "22 Jun 2024",
-    endDate: "22 Jun 2024",
-    startTime: "12:00 PM",
-    endTime: "12:00 PM",
-    responders: "455",
-    percenteofresponder: "20%",
-    status: "Live",
+    item: "Survey Name",
   },
   {
-    id: 1,
-    group_name: "App Feedback",
-    survey_name: "App Feedback",
-    group_category: ["Gromming", "Clinic", "Opd Consultation"],
-    startDate: "22 Jun 2024",
-    endDate: "22 Jun 2024",
-    startTime: "12:00 PM",
-    endTime: "12:00 PM",
-    responders: "455",
-    percenteofresponder: "20%",
-    status: "Live",
+    item: "Category of User",
   },
   {
-    id: 1,
-    group_name: "App Feedback",
-    survey_name: "App Feedback",
-    group_category: ["Gromming", "Clinic", "Opd Consultation"],
-    startDate: "22 Jun 2024",
-    endDate: "22 Jun 2024",
-    startTime: "12:00 PM",
-    endTime: "12:00 PM",
-    responders: "455",
-    percenteofresponder: "20%",
-    status: "Live",
+    item: "Start Time - End Time",
   },
   {
-    id: 1,
-    group_name: "App Feedback",
-    survey_name: "App Feedback",
-    group_category: ["Gromming", "Clinic", "Opd Consultation"],
-    startDate: "22 Jun 2024",
-    endDate: "22 Jun 2024",
-    startTime: "12:00 PM",
-    endTime: "12:00 PM",
-    responders: "455",
-    percenteofresponder: "20%",
-    status: "Live",
+    item: "Number of Responders",
   },
   {
-    id: 1,
-    group_name: "App Feedback",
-    survey_name: "App Feedback",
-    group_category: ["Gromming", "Clinic", "Opd Consultation"],
-    startDate: "22 Jun 2024",
-    endDate: "22 Jun 2024",
-    startTime: "12:00 PM",
-    endTime: "12:00 PM",
-    responders: "455",
-    percenteofresponder: "20%",
-    status: "Live",
+    item: "Status",
   },
   {
-    id: 1,
-    group_name: "App Feedback",
-    survey_name: "App Feedback",
-    group_category: ["Gromming", "Clinic", "Opd Consultation"],
-    startDate: "22 Jun 2024",
-    endDate: "22 Jun 2024",
-    startTime: "12:00 PM",
-    endTime: "12:00 PM",
-    responders: "455",
-    percenteofresponder: "20%",
-    status: "Live",
-  },
-  {
-    id: 1,
-    group_name: "App Feedback",
-    survey_name: "App Feedback",
-    group_category: ["Gromming", "Clinic", "Opd Consultation"],
-    startDate: "22 Jun 2024",
-    endDate: "22 Jun 2024",
-    startTime: "12:00 PM",
-    endTime: "12:00 PM",
-    responders: "455",
-    percenteofresponder: "20%",
-    status: "Live",
-  },
-  {
-    id: 1,
-    group_name: "App Feedback",
-    survey_name: "App Feedback",
-    group_category: ["Gromming", "Clinic", "Opd Consultation"],
-    startDate: "22 Jun 2024",
-    endDate: "22 Jun 2024",
-    startTime: "12:00 PM",
-    endTime: "12:00 PM",
-    responders: "455",
-    percenteofresponder: "20%",
-    status: "Live",
+    item: "Action",
   },
 ];
 
-const GroupListTableComponent = () => {
-  const { execute: fetchSurveyList, surveyList } = useSurveyListAPI();
-  
-  useEffect(() => {
-    fetchSurveyList();
-  }, []);
+const GroupListTableComponent = ({ source }) => {
+  const { getRouteKey } = useRouter();
+  const [params, _setparams] = useSearchParams();
 
-  console.log(surveyList);
+  const { surveyList } = useRouteInfo(getRouteKey("HOME_PAGE", "id"))
+    ?.routeState?.state as ISurvetSliceState;
+  const { execute: fetchSurveyList } = useSurveyListAPI();
+
+  useEffect(() => {
+    const groupId = params.get("group_id");
+    if (groupId) {
+      fetchSurveyList({ status: "total", group_id: groupId });
+    } else {
+      fetchSurveyList({ status: "total" });
+    }
+  }, [params.get("group_id")]);
+
+  const handelResponderPercentage = (
+    response_count: number,
+    total_sent: number
+  ) => {
+    const percentage = response_count / total_sent / 100;
+    return percentage;
+  };
+
   return (
     <div className="overflow-x-auto overflow-y-auto mt-3 max-h-[438px] shadow-md rounded-md">
       <table className="min-w-full divide-y divide-gray-200 rounded-md">
         <thead className="bg-[#F6F6F7] sticky top-0">
           <tr>
-            {tableHeader?.map((key, index) => (
-              <th
-                key={index}
-                scope="col"
-                className={`px-6 py-4 text-left whitespace-nowrap text-sm font-medium text-[#475467] capitalize tracking-wider sticky top-0 z-40  ${key.item === "Action" && "sticky right-0 bg-gray-50 "}`}
-              >
-                {key.item}
-              </th>
-            ))}
+            {source
+              ? tableHeader?.map((key, index) => (
+                  <th
+                    key={index}
+                    scope="col"
+                    className={`px-6 py-4 text-left whitespace-nowrap text-sm font-medium text-[#475467] capitalize tracking-wider sticky top-0 z-40  ${key.item === "Action" && "sticky right-0 bg-gray-50 "}`}
+                  >
+                    {key.item}
+                  </th>
+                ))
+              : tableHeader2?.map((key, index) => (
+                  <th
+                    key={index}
+                    scope="col"
+                    className={`px-6 py-4 text-left whitespace-nowrap text-sm font-medium text-[#475467] capitalize tracking-wider sticky top-0 z-40  ${key.item === "Action" && "sticky right-0 bg-gray-50 "}`}
+                  >
+                    {key.item}
+                  </th>
+                ))}
           </tr>
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          {customerBookings?.map((item) => (
-            <tr key={item.id} className="border-b">
-              <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
-                <div className="flex flex-col">{item.id}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
-                {item.group_name}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
-                {item.survey_name}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
-                <div className="flex items-center gap-2">
-                  {item.group_category.map((cc) => (
-                    <p key={cc} className="font-medium text-[#333333] text-sm">
-                      {cc}
+          {surveyList &&
+            surveyList?.map((item, id) => (
+              <tr key={id} className="border-b">
+                <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  <div className="flex flex-col">{id + 1}</div>
+                </td>
+                {source && (
+                  <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                    {item?.group_name}
+                  </td>
+                )}
+                <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  {item?.survey_name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  {item?.tags && (
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-[#333333] text-sm">
+                        {item?.tags[0]}
+                      </p>
+                      <p className="font-medium text-[#333333] text-sm">
+                        {item?.tags[1]}
+                      </p>
+
+                      {item?.tags?.length > 3 && (
+                        <div className="bg-black text-white rounded-xl p-1 text-xs cursor-pointer">
+                          {item?.tags?.length - 2}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium flex items-center gap-2">
+                  <div className="flex flex-col gap-1">
+                    <p className="font-medium text-[#333333] text-sm">
+                      {item?.start_date}
                     </p>
-                  ))}
-                  <div className="bg-black text-white rounded-xl p-1 text-xs cursor-pointer">
-                    +2
+                    <p className="font-medium text-[#333333] text-sm">
+                      {item?.start_time}
+                    </p>
                   </div>
-                </div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium flex items-center gap-2">
-                <div className="flex flex-col gap-1">
-                  <p className="font-medium text-[#333333] text-sm">
-                    {item.startDate}
-                  </p>
-                  <p className="font-medium text-[#333333] text-sm">
-                    {item.startTime}
-                  </p>
-                </div>
-                <div className="px-4">-</div>
-                <div className="flex flex-col gap-1">
-                  <p className="font-medium text-[#333333] text-sm">
-                    {item.endDate}
-                  </p>
-                  <p className="font-medium text-[#333333] text-sm">
-                    {item.endTime}
-                  </p>
-                </div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
-                <div className="flex gap-4 items-center">
-                  {item.responders}{" "}
-                  <span className="bg-red-300 rounded-full px-2 py-1 text-red-400">
-                    {item.percenteofresponder}
-                  </span>
-                </div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
-                {item.status}
-              </td>
-              <td
-                className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium sticky  right-0 bg-gray-50 -z-10"
-                style={{ width: "100px" }}
-              >
-                Book
-              </td>
-            </tr>
-          ))}
+                  <div className="px-4">-</div>
+                  <div className="flex flex-col gap-1">
+                    <p className="font-medium text-[#333333] text-sm">
+                      {item?.end_date}
+                    </p>
+                    <p className="font-medium text-[#333333] text-sm">
+                      {item?.end_time}
+                    </p>
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  <div className="flex gap-4 items-center">
+                    {item?.response_count}{" "}
+                    <span
+                      className={`${
+                        handelResponderPercentage(
+                          item?.response_count,
+                          item?.total_sent
+                        ) < 50
+                          ? "bg-[#FFD7CA] text-[#CA6100]"
+                          : "bg-[#C6FFDD] text-[#129045] "
+                      } rounded-full px-2 py-1 font-semibold `}
+                    >
+                      {handelResponderPercentage(
+                        item?.response_count,
+                        item?.total_sent
+                      )}
+                      %
+                    </span>
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  . &nbsp;{item?.status}
+                </td>
+                <td
+                  className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium sticky  right-0 bg-gray-50 -z-10"
+                  style={{ width: "100px" }}
+                >
+                  Book
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

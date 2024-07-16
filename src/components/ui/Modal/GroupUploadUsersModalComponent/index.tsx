@@ -6,6 +6,7 @@ import {
 } from "@headlessui/react";
 import { IGroupDeleteModalComponent } from "./interface";
 
+import { useGroupUserListUploadeAPI } from "@/app/hooks/api_hooks/Group/useGroupUserListUploadeAPI";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -22,7 +23,9 @@ const GroupUploadUsersModalComponent: React.FC<IGroupDeleteModalComponent> = ({
   setOpen,
 }) => {
   // const { forOnlyAlphabet, forAlphaNumericWithoutDot } = useFormValidations();
-  const [uploadedFile, setUploadedFile] = useState<null>(null);
+  const { execute: uploadUserSheet } = useGroupUserListUploadeAPI();
+
+  const [uploadedFile, setUploadedFile] = useState<any[]>([]);
   const [usertable, setUsertable] = useState<boolean>(false);
 
   const formHook = useForm<ICreateGroupFromFields>({
@@ -32,11 +35,14 @@ const GroupUploadUsersModalComponent: React.FC<IGroupDeleteModalComponent> = ({
 
   const onSubmit = () => {
     setUsertable(true);
+    uploadUserSheet(null);
   };
 
-  const handleFileUpload = (file: any) => {
+  const handleFileUpload = (file: any[]) => {
+    console.log(file, "file");
     setUploadedFile(file);
   };
+
   console.log(uploadedFile, "uploadedFile");
   return (
     <Transition show={open}>
@@ -90,6 +96,8 @@ const GroupUploadUsersModalComponent: React.FC<IGroupDeleteModalComponent> = ({
                       <div className="">
                         <ImageUploadComponent
                           onFileUploaded={handleFileUpload}
+                          type="xlsx"
+                          fileType={"multiple"}
                         />
                       </div>
                     </div>

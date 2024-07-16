@@ -44,7 +44,7 @@ const CreateFeedbackGroupComponent = () => {
         />
       </div>
       <GroupStatsComponent />
-      <GroupListTableComponent />
+      <GroupListTableComponent source={true} />
       {viewAll && (
         <ViewAllGroupModalComponent open={viewAll} setOpen={setViewAll} />
       )}

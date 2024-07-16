@@ -1,18 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import ConfigurationSliceReducer from "./configuration_slice";
+import SurveyReducer from "../auth/survey_slice";
 
-export type AuthReducerStateKeys =
-  | "CUSTOMER_PROFILE"
-  | "PATIENT_WAITING_LIST"
-  | "SLOTS"
-  | "ORDER_MANAGEMENT"
-  | "ROTA"
-  | "CUSTOMER_EMR"
-  | "CALENDAR_VIEW"
-  | "INVENTORY";
+export type AuthReducerStateKeys = "HOME_PAGE";
 
 const AuthCombinerReducer = combineReducers({
-  CONFIGURATION: ConfigurationSliceReducer,
+  HOME_PAGE: SurveyReducer,
 });
 
 export default AuthCombinerReducer;

@@ -28,7 +28,9 @@ export default function OrganaizationListComponent() {
 
   useEffect(() => {
     const AuthToken = localStorage.getItem("AuthToken");
-    fetchOrgListAPI(AuthToken);
+    if (AuthToken) {
+      fetchOrgListAPI(AuthToken);
+    }
   }, [localStorage.getItem("AuthToken")]);
 
   const handelSelect = (item: IUserOrgList) => {

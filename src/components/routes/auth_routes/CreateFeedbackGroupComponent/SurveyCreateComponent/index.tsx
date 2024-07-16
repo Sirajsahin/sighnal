@@ -1,3 +1,7 @@
+import {
+  ISurveyListProps,
+  useSurveyListAPI,
+} from "@/app/hooks/api_hooks/Group/useSurveyListAPI";
 import { useSurveyStatsListAPI } from "@/app/hooks/api_hooks/Group/useSurveyStatsListAPI";
 import StatsCardComponent from "@/components/ui/StatsCardComponent";
 import { useEffect, useState } from "react";
@@ -6,7 +10,10 @@ import { useSearchParams } from "react-router-dom";
 const SurveyStatsComponent = () => {
   const [params, _setparams] = useSearchParams();
   const { execute: fetchGroupStats, groupStats } = useSurveyStatsListAPI();
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("total");
+  const { execute: fetchSurveyList } = useSurveyListAPI();
+
+  const groupId = params.get("group_id");
 
   useEffect(() => {
     const groupId = params.get("group_id");
@@ -17,10 +24,11 @@ const SurveyStatsComponent = () => {
 
   const handleCardClick = (status) => {
     setSelectedStatus(status);
-    // Call the filter API here with the status
-    // For example:
-    console.log(`Filter API called with status: ${status}`);
-    // Add the actual API call logic here
+    const constructedData: ISurveyListProps = {
+      status: status,
+      group_id: groupId,
+    };
+    fetchSurveyList(constructedData);
   };
   return (
     <div className=" grid grid-cols-5 gap-6">

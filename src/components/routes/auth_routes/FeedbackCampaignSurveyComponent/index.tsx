@@ -5,12 +5,21 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateSurveryComponent from "../CreateFeedbackGroupComponent/CreateSurveryComponent";
 
+import useRouteInfo from "@/app/hooks/useRouteInfo";
+import { useRouter } from "@/app/hooks/useRouter";
+import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
 import GroupListTableComponent from "../CreateFeedbackGroupComponent/GroupListTableComponent";
 import SurveyStatsComponent from "../CreateFeedbackGroupComponent/SurveyCreateComponent";
 import AddGroupUserComponent from "./AddGroupUserComponent";
 import ThreeDotComponent from "./ThreeDotComponent";
 const FeedbackCampaignSurveyComponent = () => {
   const [params, _setparams] = useSearchParams();
+
+  const { getRouteKey } = useRouter();
+
+  const { surveyList } = useRouteInfo(getRouteKey("HOME_PAGE", "id"))
+    ?.routeState?.state as ISurvetSliceState;
+
   const { execute: fetchGroupDetails, groupDetails } = useGroupDetailsAPI();
   useEffect(() => {
     const groupId = params.get("group_id");
@@ -18,6 +27,8 @@ const FeedbackCampaignSurveyComponent = () => {
       fetchGroupDetails(groupId);
     }
   }, [params.get("group_id")]);
+
+  console.log(surveyList?.length === 0, "surveyList");
 
   return (
     <div>
@@ -35,12 +46,13 @@ const FeedbackCampaignSurveyComponent = () => {
           </div>
         </div>
       </div>
-      <div className="my-5 mt-10">
+      <div className="my-5 mt-10 flex justify-between ">
         <GroupHeaderComponent header="Survey" />
+        {surveyList?.length > 0 && <CreateSurveryComponent flage={true} />}
       </div>
       <SurveyStatsComponent />
-      <GroupListTableComponent />
-      <CreateSurveryComponent />
+      <GroupListTableComponent source={false} />
+      {surveyList?.length === 0 && <CreateSurveryComponent flage={false} />}
     </div>
   );
 };

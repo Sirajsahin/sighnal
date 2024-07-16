@@ -1,10 +1,9 @@
-// src/components/FileUpload.js
 import { TrashIcon } from "@heroicons/react/24/outline";
-import Papa, { ParseResult } from "papaparse";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { CiFileOn } from "react-icons/ci";
 import { LuUploadCloud } from "react-icons/lu";
+import * as XLSX from "xlsx";
 
 type FileUploadProps = {
   onFileUploaded: (data: any[]) => void;
@@ -14,11 +13,11 @@ type FileUploadProps = {
   isFileRequired?: boolean;
 };
 
-export function bytesToKB(bytes) {
+export function bytesToKB(bytes: number) {
   return (bytes / 1024).toFixed(3); // Convert bytes to kilobytes (KB) and round to 3 decimal places
 }
 
-export function bytesToMB(bytes) {
+export function bytesToMB(bytes: number) {
   return (bytes / (1024 * 1024)).toFixed(3); // Convert bytes to megabytes (MB) and round to 3 decimal places
 }
 
@@ -30,29 +29,42 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
   isFileRequired,
 }) => {
   const [fileDetails, setFileDetails] = useState<
-    { name: string; size: number; data: ParseResult<any> | string }[]
+    { name: string; size: number; data: any }[]
   >([]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      setIsFileRequired(false); // Reset the required state on file drop
+      if (setIsFileRequired) setIsFileRequired(false); // Reset the required state on file drop
       const files = acceptedFiles.map((file) => {
         const reader = new FileReader();
-        return new Promise<{ name: string; size: number; data: string }>(
+        return new Promise<{ name: string; size: number; data: any }>(
           (resolve, reject) => {
             reader.onload = () => {
-              resolve({
-                name: file.name,
-                size: file.size,
-                data: reader.result as string,
-              });
+              const binaryStr = reader.result;
+              if (type === "xlsx") {
+                const workbook = XLSX.read(binaryStr, { type: "binary" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                resolve({
+                  name: file.name,
+                  size: file.size,
+                  data: jsonData,
+                });
+              } else {
+                resolve({
+                  name: file.name,
+                  size: file.size,
+                  data: binaryStr,
+                });
+              }
             };
             reader.onerror = reject;
 
             if (type === "image") {
               reader.readAsDataURL(file);
             } else {
-              reader.readAsText(file);
+              reader.readAsBinaryString(file);
             }
           }
         );
@@ -64,35 +76,27 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
           if (type === "image") {
             onFileUploaded(fileDetails.map((file) => file.data));
           } else {
-            const csvData = fileDetails[0].data as string;
-            Papa.parse(csvData, {
-              header: true,
-              complete: (result) => {
-                setFileDetails([
-                  {
-                    name: fileDetails[0].name,
-                    size: fileDetails[0].size,
-                    data: result,
-                  },
-                ]);
-                onFileUploaded(result.data);
-              },
-              error: (error) => {
-                console.error("CSV Parsing Error:", error);
-              },
-            });
+            onFileUploaded(fileDetails.map((file) => file.data));
           }
         })
         .catch((error) => {
           console.error("File Reading Error:", error);
         });
     },
-    [onFileUploaded, type]
+    [onFileUploaded, type, setIsFileRequired]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: type === "image" ? { "image/*": [] } : { "text/csv": [] },
+    accept:
+      type === "image"
+        ? { "image/*": [] }
+        : type === "xlsx"
+          ? {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                [],
+            }
+          : { "text/*": [] },
     multiple: fileType === "multiple" && type === "image",
   });
 
@@ -129,7 +133,8 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
             <p className="text-[#34A853] text-sm font-semibold ">
               Click to upload{" "}
               <span className="text-[#475467] font-normal">
-                or drag and drop {type === "image" ? "Image Files" : "CSV File"}
+                or drag and drop{" "}
+                {type === "image" ? "Image Files" : "XLSX File"}
               </span>
             </p>
             {isFileRequired && (

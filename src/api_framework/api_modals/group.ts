@@ -71,13 +71,19 @@ export interface IGroupQuestionTypeResponse {
 }
 // SURVEY LIST
 export interface ISurveyListResponseData {
-  created_at: string;
-  updated_at: string;
-  survey_name: string;
-  survey_description: string;
-  survey_id: string;
-  created_by: string;
-  updated_by: string;
+  survey_name?: string;
+  survey_description?: string;
+  group_id?: string;
+  survey_id?: string;
+  start_date?: string;
+  start_time?: string;
+  end_date?: string;
+  end_time?: string;
+  tags?: Array<string>;
+  response_count?: number | null;
+  total_sent?: number | null;
+  group_name?: string;
+  status?: string;
 }
 export interface ISurveyListResponse {
   status: boolean;

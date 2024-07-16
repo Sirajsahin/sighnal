@@ -180,8 +180,6 @@ const AddSurveyQuestionComponent = () => {
   //option create
 
   const handleDeleteProductOptions = (id: number, optionIndex: number) => {
-    // formHook.setValue(`question_details.${id}.options`,[])
-
     questionDetailsFormHook.update(id, {
       ...formHook.getValues(`question_details.${id}`),
       options: remove(
@@ -194,8 +192,6 @@ const AddSurveyQuestionComponent = () => {
   };
 
   const handleAddProductOptions = (id: number) => {
-    // formHook.setValue(`question_details.${id}.options`,[])
-
     questionDetailsFormHook.update(id, {
       ...formHook.getValues(`question_details.${id}`),
       options: [...formHook.getValues(`question_details.${id}.options`), ""],
@@ -203,6 +199,7 @@ const AddSurveyQuestionComponent = () => {
   };
 
   useEffect(() => {
+    handleAddProductItem();
     fetchQuestionType();
   }, []);
 

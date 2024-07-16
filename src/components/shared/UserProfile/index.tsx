@@ -37,14 +37,10 @@ export interface ICreateGroupFromFields {
 
 const UserProfile = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [logo, setLogo] = useState<File | null>(null);
 
-  const {
-    forAlphaNumericWithoutDot,
-    forEmail,
-    forMobile,
-    forAlphaNumeric,
-    forOnlyNumber,
-  } = useFormValidations();
+  const { forAlphaNumericWithoutDot, forEmail, forMobile, forOnlyNumber } =
+    useFormValidations();
 
   const { execute: fetchOrganizationDetailsAPI, organization } =
     useOrganizationDetailsAPI();
@@ -116,6 +112,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     if (userDetails && organization) {
+      //user details
       formHook.setValue("email", userDetails.email);
       formHook.setValue("name", userDetails.name);
       formHook.setValue("phone", userDetails.phone);
@@ -135,8 +132,6 @@ const UserProfile = () => {
   const countyListItem = useSelectMenuReducer(countyList, "name", "id");
   const industryListItem = useSelectMenuReducer(industry, "name", "id");
   const jobTypeListItem = useSelectMenuReducer(jobType, "name", "id");
-
-  const [logo, setLogo] = useState<File | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -361,7 +356,7 @@ const UserProfile = () => {
               placeholder="Enter Your Org Website"
               register={formHook.register("org_website", {
                 required: true,
-                ...forAlphaNumeric.validations,
+                // ...forAlphaNumeric.validations,
               })}
               fieldError={formHook.formState.errors.org_website}
               errorMessages={[
@@ -369,7 +364,7 @@ const UserProfile = () => {
                   message: "Website is required",
                   type: "required",
                 },
-                forAlphaNumeric.errors,
+                // forAlphaNumeric.errors,
               ]}
             />
             <Input

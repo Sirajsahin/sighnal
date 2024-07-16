@@ -37,6 +37,7 @@ export const useFirebaseLogin = () => {
       navigate("/app/login/sign-in");
       toast.success("Successfully Logged Out");
     } catch {
+      navigate("/app/login/sign-in");
       toast.error("Error while logging out");
     }
   };
@@ -60,7 +61,7 @@ export const useFirebaseLogin = () => {
         window.location.replace(ROUTES.LOGIN_PAGE.url);
         return null;
       }
-      
+
       localStorage.setItem("displayName", result?.user?.displayName);
       localStorage.setItem("email", result?.user?.email);
       localStorage.setItem("photoURL", result?.user?.photoURL);

@@ -91,4 +91,8 @@ export const USER_LOGIN_APIS: SighnalAuthAPIS = {
     baseURL: `${BASE_URL}/org/organisation-details/`,
     params: {},
   },
+  UPLOAD_USER_SHEET: {
+    baseURL: `${BASE_URL}group/upload-user-sheet/`,
+    params: {},
+  },
 };
