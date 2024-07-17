@@ -15,11 +15,12 @@ export const useGroupUserListAPI = () => {
 
   const execute = useCallback(
     async (group_id: string, selectedCategories?: Array<string>) => {
+      console.log(selectedCategories, "selectedCategories");
       try {
         let API_FLAG = null;
 
-        if (group_id && selectedCategories) {
-          API_FLAG = `${USER_LOGIN_APIS.USER_LIST_API.baseURL}?group_id=${group_id}&tags=${[selectedCategories]}`;
+        if (group_id && selectedCategories?.length > 0) {
+          API_FLAG = `${USER_LOGIN_APIS.USER_LIST_API.baseURL}?group_id=${group_id}&tags=${selectedCategories}`;
         } else if (group_id) {
           API_FLAG = `${USER_LOGIN_APIS.USER_LIST_API.baseURL}?group_id=${group_id}`;
         } else {

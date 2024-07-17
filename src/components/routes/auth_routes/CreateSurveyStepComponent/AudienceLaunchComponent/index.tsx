@@ -1,13 +1,15 @@
 import { ISelectMenuItemData } from "@/components/ui/interface";
 import { RiShareBoxLine } from "react-icons/ri";
 
+import { ISurveyLiveProps } from "@/api_framework/api_modals/group";
+import { useSurveyLiveAPI } from "@/app/hooks/api_hooks/Group/useSurveyLiveAPI";
 import GroupUsersCategoryModalComponent from "@/components/ui/Modal/GroupUsersCategoryModalComponent";
 import SearchableSelectMenu from "@/components/ui/SearchableSelectMenu";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import CalenderComponent from "../../../../ui/CalenderComponent";
 import ToogleComponent from "../../../../ui/ToogleComponent";
 
@@ -28,6 +30,7 @@ export interface ISelectedDate {
 
 const AudienceLaunchComponent = () => {
   // State For StartDate And End Date
+  const [params, _setparams] = useSearchParams();
 
   const today = new Date();
   const yesterday = new Date();
@@ -40,6 +43,8 @@ const AudienceLaunchComponent = () => {
   });
 
   const [open, setOpen] = useState<boolean>(false);
+
+  const { execute: createSurveyLive } = useSurveyLiveAPI();
 
   // Calculate Start Date And End Date and Change Date Format Also
   const startDate = new Date(selectionDate.startDate);
@@ -88,11 +93,23 @@ const AudienceLaunchComponent = () => {
   const endTime = generateTimeItems(12, 5);
 
   /* Actions and Handlers */
+  const survey_id = params.get("survey_id");
 
   const onSubmit = (data: ICreateSurveyFromFields) => {
     if (data) {
-      console.log(data, "data");
-      // navigate("/app/thankyou");
+      const constructedData: ISurveyLiveProps = {
+        end_date: data.endDate,
+        end_time: data.endTime,
+        start_date: data.startDate,
+        start_time: data.endTime,
+        is_comments_on: data.comments,
+        tags: [],
+      };
+      createSurveyLive(constructedData, survey_id).then(({ status }) => {
+        if (status) {
+          navigate("/app/thankyou");
+        }
+      });
     }
   };
 

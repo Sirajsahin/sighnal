@@ -27,5 +27,6 @@ export type SighnalAuthAPIS = {
     | "JOB_TYPE"
     | "UPLOAD_USER_SHEET"
     | "USER_LIST_API"
+    | "SURVEY_LIVE_API"
     | "QUESTION_TYPE_API"]: ISighnalAPI;
 };

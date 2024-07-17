@@ -212,7 +212,9 @@ const AddSurveyQuestionComponent = () => {
       createQuestion(formHook.getValues("question_details")).then(
         ({ status }) => {
           if (status) {
-            navigate("/app/campaign/create-survey?step_id=3");
+            navigate(
+              `/app/campaign/create-survey?step_id=3&group_id=${group_id}&survey_id=${survey_id}`
+            );
           }
         }
       );

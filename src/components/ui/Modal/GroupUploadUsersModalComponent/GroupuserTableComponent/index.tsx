@@ -12,7 +12,20 @@ import { useEffect, useMemo, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { useSearchParams } from "react-router-dom";
 
-const PageSize = 10;
+// Mock API call functions
+const updateCustomerAPI = async (customerId, data) => {
+  // Implement your API call here
+  console.log(`Updating customer with ID: ${customerId}`, data);
+  // Return updated data or status
+};
+
+const deleteCustomerAPI = async (customerId) => {
+  // Implement your API call here
+  console.log(`Deleting customer with ID: ${customerId}`);
+  // Return status
+};
+
+const PageSize = 5;
 
 export default function GroupuserTableComponent({ setOpen, open }) {
   const [params, _setparams] = useSearchParams();
@@ -38,7 +51,7 @@ export default function GroupuserTableComponent({ setOpen, open }) {
     }
   }, [params.get("group_id")]);
 
-  const handleCategoryClick = (category: string) => {
+  const handleCategoryClick = (category) => {
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((cat) => cat !== category)
@@ -54,12 +67,30 @@ export default function GroupuserTableComponent({ setOpen, open }) {
       setCategories(uniqueTags);
     }
   }, [userData]);
+
   useEffect(() => {
     const groupId = params.get("group_id");
     if (selectedCategories?.length > 0 && groupId) {
       fetchUserListData(groupId, selectedCategories);
     }
   }, [selectedCategories, params.get("group_id")]);
+
+  const handleEdit = (customerId) => {
+    const customer = userData.find((user) => user.customer_id === customerId);
+    if (customer) {
+      const updatedData = { ...customer, name: "Updated Name" }; // Modify as needed
+      updateCustomerAPI(customerId, updatedData).then(() => {
+        fetchUserListData(params.get("group_id"));
+      });
+    }
+  };
+
+  const handleDelete = (customerId) => {
+    deleteCustomerAPI(customerId).then(() => {
+      fetchUserListData(params.get("group_id"));
+    });
+  };
+
   return (
     <Transition show={open}>
       <Dialog className="relative z-10" onClose={() => setOpen(false)}>
@@ -138,19 +169,19 @@ export default function GroupuserTableComponent({ setOpen, open }) {
                               </th>
                               <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-xs font-semibold text-[#475467]"
+                                className="px-3 py-3.5 text-left text-xs font-semibold text-[#475467] whitespace-nowrap"
                               >
                                 Phone Number
                               </th>
                               <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-xs font-semibold text-[#475467]"
+                                className="px-3 py-3.5 text-left text-xs font-semibold text-[#475467] whitespace-nowrap"
                               >
                                 Email Address
                               </th>
                               <th
                                 scope="col"
-                                className="px-3 py-3.5 text-left text-xs font-semibold text-[#475467]"
+                                className="px-3 py-3.5 text-left text-xs font-semibold text-[#475467] whitespace-nowrap"
                               >
                                 Tags
                               </th>
@@ -180,7 +211,7 @@ export default function GroupuserTableComponent({ setOpen, open }) {
                                 <td className="whitespace-nowrap px-3 py-4 text-xs text-[#475467]">
                                   {person?.email}
                                 </td>
-                                <td className="whitespace-nowrap px-3 py-4 text-xs text-[#475467]">
+                                <td className=" px-3 py-4 text-xs text-[#475467]">
                                   {person?.tags?.length > 0 ? (
                                     <div className="w-auto flex gap-2 items-center my-4 flex-wrap">
                                       {[...new Set(person?.tags)]?.map(
@@ -200,8 +231,18 @@ export default function GroupuserTableComponent({ setOpen, open }) {
                                 </td>
                                 <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-xs font-medium sm:pr-3">
                                   <div className="flex items-center gap-4 justify-center">
-                                    <TrashIcon className="h-4 w-4 text-[#475467] cursor-pointer" />
-                                    <FiEdit2 className="h-4 w-4 text-[#475467] cursor-pointer" />
+                                    <TrashIcon
+                                      className="h-4 w-4 text-[#475467] cursor-pointer"
+                                      onClick={() =>
+                                        handleDelete(person?.customer_id)
+                                      }
+                                    />
+                                    <FiEdit2
+                                      className="h-4 w-4 text-[#475467] cursor-pointer"
+                                      onClick={() =>
+                                        handleEdit(person?.customer_id)
+                                      }
+                                    />
                                   </div>
                                 </td>
                               </tr>

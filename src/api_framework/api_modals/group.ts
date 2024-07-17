@@ -40,6 +40,17 @@ export interface ISurveyCreateProps {
   group_id: string;
 }
 
+//Survey Live
+
+export interface ISurveyLiveProps {
+  start_date: string;
+  end_date: string;
+  start_time: string;
+  end_time: string;
+  tags: Array<string>;
+  is_comments_on: boolean;
+}
+
 // Survey response
 export interface ISurveyCreateResponse {
   data: {
