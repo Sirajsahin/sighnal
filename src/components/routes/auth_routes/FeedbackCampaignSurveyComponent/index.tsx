@@ -1,19 +1,21 @@
 import GroupHeaderComponent from "@/components/ui/GroupHeaderComponent";
 
 import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsAPI";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateSurveryComponent from "../CreateFeedbackGroupComponent/CreateSurveryComponent";
 
 import useRouteInfo from "@/app/hooks/useRouteInfo";
 import { useRouter } from "@/app/hooks/useRouter";
 import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
+import GroupuserTableComponent from "@/components/ui/Modal/GroupUploadUsersModalComponent/GroupuserTableComponent";
 import GroupListTableComponent from "../CreateFeedbackGroupComponent/GroupListTableComponent";
 import SurveyStatsComponent from "../CreateFeedbackGroupComponent/SurveyCreateComponent";
 import AddGroupUserComponent from "./AddGroupUserComponent";
 import ThreeDotComponent from "./ThreeDotComponent";
 const FeedbackCampaignSurveyComponent = () => {
   const [params, _setparams] = useSearchParams();
+  const [open, setOpen] = useState<boolean>(false);
 
   const { getRouteKey } = useRouter();
 
@@ -28,8 +30,6 @@ const FeedbackCampaignSurveyComponent = () => {
     }
   }, [params.get("group_id")]);
 
-  console.log(surveyList?.length === 0, "surveyList");
-
   return (
     <div>
       <div className="grid grid-cols-8">
@@ -38,7 +38,32 @@ const FeedbackCampaignSurveyComponent = () => {
             header={groupDetails?.group_name}
             para={groupDetails?.group_description}
           />
-          <AddGroupUserComponent />
+          {groupDetails?.tags?.length > 0 ? (
+            <div className="flex items-center gap-2">
+              <div className="w-auto flex gap-2 items-center my-4 flex-wrap">
+                {[...new Set(groupDetails?.tags)]?.map((category) => (
+                  <p
+                    key={category}
+                    className={`p-2 w-auto rounded-2xl text-xs items-center flex justify-center font-medium 
+                    bg-[#F5F5F5]
+                  }`}
+                  >
+                    {category}
+                  </p>
+                ))}
+              </div>
+              <button
+                onClick={() => setOpen(true)}
+                className={`p-1 px-2 w-auto rounded-2xl text-xs items-center text-white flex justify-center font-medium cursor-pointer
+                    bg-[#333333]
+                  }`}
+              >
+                View All
+              </button>
+            </div>
+          ) : (
+            <AddGroupUserComponent />
+          )}
         </div>
         <div className="col-span-1">
           <div className="flex justify-end">
@@ -46,6 +71,8 @@ const FeedbackCampaignSurveyComponent = () => {
           </div>
         </div>
       </div>
+      {open && <GroupuserTableComponent setOpen={setOpen} open={open} />}
+
       <div className="my-5 mt-10 flex justify-between ">
         <GroupHeaderComponent header="Survey" />
         {surveyList?.length > 0 && <CreateSurveryComponent flage={true} />}

@@ -90,3 +90,18 @@ export interface ISurveyListResponse {
   message: string;
   data: ISurveyListResponseData[];
 }
+
+//User list
+
+export interface IUserListResponseData {
+  customer_id: string | null;
+  email: string | null;
+  name: string | null;
+  mobile?: string | null;
+  tags: Array<string> | [];
+}
+export interface IUserListResponse {
+  message: string;
+  status: boolean;
+  data: IUserListResponseData[] | null;
+}

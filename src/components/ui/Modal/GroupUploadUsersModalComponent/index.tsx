@@ -9,8 +9,7 @@ import { IGroupDeleteModalComponent } from "./interface";
 import { useGroupUserListUploadeAPI } from "@/app/hooks/api_hooks/Group/useGroupUserListUploadeAPI";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import ImageUploadComponent from "../../ImageUploadComponent";
+import XlsxUploadComponent from "../../XlsxUploadComponent";
 import GroupuserTableComponent from "./GroupuserTableComponent";
 
 export interface ICreateGroupFromFields {
@@ -25,25 +24,25 @@ const GroupUploadUsersModalComponent: React.FC<IGroupDeleteModalComponent> = ({
   // const { forOnlyAlphabet, forAlphaNumericWithoutDot } = useFormValidations();
   const { execute: uploadUserSheet } = useGroupUserListUploadeAPI();
 
-  const [uploadedFile, setUploadedFile] = useState<any[]>([]);
+  const [uploadedFile, setUploadedFile] = useState<any>(null);
   const [usertable, setUsertable] = useState<boolean>(false);
+  const [isFileRequired, setIsFileRequired] = useState<boolean>(false);
 
-  const formHook = useForm<ICreateGroupFromFields>({
-    mode: "onChange",
-    defaultValues: {},
-  });
-
-  const onSubmit = () => {
-    setUsertable(true);
-    uploadUserSheet(null);
+  const handelUpload = () => {
+    uploadUserSheet(uploadedFile).then(({ status }) => {
+      if (status) {
+        setUsertable(true);
+      }
+    });
   };
 
-  const handleFileUpload = (file: any[]) => {
-    console.log(file, "file");
-    setUploadedFile(file);
+  const handleFileUpload = (file: any) => {
+    if (file) {
+      setUploadedFile(file);
+      setIsFileRequired(true);
+    }
   };
 
-  console.log(uploadedFile, "uploadedFile");
   return (
     <Transition show={open}>
       <Dialog className="relative z-10" onClose={() => setOpen(false)}>
@@ -72,10 +71,7 @@ const GroupUploadUsersModalComponent: React.FC<IGroupDeleteModalComponent> = ({
                 className={`relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-3 text-left shadow-xl transition-all sm:my-6 sm:w-full sm:max-w-${usertable ? "6xl" : "2xl"}  sm:p-6`}
               >
                 {!usertable ? (
-                  <form
-                    className=" w-full mt-0"
-                    onSubmit={formHook.handleSubmit(onSubmit)}
-                  >
+                  <div className=" w-full mt-0">
                     <div>
                       <p className="text-base font-bold text-[#333333] py-2 flex justify-between items-center">
                         Add Group Users
@@ -94,10 +90,9 @@ const GroupUploadUsersModalComponent: React.FC<IGroupDeleteModalComponent> = ({
                         </p>
                       </div>
                       <div className="">
-                        <ImageUploadComponent
+                        <XlsxUploadComponent
                           onFileUploaded={handleFileUpload}
                           type="xlsx"
-                          fileType={"multiple"}
                         />
                       </div>
                     </div>
@@ -110,18 +105,17 @@ const GroupUploadUsersModalComponent: React.FC<IGroupDeleteModalComponent> = ({
                         Cancel
                       </button>
                       <button
+                        disabled={!isFileRequired}
+                        onClick={handelUpload}
                         type="submit"
-                        className="  w-auto justify-center rounded-md bg-[#333333] px-6 py-2 text-sm font-medium text-white shadow-sm"
+                        className={`  w-auto justify-center rounded-md ${!isFileRequired ? "bg-gray-300" : "bg-[#333333]"} px-6 py-2 text-sm font-medium text-white shadow-sm`}
                       >
                         Save
                       </button>
                     </div>
-                  </form>
+                  </div>
                 ) : (
-                  <GroupuserTableComponent
-                    data={uploadedFile}
-                    setOpen={setOpen}
-                  />
+                  <GroupuserTableComponent setOpen={setOpen} open={open} />
                 )}
               </DialogPanel>
             </TransitionChild>
