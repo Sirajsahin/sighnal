@@ -19,7 +19,9 @@ export interface ICreateSurveyFromFields {
   startDate: string;
   endDate: string;
   startTime: string;
+  startTimeMinute: string;
   endTime: string;
+  endTimeMinute: string;
 }
 
 export interface ISelectedDate {
@@ -31,6 +33,7 @@ export interface ISelectedDate {
 const AudienceLaunchComponent = () => {
   // State For StartDate And End Date
   const [params, _setparams] = useSearchParams();
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const today = new Date();
   const yesterday = new Date();
@@ -60,8 +63,8 @@ const AudienceLaunchComponent = () => {
   const endMonth = (endDate.getMonth() + 1).toString().padStart(2, "0");
   const endDay = endDate.getDate().toString().padStart(2, "0");
 
-  const formattedStartDate = `${startYear}-${startMonth}-${startDay}`;
-  const formattedEndDate = `${endYear}-${endMonth}-${endDay}`;
+  const formattedStartDate = `${startYear}/${startMonth}/${startDay}`;
+  const formattedEndDate = `${endYear}/${endMonth}/${endDay}`;
 
   // Default Value
   const formHook = useForm<ICreateSurveyFromFields>({
@@ -69,6 +72,7 @@ const AudienceLaunchComponent = () => {
     defaultValues: {
       startDate: formattedStartDate,
       endDate: formattedEndDate,
+      comments: false,
     },
   });
 
@@ -99,11 +103,11 @@ const AudienceLaunchComponent = () => {
     if (data) {
       const constructedData: ISurveyLiveProps = {
         end_date: data.endDate,
-        end_time: data.endTime,
+        end_time: data.endTime + ":" + data.endTimeMinute,
         start_date: data.startDate,
-        start_time: data.endTime,
+        start_time: data.startTime + ":" + data.startTimeMinute,
         is_comments_on: data.comments,
-        tags: [],
+        tags: selectedCategories,
       };
       createSurveyLive(constructedData, survey_id).then(({ status }) => {
         if (status) {
@@ -137,7 +141,18 @@ const AudienceLaunchComponent = () => {
             <p className="text-[#333333] font-medium text-sm cursor-pointer">
               Add Target Audience
             </p>
-            <div className="border border-1 border-purple-100 mt-2 p-3 w-full rounded-lg flex justify-between items-center gap-2">
+            <div className="border border-1 border-purple-100 mt-2 p-3 w-full rounded-lg flex  items-center gap-2">
+              {selectedCategories?.length > 0 && (
+                <div className="flex items-center gap-2">
+                  {selectedCategories?.map((item) => {
+                    return (
+                      <p className="p-2 w-auto rounded-2xl text-xs items-center flex justify-center font-medium cursor-pointer bg-[#333333] text-white">
+                        {item}
+                      </p>
+                    );
+                  })}
+                </div>
+              )}
               <span
                 className="flex items-center gap-1 text-xs text-[#333333] bg-[#E7F0EC] px-4 py-1 rounded-3xl cursor-pointer"
                 onClick={() => setOpen(true)}
@@ -184,7 +199,7 @@ const AudienceLaunchComponent = () => {
             </div>
             <div className="w-full mb-2">
               <p className="text-[#333333] font-medium text-sm mb-2">
-                Start Time - End Time
+                Start Time
               </p>
               <div className="text-sm text-[#333333] grid grid-cols-2 gap-3">
                 <SearchableSelectMenu
@@ -227,12 +242,12 @@ const AudienceLaunchComponent = () => {
                   ]}
                   onSelectItem={(item) => {
                     if (item) {
-                      formHook.setValue("endTime", item.title);
+                      formHook.setValue("startTimeMinute", item.title);
                     }
-                    formHook.clearErrors(`endTime`);
+                    formHook.clearErrors(`startTimeMinute`);
                   }}
-                  fieldError={formHook?.formState?.errors?.endTime}
-                  register={formHook.register("endTime", {
+                  fieldError={formHook?.formState?.errors?.startTimeMinute}
+                  register={formHook.register("startTimeMinute", {
                     required: true,
                   })}
                   selectItems={endTime}
@@ -242,7 +257,76 @@ const AudienceLaunchComponent = () => {
                   showDropdownIcon={true}
                   defaultSelected={
                     endTime?.filter(
+                      (oc) => oc.title === formHook.watch("startTimeMinute")
+                    )[0]
+                  }
+                  listBoxClassName="w-full"
+                  className="text-gray-800 "
+                  containerClassName="w-full"
+                />
+              </div>
+            </div>
+            <div className="w-full mb-2">
+              <p className="text-[#333333] font-medium text-sm mb-2">
+                End Time
+              </p>
+              <div className="text-sm text-[#333333] grid grid-cols-2 gap-3">
+                <SearchableSelectMenu
+                  errorMessages={[
+                    {
+                      message: "Start Time is required",
+                      type: "required",
+                    },
+                  ]}
+                  onSelectItem={(item) => {
+                    if (item) {
+                      formHook.setValue("endTime", item.title);
+                    }
+                    formHook.clearErrors(`endTime`);
+                  }}
+                  fieldError={formHook?.formState?.errors?.endTime}
+                  register={formHook.register("endTime", {
+                    required: true,
+                  })}
+                  selectItems={startTime}
+                  placeholder="HH"
+                  showTooltips={false}
+                  showTypedErrors={true}
+                  showDropdownIcon={true}
+                  defaultSelected={
+                    startTime?.filter(
                       (oc) => oc.title === formHook.watch("endTime")
+                    )[0]
+                  }
+                  listBoxClassName="w-full"
+                  className="text-gray-800 "
+                  containerClassName="w-full"
+                />
+                <SearchableSelectMenu
+                  errorMessages={[
+                    {
+                      message: "End Time is required",
+                      type: "required",
+                    },
+                  ]}
+                  onSelectItem={(item) => {
+                    if (item) {
+                      formHook.setValue("endTimeMinute", item.title);
+                    }
+                    formHook.clearErrors(`endTimeMinute`);
+                  }}
+                  fieldError={formHook?.formState?.errors?.endTimeMinute}
+                  register={formHook.register("endTimeMinute", {
+                    required: true,
+                  })}
+                  selectItems={endTime}
+                  placeholder="MM"
+                  showTooltips={false}
+                  showTypedErrors={true}
+                  showDropdownIcon={true}
+                  defaultSelected={
+                    endTime?.filter(
+                      (oc) => oc.title === formHook.watch("endTimeMinute")
                     )[0]
                   }
                   listBoxClassName="w-full"
@@ -285,7 +369,12 @@ const AudienceLaunchComponent = () => {
       </form>
 
       {open && (
-        <GroupUsersCategoryModalComponent open={open} setOpen={setOpen} />
+        <GroupUsersCategoryModalComponent
+          open={open}
+          setOpen={setOpen}
+          setSelectedCategories={setSelectedCategories}
+          selectedCategories={selectedCategories}
+        />
       )}
     </div>
   );

@@ -48,6 +48,7 @@ export const useSurveyLiveAPI = () => {
           });
         return response;
       } catch (e: any) {
+        return { status: false, message: null };
         toast.error("Server Error: " + e.message);
       }
     },
