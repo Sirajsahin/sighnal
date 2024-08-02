@@ -28,7 +28,6 @@ export interface ICampaignQuestionDetailsInfo {
   can_skipped: string;
   options: Array<string>;
   group_id: string;
-  business_id: string;
   survey_id: string;
 }
 const ratingRange = [
@@ -157,7 +156,6 @@ const AddSurveyQuestionComponent = () => {
     control: formHook.control,
   });
 
-  const business_id = params.get("business_id");
   const group_id = params.get("group_id");
   const survey_id = params.get("survey_id");
 
@@ -171,7 +169,6 @@ const AddSurveyQuestionComponent = () => {
       question_type_id: null,
       options: [""],
       can_skipped: null,
-      business_id: business_id,
       group_id: group_id,
       survey_id: survey_id,
     });

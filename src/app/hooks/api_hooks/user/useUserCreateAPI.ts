@@ -60,11 +60,14 @@ export const useUserCreateAPI = () => {
               accessToken: null,
             })
           );
-          if (e.code === "ERR_BAD_REQUEST") {
-            toast.error("Error while fetching org services");
-          }
+          const messge = e.response.data as any;
+          // if (e.code === "ERR_BAD_REQUEST") {
+          //   toast.error(messge.message);
+          // }
           if (e.response?.status === 400) {
-            toast("Services records not found");
+            console.log(e.response, "ddd");
+
+            toast.error(messge.message);
           }
           if (e.response.status === 500) {
             toast.error("Server error 500");
@@ -73,7 +76,7 @@ export const useUserCreateAPI = () => {
         });
       return response;
     } catch (e: any) {
-      toast.error("User Already Exist");
+      // toast.error(e..message);
       return { status: false, message: "" };
     }
   }, []);

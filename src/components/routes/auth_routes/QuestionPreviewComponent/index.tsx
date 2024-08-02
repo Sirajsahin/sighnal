@@ -1,3 +1,5 @@
+import { useQuestionPreviewAPI } from "@/app/hooks/api_hooks/Group/useQuestionPreviewAPI";
+import { useEffect } from "react";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
 import NPSComponent from "./NPSComponent";
@@ -6,7 +8,16 @@ import RatingComponent from "./RatingComponent";
 
 const QuestionPreviewComponent = () => {
   const [params, _setparams] = useSearchParams();
+  const { execute: fetchQuestionDetails } = useQuestionPreviewAPI();
   const step_id = params.get("step_id");
+
+  useEffect(() => {
+    const survey_id = params.get("survey_id");
+    const group_id = params.get("group_id");
+    if (group_id && survey_id) {
+      fetchQuestionDetails(group_id, survey_id);
+    }
+  }, [params.get("survey_id")]);
 
   return (
     <div>

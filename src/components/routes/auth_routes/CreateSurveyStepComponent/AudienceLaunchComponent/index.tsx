@@ -98,6 +98,7 @@ const AudienceLaunchComponent = () => {
 
   /* Actions and Handlers */
   const survey_id = params.get("survey_id");
+  const group_id = params.get("group_id");
 
   const onSubmit = (data: ICreateSurveyFromFields) => {
     if (data) {
@@ -122,7 +123,9 @@ const AudienceLaunchComponent = () => {
   };
 
   const handelOpenPreview = () => {
-    navigate("/app/campaign/survey-preview?step_id=1");
+    navigate(
+      `/app/campaign/survey-preview?step_id=1&group_id=${group_id}&survey_id=${survey_id}`
+    );
   };
 
   return (

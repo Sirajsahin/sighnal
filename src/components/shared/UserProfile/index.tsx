@@ -1,5 +1,3 @@
-import { IoMdArrowDropright } from "react-icons/io";
-
 import {
   IOrganizationDetails,
   IUserDetails,
@@ -12,7 +10,6 @@ import { useUpdateUserDetailsAPI } from "@/app/hooks/api_hooks/user/useUpdateUse
 import { useUserCountyListAPI } from "@/app/hooks/api_hooks/user/useUserCountyListAPI";
 import { useUserDetailsAPI } from "@/app/hooks/api_hooks/user/useUserDetailsAPI";
 import Input from "@/components/ui/Input";
-import GroupUploadUsersModalComponent from "@/components/ui/Modal/GroupUploadUsersModalComponent";
 import SearchableSelectMenu from "@/components/ui/SearchableSelectMenu";
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { useSelectMenuReducer } from "@/components/ui/useSelectMenuReducer";
@@ -36,7 +33,6 @@ export interface ICreateGroupFromFields {
 }
 
 const UserProfile = () => {
-  const [open, setOpen] = useState<boolean>(false);
   const [logo, setLogo] = useState<File | null>(null);
 
   const { forAlphaNumericWithoutDot, forEmail, forMobile, forOnlyNumber } =
@@ -113,6 +109,7 @@ const UserProfile = () => {
   useEffect(() => {
     if (userDetails && organization) {
       //user details
+      localStorage.setItem("displayName", userDetails.name);
       formHook.setValue("email", userDetails.email);
       formHook.setValue("name", userDetails.name);
       formHook.setValue("phone", userDetails.phone);
@@ -470,12 +467,8 @@ const UserProfile = () => {
           </div>
           <div
             className="w-full border border-[#D0D5DD] px-4 py-3 rounded-lg my-4 cursor-pointer"
-            onClick={() => setOpen(true)}
-          >
-            <p className="text-gray-400 text-xs flex items-center justify-between ">
-              Add End Consumers <IoMdArrowDropright className="w-4 h-4" />
-            </p>
-          </div>
+            // onClick={() => setOpen(true)}
+          ></div>
 
           <button
             type="submit"
@@ -486,7 +479,7 @@ const UserProfile = () => {
         </div>
       </form>
 
-      {open && <GroupUploadUsersModalComponent setOpen={setOpen} open={open} />}
+      {/* {open && <GroupUploadUsersModalComponent setOpen={setOpen} open={open} />} */}
     </div>
   );
 };

@@ -9,14 +9,14 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
-export const useSurveyStatsListAPI = () => {
+export const useQuestionPreviewAPI = () => {
   const [groupStats, setGroupStats] = useState<IGroupStatsresponseData[]>([]);
-  const execute = useCallback(async (group_id: string) => {
+  const execute = useCallback(async (group_id: string, survey_id: string) => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
       await axios
         .get(
-          `${USER_LOGIN_APIS.GROUP_STATS_API.baseURL}?group_id=${group_id} `,
+          `${USER_LOGIN_APIS.SURVEY_PREVIEW_API.baseURL}?group_id=${group_id}&survey_id=${survey_id} `,
           {
             headers: {
               Authorization: `${accessToken}`,

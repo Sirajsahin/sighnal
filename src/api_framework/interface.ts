@@ -28,5 +28,6 @@ export type SighnalAuthAPIS = {
     | "UPLOAD_USER_SHEET"
     | "USER_LIST_API"
     | "SURVEY_LIVE_API"
+    | "SURVEY_PREVIEW_API"
     | "QUESTION_TYPE_API"]: ISighnalAPI;
 };

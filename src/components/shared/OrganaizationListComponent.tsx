@@ -72,7 +72,10 @@ export default function OrganaizationListComponent() {
               <div>
                 {orgList?.map((item, id) => {
                   return (
-                    <div key={id} className="flex items-center gap-4 w-full">
+                    <div
+                      key={id}
+                      className="flex items-center gap-4 w-full mb-4"
+                    >
                       <div className="h-14 w-14 rounded-xl bg-[#EDFFF6] text-2xl capitalize flex items-center justify-center font-medium">
                         {item?.org_name?.substring(0, 1)}
                       </div>
@@ -94,6 +97,15 @@ export default function OrganaizationListComponent() {
                   );
                 })}
               </div>
+            </div>
+            <div className="mt-10">
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-[#333] px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm "
+                onClick={() => navigate("/app/login/onboard")}
+              >
+                Create Anather Space
+              </button>
             </div>
             <div className="mt-10">
               <p className="text-[#27272544] text-sm text-center">

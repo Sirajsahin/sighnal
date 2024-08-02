@@ -52,7 +52,9 @@ export default function Organaization() {
 
   useEffect(() => {
     const email = localStorage.getItem("email")?.split("@")[1]?.split(".")[0];
-    formHook.setValue("name", email);
+    if (email?.toLowerCase() !== "gmail") {
+      formHook.setValue("name", email);
+    }
   }, [localStorage.getItem("email")]);
 
   const countyListItem = useSelectMenuReducer(countyList, "name", "id");
