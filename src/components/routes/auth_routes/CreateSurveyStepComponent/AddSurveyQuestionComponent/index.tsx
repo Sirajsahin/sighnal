@@ -23,7 +23,97 @@ import { useSelectMenuReducer } from "@ui/useSelectMenuReducer";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import MoodScaleComponent from "../MoodScalComponent";
+import RatingScaleComponent from "../RatingScaleCoponent";
+
+const ratingRange = [
+  { id: "1", title: "5" },
+  { id: "2", title: "10" },
+];
+const moodRange = [
+  { id: "1", title: "2" },
+  { id: "2", title: "3" },
+  { id: "3", title: "4" },
+  { id: "4", title: "5" },
+];
+// const data = [
+//   {
+//     item: "1",
+//   },
+//   {
+//     item: "2",
+//   },
+//   {
+//     item: "3",
+//   },
+//   {
+//     item: "4",
+//   },
+//   {
+//     item: "5",
+//   },
+// ];
+const ratingRangeData = [
+  {
+    item: "1",
+  },
+  {
+    item: "2",
+  },
+  {
+    item: "3",
+  },
+  {
+    item: "4",
+  },
+  {
+    item: "5",
+  },
+  {
+    item: "6",
+  },
+  {
+    item: "7",
+  },
+  {
+    item: "8",
+  },
+  {
+    item: "9",
+  },
+  {
+    item: "10",
+  },
+];
+
+// const _dataItem = [
+//   { id: "true", name: "Yes" },
+//   { id: "false", name: "No" },
+// ];
+
+const moodScaleDate = [
+  { emoji: "😍", label: "Very Satisfied" },
+  { emoji: "😃", label: "Satisfied" },
+  { emoji: "😐", label: "It's Okay" },
+  { emoji: "😕", label: "Unsatisfied" },
+  { emoji: "😡", label: "Very unsatisfied" },
+];
+// const moodScaleDate4 = [
+//   { emoji: "😍", label: "Very Satisfied" },
+//   { emoji: "😃", label: "Satisfied" },
+//   { emoji: "😐", label: "It's Okay" },
+//   { emoji: "😕", label: "Unsatisfied" },
+// ];
+// const moodScaleDate2 = [
+//   { emoji: "😍", label: "Very Satisfied" },
+//   { emoji: "😃", label: "Satisfied" },
+// ];
+// const moodScaleDate3 = [
+//   { emoji: "😍", label: "Very Satisfied" },
+//   { emoji: "😃", label: "Satisfied" },
+//   { emoji: "😐", label: "It's Okay" },
+// ];
 
 export interface IServiceDeskImage {
   base_64_string: string;
@@ -42,6 +132,8 @@ export interface ICampaignQuestionProps {
   options: Array<string>;
   openText: string;
   group_id: string;
+  rating?: string;
+  mood?: string;
   survey_id: string;
   attachment?: IServiceDeskImage[];
 }
@@ -54,7 +146,9 @@ export interface ICampaignQuestionDetailsInfo {
   options: Array<string>;
   group_id: string;
   openText: string;
+  rating: string;
   survey_id: string;
+  mood: string;
   attachment_file?: FileList;
   image?: IServiceDeskImage[];
 }
@@ -78,11 +172,13 @@ const AddSurveyQuestionComponent = () => {
       question_details: [],
     },
   });
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const questionDetailsFormHook = useFieldArray<ICreateSurveyFormFields>({
     name: "question_details",
     control: formHook.control,
   });
+
+  const { setValue } = formHook;
 
   const group_id = params.get("group_id");
   const survey_id = params.get("survey_id");
@@ -100,6 +196,8 @@ const AddSurveyQuestionComponent = () => {
     questionDetailsFormHook.append({
       question: "",
       openText: "",
+      rating: "",
+      mood: "",
       question_type_id: "",
       options: [""],
       can_skipped: "false",
@@ -164,9 +262,9 @@ const AddSurveyQuestionComponent = () => {
 
       const { status } = await createQuestion(filteredQuestionDetails);
       if (status) {
-        // navigate(
-        //   `/app/campaign/create-survey?step_id=3&group_id=${group_id}&survey_id=${survey_id}`
-        // );
+        navigate(
+          `/app/campaign/create-survey?step_id=3&group_id=${group_id}&survey_id=${survey_id}`
+        );
       }
     } catch (error) {
       console.error("Error processing files:", error);
@@ -179,8 +277,6 @@ const AddSurveyQuestionComponent = () => {
     "question_type_name",
     "question_type_id"
   );
-  const ratingRange = []; // Define or fetch ratingRange options
-  const moodRange = []; // Define or fetch moodRange options
 
   const handleSetImageURL = async () => {
     const questions = formHook.getValues("question_details");
@@ -863,6 +959,27 @@ const AddSurveyQuestionComponent = () => {
                               />
                             </div>
                           </div>
+                        )}
+                        {formHook.watch(
+                          `question_details.${index}.question_type_id`
+                        ) === "mood_scale" && (
+                          <div>
+                            {/* <input hidden {...regester} fo/> */}
+                            <MoodScaleComponent
+                              data={moodScaleDate}
+                              setValue={setValue}
+                              fieldPath={`question_details.${index}.mood`}
+                            />
+                          </div>
+                        )}
+                        {formHook.watch(
+                          `question_details.${index}.question_type_id`
+                        ) === "rating_scale" && (
+                          <RatingScaleComponent
+                            data={ratingRangeData}
+                            setValue={setValue}
+                            fieldPath={`question_details.${index}.rating`}
+                          />
                         )}
                       </div>
                     </DisclosurePanel>
