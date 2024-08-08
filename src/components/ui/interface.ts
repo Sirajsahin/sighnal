@@ -73,7 +73,7 @@ export interface IInputWithFileUpload
   isMultiple?: boolean;
   dragAndDropIcon?: React.ReactNode;
   files?: FileList;
-  onFileUploaded: (data: any[]) => void;
+  onFileUploaded?: (data: any[]) => void;
   type?: string;
   fileType?: string;
 

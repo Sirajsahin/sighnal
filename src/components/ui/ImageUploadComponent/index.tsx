@@ -54,7 +54,7 @@ const ImageUploadComponent: React.FC<FileUploadProps> = ({
             } else {
               reader.readAsText(file);
             }
-          }
+          } 
         );
       });
 
