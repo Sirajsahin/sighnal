@@ -1,10 +1,15 @@
-import { ISurveyListResponseData } from "@/api_framework/api_modals/group";
+import {
+  IgroupDetailsData,
+  ISurveyListResponseData,
+} from "@/api_framework/api_modals/group";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { IRouteReducerSliceStateInit } from "../slice_interface";
 
 export interface ISurvetSliceState {
   surveyList: ISurveyListResponseData[];
+  userName: string;
+  groupDetails: IgroupDetailsData | null;
 }
 
 export interface ISurveyInitialState extends IRouteReducerSliceStateInit {
@@ -15,6 +20,8 @@ export interface ISurveyInitialState extends IRouteReducerSliceStateInit {
 const initialRootState: ISurveyInitialState = {
   state: {
     surveyList: [],
+    userName: null,
+    groupDetails: null,
   },
 };
 
@@ -28,9 +35,19 @@ export const surveySlice = createSlice({
     ) => {
       state.state.surveyList = action.payload.data;
     },
+    setUserName: (state, action: PayloadAction<{ data: string }>) => {
+      state.state.userName = action.payload.data;
+    },
+    setGroupDetails: (
+      state,
+      action: PayloadAction<{ data: IgroupDetailsData | null }>
+    ) => {
+      state.state.groupDetails = action.payload.data;
+    },
   },
 });
 
-export const { setSurveyList } = surveySlice.actions;
+export const { setSurveyList, setUserName, setGroupDetails } =
+  surveySlice.actions;
 
 export default surveySlice.reducer;

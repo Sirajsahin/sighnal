@@ -10,6 +10,9 @@ import { IGroupCreateprops } from "@/api_framework/api_modals/group";
 import { useGroupCreateAPI } from "@/app/hooks/api_hooks/Group/useGroupCreateAPI";
 import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsAPI";
 import { useGroupUpdateAPI } from "@/app/hooks/api_hooks/Group/useGroupUpdateAPI";
+import useRouteInfo from "@/app/hooks/useRouteInfo";
+import { useRouter } from "@/app/hooks/useRouter";
+import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
 import useFormValidations from "@/components/shared/UI_Interface/useFormValidation";
 import Input from "@/components/ui/Input";
 import TextareaComponent from "@/components/ui/TextareaComponent";
@@ -28,6 +31,11 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
   open,
   setOpen,
 }) => {
+  const { getRouteKey } = useRouter();
+
+  const { groupDetails } = useRouteInfo(getRouteKey("HOME_PAGE", "id"))
+    ?.routeState?.state as ISurvetSliceState;
+
   const { forAlphaNumeric, forAlphaNumericWithoutDot } = useFormValidations();
   const { execute: createGroup } = useGroupCreateAPI();
   const formHook = useForm<ICreateGroupFromFields>({
@@ -38,7 +46,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
   const navigate = useNavigate();
   const [params, _setparams] = useSearchParams();
 
-  const { execute: fetchGroupDetails, groupDetails } = useGroupDetailsAPI();
+  const { execute: fetchGroupDetails } = useGroupDetailsAPI();
   const { execute: updateGroup } = useGroupUpdateAPI();
 
   useEffect(() => {
@@ -79,6 +87,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
       if (group_id) {
         updateGroup(constructedData, group_id).then(({ status }) => {
           if (status) {
+            fetchGroupDetails(group_id);
             navigate(`/app/campaign/campaign-list?group_id=${group_id}`);
             setOpen(false);
           }
@@ -162,7 +171,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                       </div>
                     </div>
                     <div>
-                      <div className="w-full max-w-md mt-2">
+                      <div className="w-full max-w-md mt-4">
                         <Field>
                           <Label className="text-xs font-medium text-black">
                             About Group{" "}

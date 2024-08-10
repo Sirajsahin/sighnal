@@ -15,7 +15,6 @@ import TextareaComponent from "@/components/ui/TextareaComponent";
 import { useSelectMenuReducer } from "@/components/ui/useSelectMenuReducer";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import useFormValidations from "../UI_Interface/useFormValidation";
 
 export interface IUserProfileLogo {
@@ -177,7 +176,7 @@ const UserProfile = () => {
       img.onload = () => {
         // if (img.width === 400 && img.height === 400) {
         setLogo(file);
-        toast.success("Logo Upload Successfully");
+        // toast.success("Logo Upload Successfully");
         // } else {
         //   toast.error("Please upload an image with dimensions 400x400 pixels.");
         // }

@@ -1,11 +1,10 @@
 import { useState } from "react";
 
-const MoodScaleComponent = ({ data, setValue, fieldPath }) => {
+const MoodScaleComponent = ({ data }) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  const handleOptionClick = (option: number, title: string) => {
+  const handleOptionClick = (option: number) => {
     setSelectedOption(option);
-    setValue(fieldPath, title);
   };
 
   return (
@@ -18,7 +17,7 @@ const MoodScaleComponent = ({ data, setValue, fieldPath }) => {
               ? "border-[#333333] text-black bg-white border"
               : "bg-white text-[#333333]"
           }`}
-          onClick={() => handleOptionClick(index, option?.label)}
+          onClick={() => handleOptionClick(index)}
         >
           <p className="text-2xl">{option.emoji}</p>
           <p className="text-xs">{option.label}</p>

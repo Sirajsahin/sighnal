@@ -19,10 +19,12 @@ const FeedbackCampaignSurveyComponent = () => {
 
   const { getRouteKey } = useRouter();
 
-  const { surveyList } = useRouteInfo(getRouteKey("HOME_PAGE", "id"))
-    ?.routeState?.state as ISurvetSliceState;
+  const { surveyList, groupDetails } = useRouteInfo(
+    getRouteKey("HOME_PAGE", "id")
+  )?.routeState?.state as ISurvetSliceState;
 
-  const { execute: fetchGroupDetails, groupDetails } = useGroupDetailsAPI();
+  const { execute: fetchGroupDetails } = useGroupDetailsAPI();
+
   useEffect(() => {
     const groupId = params.get("group_id");
     if (groupId) {
@@ -78,7 +80,7 @@ const FeedbackCampaignSurveyComponent = () => {
         {surveyList?.length > 0 && <CreateSurveryComponent flage={true} />}
       </div>
       <SurveyStatsComponent />
-      <GroupListTableComponent source={false} />
+      {surveyList?.length > 0 && <GroupListTableComponent source={false} />}
       {surveyList?.length === 0 && <CreateSurveryComponent flage={false} />}
     </div>
   );

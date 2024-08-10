@@ -170,6 +170,9 @@ const InputWithFileUpload: React.FC<IInputWithFileUpload> = ({
                   {dragAndDropDescription?.maxFileSize}
                 </p>
               )}
+              <p className="text-xs text-gray-600">
+                You can upload only 4 images
+              </p>
             </div>
           )}
         </div>

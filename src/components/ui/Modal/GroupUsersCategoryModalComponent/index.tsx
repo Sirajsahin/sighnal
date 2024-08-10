@@ -1,5 +1,8 @@
 import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsAPI";
 import { useGroupUserListAPI } from "@/app/hooks/api_hooks/Group/useGroupUserListAPI";
+import useRouteInfo from "@/app/hooks/useRouteInfo";
+import { useRouter } from "@/app/hooks/useRouter";
+import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
 import {
   Dialog,
   DialogPanel,
@@ -14,9 +17,14 @@ import { IGroupDeleteModalComponent } from "./interface";
 const GroupUsersCategoryModalComponent: React.FC<
   IGroupDeleteModalComponent
 > = ({ open, setOpen, setSelectedCategories, selectedCategories }) => {
+  const { getRouteKey } = useRouter();
+
+  const { groupDetails } = useRouteInfo(getRouteKey("HOME_PAGE", "id"))
+    ?.routeState?.state as ISurvetSliceState;
+
   const [params, _setparams] = useSearchParams();
 
-  const { execute: fetchGroupDetails, groupDetails } = useGroupDetailsAPI();
+  const { execute: fetchGroupDetails } = useGroupDetailsAPI();
   const { execute: fetchUserListData, userData } = useGroupUserListAPI();
 
   useEffect(() => {

@@ -1,11 +1,10 @@
 import { useState } from "react";
 
-const RatingScaleComponent = ({ data, setValue, fieldPath }) => {
+const RatingScaleComponent = ({ data }) => {
   const [selected, setSelected] = useState<number | null>(null);
 
-  const handleOptionClick = (option: number, title: string) => {
+  const handleOptionClick = (option: number) => {
     setSelected(option);
-    setValue(fieldPath, title);
   };
 
   return (
@@ -15,8 +14,8 @@ const RatingScaleComponent = ({ data, setValue, fieldPath }) => {
           return (
             <div
               key={index}
-              className={`text-sm font-medium rounded-xl ${selected === index ? "bg-[#333333] text-white" : "bg-white border"} p-3 rounded-lg text-center  cursor-pointer h-12 w-12`}
-              onClick={() => handleOptionClick(index, val?.item)}
+              className={`text-sm font-medium rounded-xl ${selected === index ? "bg-white text-black border" : "bg-white border"} p-3 rounded-lg text-center  cursor-pointer h-12 w-12`}
+              onClick={() => handleOptionClick(index)}
             >
               {val?.item}
             </div>

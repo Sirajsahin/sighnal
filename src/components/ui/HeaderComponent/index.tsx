@@ -1,4 +1,7 @@
 import { useFirebaseLogin } from "@/app/hooks/api_hooks/auth/useFirebaseLogin";
+import useRouteInfo from "@/app/hooks/useRouteInfo";
+import { useRouter } from "@/app/hooks/useRouter";
+import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
@@ -10,6 +13,12 @@ function classNames(...classes: any[]) {
 
 export default function HeaderComponent() {
   const navigate = useNavigate();
+
+  const { getRouteKey } = useRouter();
+
+  const { userName } = useRouteInfo(getRouteKey("HOME_PAGE", "id"))?.routeState
+    ?.state as ISurvetSliceState;
+
   const { clientSignOut } = useFirebaseLogin();
 
   const profilePic = localStorage.getItem("displayName")?.slice(0, 1);
@@ -150,7 +159,7 @@ export default function HeaderComponent() {
                     className="ml-4 text-sm font-semibold leading-6 text-gray-900 capitalize"
                     aria-hidden="true"
                   >
-                    {localStorage.getItem("displayName")}
+                    {userName || localStorage.getItem("displayName")}
                   </span>
                   <ChevronDownIcon
                     className="ml-2 h-5 w-5 text-gray-400"

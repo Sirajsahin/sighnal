@@ -24,6 +24,7 @@ import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 import MoodScaleComponent from "../MoodScalComponent";
 import RatingScaleComponent from "../RatingScaleCoponent";
 
@@ -93,26 +94,26 @@ const ratingRangeData = [
 // ];
 
 const moodScaleData = [
-  { emoji: "😍", label: "Very Satisfied" },
-  { emoji: "😃", label: "Satisfied" },
-  { emoji: "😐", label: "It's Okay" },
-  { emoji: "😕", label: "Unsatisfied" },
   { emoji: "😡", label: "Very unsatisfied" },
+  { emoji: "😕", label: "Unsatisfied" },
+  { emoji: "😐", label: "It's Okay" },
+  { emoji: "😃", label: "Satisfied" },
+  { emoji: "😍", label: "Very Satisfied" },
 ];
 const moodScaleData4 = [
-  { emoji: "😍", label: "Very Satisfied" },
+  { emoji: "😕", label: "Unsatisfied" },
   { emoji: "😃", label: "Satisfied" },
   { emoji: "😐", label: "It's Okay" },
-  { emoji: "😕", label: "Unsatisfied" },
+  { emoji: "😍", label: "Very Satisfied" },
 ];
 const moodScaleData2 = [
-  { emoji: "😍", label: "Very Satisfied" },
   { emoji: "😃", label: "Satisfied" },
+  { emoji: "😍", label: "Very Satisfied" },
 ];
 const moodScaleData3 = [
-  { emoji: "😍", label: "Very Satisfied" },
-  { emoji: "😃", label: "Satisfied" },
   { emoji: "😐", label: "It's Okay" },
+  { emoji: "😃", label: "Satisfied" },
+  { emoji: "😍", label: "Very Satisfied" },
 ];
 
 export interface IServiceDeskImage {
@@ -168,7 +169,7 @@ const dataItem = [
 
 const AddSurveyQuestionComponent = () => {
   const [params] = useSearchParams();
-  const { fileListToBase64 } = useUtils();
+  const { fileListToBase64, truncateString } = useUtils();
   const { forAlphaNumericWithoutDot } = useFormValidations();
 
   const formHook = useForm<ICreateSurveyFormFields>({
@@ -182,19 +183,12 @@ const AddSurveyQuestionComponent = () => {
     control: formHook.control,
   });
 
-  const { setValue } = formHook;
-
   const group_id = params.get("group_id");
   const survey_id = params.get("survey_id");
 
   const { execute: createQuestion } = useSurveyQuestionCreateAPI();
   const { execute: fetchQuestionType, groupQuestionType } =
     useGroupQuestionTypeAPI();
-
-  useEffect(() => {
-    // handleAddProductItem();
-    fetchQuestionType();
-  }, []);
 
   const handleAddProductItem = () => {
     questionDetailsFormHook.append({
@@ -203,7 +197,7 @@ const AddSurveyQuestionComponent = () => {
       rating: "",
       mood: "",
       question_type_id: "",
-      options: ["yes", "no"],
+      options: ["", ""],
       rating_scale: "5",
       mood_scale: "5",
       can_skipped: "false",
@@ -212,6 +206,10 @@ const AddSurveyQuestionComponent = () => {
       attachment_file: null,
     });
   };
+  useEffect(() => {
+    handleAddProductItem();
+    fetchQuestionType();
+  }, []);
 
   const handleDeleteProductOptions = (id: number, optionIndex: number) => {
     const updatedOptions = formHook
@@ -222,6 +220,31 @@ const AddSurveyQuestionComponent = () => {
       options: updatedOptions,
     });
   };
+
+  const handleDeleteProductImage = (id: number, imageIndex: number) => {
+    console.log(imageIndex, "imageindex");
+    const currentFiles =
+      formHook.getValues(`question_details.${id}.attachment_file`) || [];
+    const currentFilesArray = Array.from(currentFiles);
+    if (imageIndex >= 0 && imageIndex < currentFilesArray.length) {
+      const updatedFilesArray = currentFilesArray.filter(
+        (_, index) => index !== imageIndex
+      );
+      const updatedFiles = arrayToFileList(updatedFilesArray);
+      questionDetailsFormHook.update(id, {
+        ...formHook.getValues(`question_details.${id}`),
+        attachment_file: updatedFiles,
+      });
+    } else {
+      console.warn(`Invalid imageIndex: ${imageIndex}`);
+    }
+  };
+
+  function arrayToFileList(files: File[]): FileList {
+    const dataTransfer = new DataTransfer();
+    files.forEach((file) => dataTransfer.items.add(file));
+    return dataTransfer.files;
+  }
 
   const handleAddProductOptions = (id: number) => {
     questionDetailsFormHook.update(id, {
@@ -341,7 +364,7 @@ const AddSurveyQuestionComponent = () => {
                           <TrashIcon className="w-5 h-5 text-red-500" />
                         </button>
 
-                        <ChevronDownIcon className="size-8 fill-[#333333] group-data-[open]:rotate-180" />
+                        <ChevronDownIcon className="size-5 fill-white/60 group-data-[hover]:fill-white/50 group-data-[open]:rotate-180" />
                       </div>
                     </DisclosureButton>
                     <DisclosurePanel className="mt-2 text-sm/5">
@@ -604,7 +627,7 @@ const AddSurveyQuestionComponent = () => {
                         ) === "image_single_choice" && (
                           <div className="mt-8">
                             {formHook.watch(`question_details.${index}.image`)
-                              ?.length > 0 ? null : (
+                              ?.length >= 4 ? null : (
                               <InputWithFileUpload
                                 variant="DRAG_AND_DROP"
                                 fieldError={
@@ -642,6 +665,13 @@ const AddSurveyQuestionComponent = () => {
                                           ) || "Invalid file type"
                                         );
                                       },
+                                      maxFiles: (files: FileList) => {
+                                        const maxAllowedFiles = 4; // Change this number to allow more files
+                                        return (
+                                          files.length <= maxAllowedFiles ||
+                                          `You can upload up to ${maxAllowedFiles} file${maxAllowedFiles > 1 ? "s" : ""}`
+                                        );
+                                      },
                                     },
                                   }
                                 )}
@@ -668,13 +698,33 @@ const AddSurveyQuestionComponent = () => {
                             )}
                             {formHook
                               .watch(`question_details.${index}.image`)
+                              ?.slice(0, 4)
                               ?.map((image, imgIndex) => (
                                 <div
                                   key={imgIndex}
                                   className="flex items-center gap-8 px-4 py-2"
                                 >
-                                  <div className="flex items-center gap-1 w-60">
-                                    <p>{image.file_name}</p>
+                                  <div className="flex items-center gap-4 w-60">
+                                    <div
+                                      className="flex flex-col"
+                                      data-tooltip-id="imagedetails"
+                                      data-tooltip-content={image.file_name}
+                                    >
+                                      {truncateString(image.file_name, 25)}
+                                    </div>
+                                    <p
+                                      className="pr-3 items-center cursor-pointer right-0"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleDeleteProductImage(
+                                          index,
+                                          imgIndex
+                                        );
+                                      }}
+                                    >
+                                      <XMarkIcon className="w-4 h-4" />
+                                    </p>
                                   </div>
                                 </div>
                               ))}
@@ -684,73 +734,105 @@ const AddSurveyQuestionComponent = () => {
                           `question_details.${index}.question_type_id`
                         ) === "image_multiple_choice" && (
                           <div className="mt-8">
-                            <InputWithFileUpload
-                              variant="DRAG_AND_DROP"
-                              fieldError={
-                                formHook?.formState?.errors?.question_details
-                                  ? formHook?.formState?.errors
-                                      ?.question_details[index]?.attachment_file
-                                  : null
-                              }
-                              {...formHook.register(
-                                `question_details.${index}.attachment_file`
-                              )}
-                              register={formHook.register(
-                                `question_details.${index}.attachment_file`,
-                                {
-                                  validate: {
-                                    maxSize: (files: FileList) => {
-                                      return (
-                                        Array.from(files).every(
-                                          (file) => file.size < 5 * 1024 * 1024
-                                        ) ||
-                                        "Each file must be smaller than 5MB"
-                                      );
-                                    },
-                                    fileType: (files: FileList) => {
-                                      const validTypes = [
-                                        "image/png",
-                                        "image/jpeg",
-                                        "application/pdf",
-                                      ];
-                                      return (
-                                        Array.from(files).every((file) =>
-                                          validTypes.includes(file.type)
-                                        ) || "Invalid file type"
-                                      );
-                                    },
-                                  },
+                            {formHook.watch(`question_details.${index}.image`)
+                              ?.length >= 4 ? null : (
+                              <InputWithFileUpload
+                                variant="DRAG_AND_DROP"
+                                fieldError={
+                                  formHook?.formState?.errors?.question_details
+                                    ? formHook?.formState?.errors
+                                        ?.question_details[index]
+                                        ?.attachment_file
+                                    : null
                                 }
-                              )}
-                              isMultiple
-                              onClear={() => {
-                                formHook.resetField(
+                                {...formHook.register(
                                   `question_details.${index}.attachment_file`
-                                );
-                              }}
-                              type="file"
-                              className="w-full"
-                              id={`question_details.${index}.attachment_file`}
-                              errorMessages={[
-                                {
-                                  type: "",
-                                  message: "Please upload Issues",
-                                },
-                              ]}
-                              dragAndDropDescription={{
-                                allowedFormats: ["PDF", "JPEG", "PNG"],
-                                maxFileSize: "5MB",
-                              }}
-                            />
+                                )}
+                                register={formHook.register(
+                                  `question_details.${index}.attachment_file`,
+                                  {
+                                    validate: {
+                                      maxSize: (files: FileList) => {
+                                        return (
+                                          Array.from(files).every(
+                                            (file) =>
+                                              file.size < 5 * 1024 * 1024
+                                          ) ||
+                                          "Each file must be smaller than 5MB"
+                                        );
+                                      },
+                                      fileType: (files: FileList) => {
+                                        const validTypes = [
+                                          "image/png",
+                                          "image/jpeg",
+                                          "application/pdf",
+                                        ];
+                                        return (
+                                          Array.from(files).every((file) =>
+                                            validTypes.includes(file.type)
+                                          ) || "Invalid file type"
+                                        );
+                                      },
+                                      maxFiles: (files: FileList) => {
+                                        const maxAllowedFiles = 1; // Change this number to allow more files
+                                        return (
+                                          files.length <= maxAllowedFiles ||
+                                          `You can upload up to ${maxAllowedFiles} file${maxAllowedFiles > 1 ? "s" : ""}`
+                                        );
+                                      },
+                                    },
+                                  }
+                                )}
+                                isMultiple
+                                onClear={() => {
+                                  formHook.resetField(
+                                    `question_details.${index}.attachment_file`
+                                  );
+                                }}
+                                type="file"
+                                className="w-full"
+                                id={`question_details.${index}.attachment_file`}
+                                errorMessages={[
+                                  {
+                                    type: "",
+                                    message: "Please upload Issues",
+                                  },
+                                ]}
+                                dragAndDropDescription={{
+                                  allowedFormats: ["PDF", "JPEG", "PNG"],
+                                  maxFileSize: "5MB",
+                                }}
+                              />
+                            )}
                             {formHook
                               .watch(`question_details.${index}.image`)
+                              ?.slice(0, 4)
                               ?.map((image, imgIndex) => (
                                 <div
                                   key={imgIndex}
                                   className="flex items-center gap-8 px-4 py-2"
                                 >
                                   <div className="flex items-center gap-1 w-60">
-                                    <p>{image.file_name}</p>
+                                    <div
+                                      className="flex flex-col"
+                                      data-tooltip-id="imagedetails"
+                                      data-tooltip-content={image.file_name}
+                                    >
+                                      {truncateString(image.file_name, 25)}
+                                    </div>
+                                    <p
+                                      className="pr-3 items-center  cursor-pointer right-0"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleDeleteProductImage(
+                                          index,
+                                          imgIndex
+                                        );
+                                      }}
+                                    >
+                                      <XMarkIcon className="w-4 h-4 fill-black" />
+                                    </p>
                                   </div>
                                 </div>
                               ))}
@@ -907,11 +989,12 @@ const AddSurveyQuestionComponent = () => {
                             >
                               <TextareaComponent
                                 className="text-sm w-full"
+                                disabled
                                 placeholder="Your end consumer can write their response here without any limitations."
                                 register={formHook.register(
                                   `question_details.${index}.openText`,
                                   {
-                                    required: true,
+                                    required: false,
                                   }
                                 )}
                                 fieldError={
@@ -950,8 +1033,6 @@ const AddSurveyQuestionComponent = () => {
                                       ? moodScaleData4
                                       : moodScaleData
                               }
-                              setValue={setValue}
-                              fieldPath={`question_details.${index}.mood`}
                             />
                           </div>
                         )}
@@ -966,8 +1047,6 @@ const AddSurveyQuestionComponent = () => {
                                 ? ratingRangeData5
                                 : ratingRangeData
                             }
-                            setValue={setValue}
-                            fieldPath={`question_details.${index}.rating`}
                           />
                         )}
                       </div>
@@ -993,9 +1072,6 @@ const AddSurveyQuestionComponent = () => {
                 scale
               </p>
             </div>
-            <span>
-              <ChevronDownIcon className="size-5 fill-white group-data-[hover]:fill-black/50 group-data-[open]:rotate-180" />
-            </span>
           </div>
           <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
             <button
@@ -1017,6 +1093,8 @@ const AddSurveyQuestionComponent = () => {
           </div>
         </form>
       </div>
+
+      <Tooltip id="imagedetails" />
     </div>
   );
 };
