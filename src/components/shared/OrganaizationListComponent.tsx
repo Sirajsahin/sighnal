@@ -104,7 +104,7 @@ export default function OrganaizationListComponent() {
                 className="flex w-full justify-center rounded-md bg-[#333] px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm "
                 onClick={() => navigate("/app/login/onboard")}
               >
-                Create Anather Space
+                Create Another Space
               </button>
             </div>
             <div className="mt-10">

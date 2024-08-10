@@ -18,6 +18,14 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useFormValidations from "../UI_Interface/useFormValidation";
 
+export interface IUserProfileLogo {
+  base_64_string: string;
+  file_extension: string;
+  file_name: string;
+  is_thumbnail?: boolean;
+  image_url?: string;
+}
+
 export interface ICreateGroupFromFields {
   name: string;
   citizen: string;
@@ -30,6 +38,7 @@ export interface ICreateGroupFromFields {
   org_age: string;
   org_about: string;
   Industry: string;
+  attachment_file?: IUserProfileLogo;
 }
 
 const UserProfile = () => {
@@ -37,6 +46,7 @@ const UserProfile = () => {
 
   const { forAlphaNumericWithoutDot, forEmail, forMobile, forOnlyNumber } =
     useFormValidations();
+  // const { fileListToBase64 } = useUtils();
 
   const { execute: fetchOrganizationDetailsAPI, organization } =
     useOrganizationDetailsAPI();
@@ -78,6 +88,7 @@ const UserProfile = () => {
         about: data.org_about,
         age: data.org_age,
         website: data.org_website,
+        attachment_file: data.attachment_file ? data.attachment_file : null,
       };
       const constructedDataUser: IUserDetails = {
         name: data.name,
@@ -130,19 +141,46 @@ const UserProfile = () => {
   const industryListItem = useSelectMenuReducer(industry, "name", "id");
   const jobTypeListItem = useSelectMenuReducer(jobType, "name", "id");
 
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleFileUpload = async (file: File) => {
+    try {
+      const base64File = await fileToBase64(file);
+      const attachmentFile: IUserProfileLogo = {
+        base_64_string: base64File,
+        file_extension: file?.type,
+        file_name: file?.name,
+      };
+      formHook.setValue("attachment_file", attachmentFile);
+      console.log("Base64 String: ", base64File); // This logs the base64 string of the image
+      // You can use this base64 string as needed, e.g., display it, upload to a server, etc.
+    } catch (error) {
+      console.error("Error converting file to base64:", error);
+    }
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
+      const file = event.target.files[0] as any;
+      handleFileUpload(file);
+      console.log(file, "file");
       const img = new Image();
       img.src = URL.createObjectURL(file);
 
       img.onload = () => {
-        if (img.width === 400 && img.height === 400) {
-          setLogo(file);
-          toast.success("Logo Upload Successfully");
-        } else {
-          toast.error("Please upload an image with dimensions 400x400 pixels.");
-        }
+        // if (img.width === 400 && img.height === 400) {
+        setLogo(file);
+        toast.success("Logo Upload Successfully");
+        // } else {
+        //   toast.error("Please upload an image with dimensions 400x400 pixels.");
+        // }
       };
     }
   };
@@ -193,7 +231,7 @@ const UserProfile = () => {
                 Upload Company Logo
               </p>
               <p className="text-xs text-[#475467] py-1 font-medium">
-                Recommended size: 400x400px
+                {/* Recommended size: 400x400px */}
               </p>
             </div>
           )}
@@ -206,100 +244,119 @@ const UserProfile = () => {
             Please provide your personal details, they will be used to complete
             your profile on Sighnal.
           </p>
-          <div className="grid grid-cols-2 gap-6 items-center mt-4">
-            <Input
-              autoComplete="false"
-              className="text-xs"
-              placeholder="Enter Your Name"
-              isMandatory={true}
-              register={formHook.register("name", {
-                required: true,
-                ...forAlphaNumericWithoutDot.validations,
-              })}
-              fieldError={formHook.formState.errors.name}
-              errorMessages={[
-                {
-                  message: "Name is required",
-                  type: "required",
-                },
-                forAlphaNumericWithoutDot.errors,
-              ]}
-            />
-
-            <Input
-              className="text-xs"
-              type="email"
-              placeholder="Enter Your Email"
-              // labelName="Email"
-              disabled
-              isMandatory={true}
-              register={formHook.register("email", {
-                required: true,
-                ...forEmail.validations,
-              })}
-              fieldError={formHook.formState.errors.email}
-              errorMessages={[
-                {
-                  message: "Email is required",
-                  type: "required",
-                },
-                forEmail.errors,
-              ]}
-            />
-            <Input
-              className="text-xs"
-              placeholder="Enter Your Phone"
-              isMandatory={true}
-              // labelName="Phone"
-              maxLength={10}
-              register={formHook.register("phone", {
-                required: true,
-                ...forMobile.validations,
-              })}
-              fieldError={formHook.formState.errors.phone}
-              errorMessages={[
-                {
-                  message: "Phone is required",
-                  type: "required",
-                },
-                forMobile.errors,
-              ]}
-            />
-            <SearchableSelectMenu
-              // label="Job Title"
-              errorMessages={[
-                {
-                  message: " Job title is required",
-                  type: "required",
-                },
-              ]}
-              onSelectItem={(item) => {
-                if (item) {
-                  formHook.setValue(`jobTitle`, item.title);
+          <div className="grid grid-cols-2 gap-6 items-center mt-6">
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Name <span className="text-red-400">*</span>
+              </p>
+              <Input
+                autoComplete="false"
+                className="text-xs"
+                placeholder="Enter Your Name"
+                isMandatory={true}
+                register={formHook.register("name", {
+                  required: true,
+                  ...forAlphaNumericWithoutDot.validations,
+                })}
+                fieldError={formHook.formState.errors.name}
+                errorMessages={[
+                  {
+                    message: "Name is required",
+                    type: "required",
+                  },
+                  forAlphaNumericWithoutDot.errors,
+                ]}
+              />
+            </div>
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Email <span className="text-red-400">*</span>
+              </p>
+              <Input
+                className="text-xs"
+                type="email"
+                placeholder="Enter Your Email"
+                // labelName="Email"
+                disabled
+                isMandatory={true}
+                register={formHook.register("email", {
+                  required: true,
+                  ...forEmail.validations,
+                })}
+                fieldError={formHook.formState.errors.email}
+                errorMessages={[
+                  {
+                    message: "Email is required",
+                    type: "required",
+                  },
+                  forEmail.errors,
+                ]}
+              />
+            </div>
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Contact <span className="text-red-400">*</span>
+              </p>
+              <Input
+                className="text-xs"
+                placeholder="Enter Your Phone"
+                isMandatory={true}
+                // labelName="Phone"
+                maxLength={10}
+                register={formHook.register("phone", {
+                  required: true,
+                  ...forMobile.validations,
+                })}
+                fieldError={formHook.formState.errors.phone}
+                errorMessages={[
+                  {
+                    message: "Phone is required",
+                    type: "required",
+                  },
+                  forMobile.errors,
+                ]}
+              />
+            </div>
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Job Title <span className="text-red-400">*</span>
+              </p>
+              <SearchableSelectMenu
+                // label="Job Title"
+                errorMessages={[
+                  {
+                    message: " Job title is required",
+                    type: "required",
+                  },
+                ]}
+                onSelectItem={(item) => {
+                  if (item) {
+                    formHook.setValue(`jobTitle`, item.title);
+                  }
+                  formHook.clearErrors("jobTitle");
+                }}
+                fieldError={formHook?.formState?.errors?.jobTitle}
+                register={formHook.register(`jobTitle`, {
+                  required: true,
+                })}
+                selectItems={jobTypeListItem}
+                placeholder="Select Job Title"
+                showTooltips={false}
+                showTypedErrors={true}
+                showDropdownIcon={true}
+                defaultSelected={
+                  jobTypeListItem?.filter(
+                    (oc) => oc.title === formHook.watch(`jobTitle`)
+                  )[0]
                 }
-                formHook.clearErrors("jobTitle");
-              }}
-              fieldError={formHook?.formState?.errors?.jobTitle}
-              register={formHook.register(`jobTitle`, {
-                required: true,
-              })}
-              selectItems={jobTypeListItem}
-              placeholder="Select Job Title"
-              showTooltips={false}
-              showTypedErrors={true}
-              showDropdownIcon={true}
-              defaultSelected={
-                jobTypeListItem?.filter(
-                  (oc) => oc.title === formHook.watch(`jobTitle`)
-                )[0]
-              }
-              listBoxClassName="w-full"
-              className="text-gray-800 "
-              containerClassName="w-full"
-            />
+                listBoxClassName="w-full"
+                className="text-gray-800 "
+                containerClassName="w-full"
+              />
+            </div>
           </div>
         </div>
-        <div className="pt-4">
+        <div className="pt-10">
           <p className="text-base text-[#333333] font-bold">
             Your Organisation details
           </p>
@@ -307,168 +364,207 @@ const UserProfile = () => {
             Please provide your Organisation information accurately, It will be
             used in your communications on the platform.
           </p>
-          <div className="grid grid-cols-2 gap-6 items-center mt-4">
-            <Input
-              className="text-xs"
-              placeholder="Enter Your Org Name"
-              // labelName="Company Name"
-              isMandatory={true}
-              register={formHook.register("org_name", {
-                required: true,
-                ...forAlphaNumericWithoutDot.validations,
-              })}
-              fieldError={formHook.formState.errors.org_name}
-              errorMessages={[
-                {
-                  message: "Org Name is required",
-                  type: "required",
-                },
-                forAlphaNumericWithoutDot.errors,
-              ]}
-            />
-            <Input
-              className="text-xs"
-              placeholder="Organisation Size"
-              // labelName="Company Name"
-              isMandatory={true}
-              register={formHook.register("org_size", {
-                required: true,
-                ...forOnlyNumber.validations,
-              })}
-              fieldError={formHook.formState.errors.org_size}
-              errorMessages={[
-                {
-                  message: "Org Size is required",
-                  type: "required",
-                },
-                forOnlyNumber.errors,
-              ]}
-            />
-
-            <Input
-              className="text-xs"
-              type="wbesite"
-              isMandatory={true}
-              // labelName="Website"
-              placeholder="Enter Your Org Website"
-              register={formHook.register("org_website", {
-                required: true,
-                // ...forAlphaNumeric.validations,
-              })}
-              fieldError={formHook.formState.errors.org_website}
-              errorMessages={[
-                {
-                  message: "Website is required",
-                  type: "required",
-                },
-                // forAlphaNumeric.errors,
-              ]}
-            />
-            <Input
-              // labelName="Company Age"
-              isMandatory
-              className="text-xs"
-              placeholder="Enter Your Org Age"
-              register={formHook.register("org_age", {
-                required: true,
-                ...forOnlyNumber.validations,
-              })}
-              fieldError={formHook.formState.errors.org_age}
-              errorMessages={[
-                {
-                  message: "Org Age is required",
-                  type: "required",
-                },
-                forOnlyNumber.errors,
-              ]}
-            />
-            <SearchableSelectMenu
-              // label="I’m a citizen of"
-              errorMessages={[
-                {
-                  message: "Country is required",
-                  type: "required",
-                },
-              ]}
-              onSelectItem={(item) => {
-                if (item) {
-                  formHook.setValue(`citizen`, item.title);
-                }
-                formHook.clearErrors(`citizen`);
-              }}
-              fieldError={formHook?.formState?.errors?.citizen}
-              register={formHook.register(`citizen`, {
-                required: true,
-              })}
-              selectItems={countyListItem}
-              placeholder="Select Country"
-              showTooltips={false}
-              showTypedErrors={true}
-              showDropdownIcon={true}
-              defaultSelected={
-                countyListItem?.filter(
-                  (oc) => oc.title === formHook.watch(`citizen`)
-                )[0]
-              }
-              listBoxClassName="w-full"
-              className="text-gray-400 "
-              containerClassName="w-full"
-            />
-            <SearchableSelectMenu
-              // label="I’m a citizen of"
-              errorMessages={[
-                {
-                  message: "Industry  is required",
-                  type: "required",
-                },
-              ]}
-              onSelectItem={(item) => {
-                if (item) {
-                  formHook.setValue(`Industry`, item.title);
-                }
-                formHook.clearErrors(`Industry`);
-              }}
-              fieldError={formHook?.formState?.errors?.Industry}
-              register={formHook.register(`Industry`, {
-                required: true,
-              })}
-              selectItems={industryListItem}
-              placeholder="Select Industry"
-              showTooltips={false}
-              showTypedErrors={true}
-              showDropdownIcon={true}
-              defaultSelected={
-                industryListItem?.filter(
-                  (oc) => oc.title === formHook.watch(`Industry`)
-                )[0]
-              }
-              listBoxClassName="w-full"
-              className="text-gray-400 "
-              containerClassName="w-full"
-            />
-            <div className="col-span-2">
-              <TextareaComponent
+          <div className="grid grid-cols-2 gap-6 items-center mt-6">
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Organisation Name <span className="text-red-400">*</span>
+              </p>
+              <Input
                 className="text-xs"
-                placeholder="About Company "
-                register={formHook.register("org_about", {
+                placeholder="Enter Your Org Name"
+                // labelName="Company Name"
+                isMandatory={true}
+                register={formHook.register("org_name", {
                   required: true,
                   ...forAlphaNumericWithoutDot.validations,
                 })}
-                fieldError={formHook.formState.errors.org_about}
+                fieldError={formHook.formState.errors.org_name}
                 errorMessages={[
                   {
-                    message: "This is required",
+                    message: "Org Name is required",
                     type: "required",
                   },
                   forAlphaNumericWithoutDot.errors,
                 ]}
               />
             </div>
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Organisation Size <span className="text-red-400">*</span>
+              </p>
+              <Input
+                className="text-xs"
+                placeholder="Organisation Size"
+                // labelName="Company Name"
+                isMandatory={true}
+                register={formHook.register("org_size", {
+                  required: true,
+                  ...forOnlyNumber.validations,
+                })}
+                fieldError={formHook.formState.errors.org_size}
+                errorMessages={[
+                  {
+                    message: "Org Size is required",
+                    type: "required",
+                  },
+                  forOnlyNumber.errors,
+                ]}
+              />
+            </div>
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Organisation Website <span className="text-red-400">*</span>
+              </p>
+              <Input
+                className="text-xs"
+                type="wbesite"
+                isMandatory={true}
+                // labelName="Website"
+                placeholder="Enter Your Org Website"
+                register={formHook.register("org_website", {
+                  required: true,
+                  // ...forAlphaNumeric.validations,
+                })}
+                fieldError={formHook.formState.errors.org_website}
+                errorMessages={[
+                  {
+                    message: "Website is required",
+                    type: "required",
+                  },
+                  // forAlphaNumeric.errors,
+                ]}
+              />
+            </div>
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Organisation Age <span className="text-red-400">*</span>
+              </p>
+              <Input
+                // labelName="Company Age"
+                isMandatory
+                className="text-xs"
+                placeholder="Enter Your Org Age"
+                register={formHook.register("org_age", {
+                  required: true,
+                  ...forOnlyNumber.validations,
+                })}
+                fieldError={formHook.formState.errors.org_age}
+                errorMessages={[
+                  {
+                    message: "Org Age is required",
+                    type: "required",
+                  },
+                  forOnlyNumber.errors,
+                ]}
+              />
+            </div>
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Country <span className="text-red-400">*</span>
+              </p>
+              <SearchableSelectMenu
+                // label="I’m a citizen of"
+                errorMessages={[
+                  {
+                    message: "Country is required",
+                    type: "required",
+                  },
+                ]}
+                onSelectItem={(item) => {
+                  if (item) {
+                    formHook.setValue(`citizen`, item.title);
+                  }
+                  formHook.clearErrors(`citizen`);
+                }}
+                fieldError={formHook?.formState?.errors?.citizen}
+                register={formHook.register(`citizen`, {
+                  required: true,
+                })}
+                selectItems={countyListItem}
+                placeholder="Select Country"
+                showTooltips={false}
+                showTypedErrors={true}
+                showDropdownIcon={true}
+                defaultSelected={
+                  countyListItem?.filter(
+                    (oc) => oc.title === formHook.watch(`citizen`)
+                  )[0]
+                }
+                listBoxClassName="w-full"
+                containerClassName="w-full"
+              />
+            </div>
+            <div>
+              <p className="flex items-center gap-1 text-sm">
+                Organisation Type<span className="text-red-400">*</span>
+              </p>
+              <SearchableSelectMenu
+                // label="I’m a citizen of"
+                errorMessages={[
+                  {
+                    message: "Industry  is required",
+                    type: "required",
+                  },
+                ]}
+                onSelectItem={(item) => {
+                  if (item) {
+                    formHook.setValue(`Industry`, item.title);
+                  }
+                  formHook.clearErrors(`Industry`);
+                }}
+                fieldError={formHook?.formState?.errors?.Industry}
+                register={formHook.register(`Industry`, {
+                  required: true,
+                })}
+                selectItems={industryListItem}
+                placeholder="Select Industry"
+                showTooltips={false}
+                showTypedErrors={true}
+                showDropdownIcon={true}
+                defaultSelected={
+                  industryListItem?.filter(
+                    (oc) => oc.title === formHook.watch(`Industry`)
+                  )[0]
+                }
+                listBoxClassName="w-full"
+                containerClassName="w-full"
+              />
+            </div>
+            <div className="col-span-2">
+              <p className="flex items-center gap-1 text-sm">
+                About Organisation<span className="text-red-400">*</span>
+              </p>
+              <div>
+                <TextareaComponent
+                  className="text-xs"
+                  placeholder="About Company "
+                  register={formHook.register("org_about", {
+                    required: true,
+                    ...forAlphaNumericWithoutDot.validations,
+                  })}
+                  fieldError={formHook.formState.errors.org_about}
+                  errorMessages={[
+                    {
+                      message: "This is required",
+                      type: "required",
+                    },
+                    forAlphaNumericWithoutDot.errors,
+                  ]}
+                />
+              </div>
+            </div>
           </div>
-          <div
-            className="w-full border border-[#D0D5DD] px-4 py-3 rounded-lg my-4 cursor-pointer"
-            // onClick={() => setOpen(true)}
-          ></div>
+          <div className="mt-4">
+            <p className="flex items-center gap-1 text-sm">
+              End Consumers<span className="text-red-400">*</span>
+            </p>
+            <div
+              className="w-full border border-[#D0D5DD] px-4 py-3 rounded-lg  cursor-pointer"
+              // onClick={() => setOpen(true)}
+            >
+              <p className="text-sm">End </p>
+            </div>
+          </div>
 
           <button
             type="submit"

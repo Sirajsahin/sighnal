@@ -25,6 +25,7 @@ export const useUserDetailsAPI = () => {
         .then((res: AxiosResponse<IUserDetailsResponse>) => {
           if (res.data?.status) {
             setUserDetails(res.data?.data);
+            localStorage.setItem("displayName", res.data.data.name);
           } else {
             setUserDetails(null);
             // navigate("/app/login/onboard");

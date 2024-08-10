@@ -100,7 +100,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
               )}
               <div className="relative  w-full mt-1">
                 {props?.label && (
-                  <span className="absolute text-xs left-1 -top-4 text-gray-500">
+                  <span className="absolute text-sm left-1 -top-4 text-gray-500">
                     {props?.label}
                   </span>
                 )}
@@ -126,9 +126,9 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                             return item?.title;
                           }}
                           className={clsx(
-                            `w-full text-xs  font-medium focus:border-[#333333] rounded-lg py-2 pl-3 pr-10 leading-6   ${className}`,
+                            `w-full text-sm  font-medium focus:border-[#333333] rounded-lg py-2 pl-3 pr-10 leading-6   ${className}`,
                             isValid
-                              ? "text-gray-500 border-none outline-none font-medium "
+                              ? "text-black-500 border-none outline-none font-medium "
                               : "text-red-600  ::place  .placeholder-red-500",
                             props?.variant &&
                               props?.variant === "LIKE_INPUT" &&
@@ -152,9 +152,9 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                         autoComplete="off"
                         autoCorrect="false"
                         className={clsx(
-                          `w-full text-xs font-normal focus:border-[#333333] rounded-lg py-2 pl-3 pr-10 leading-6  focus:ring-0 ${className}`,
+                          `w-full text-sm font-normal focus:border-[#333333] rounded-lg py-2 pl-3 pr-10 leading-6  focus:ring-0 ${className}`,
                           isValid
-                            ? "text-gray-500 border-none outline-none font-medium "
+                            ? "text-black-500 border-none outline-none font-medium "
                             : "text-red-600   placeholder-red-400 ",
                           props?.variant &&
                             props?.variant === "LIKE_INPUT" &&
@@ -182,7 +182,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                   {showDropdownIcon && showDropdownIcon === true ? (
                     <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
                       <IoMdArrowDropdown
-                        className="h-5 w-5 text-gray-400"
+                        className="h-5 w-5 text-black-400"
                         aria-hidden="true"
                       />
                     </Combobox.Button>
@@ -230,7 +230,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                                 e.stopPropagation();
                                 setQuery(e.target.value);
                               }}
-                              className="w-full text-gray-500 border-t-0 border-l-0 border-r-0  outline-none ring-0 border-b text-xs pl-2 pr-4 border-b-gray-200 focus:ring-0 focus:outline-none "
+                              className="w-full text-black-500 border-t-0 border-l-0 border-r-0  outline-none ring-0 border-b text-sm pl-2 pr-4 border-b-gray-200 focus:ring-0 focus:outline-none "
                               type="text"
                               placeholder="Search withing options"
                             />
@@ -242,7 +242,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                         showDropdownWhenNoData === true && (
                           <div className=" absolute cursor-default select-none py-2 bg-white shadow-md border border-gray-100 w-full z-10 rounded-md px-4 text-gray-700">
                             {props?.dropdownNoDataContent ?? (
-                              <span className="text-xs text-center">
+                              <span className="text-sm text-center">
                                 No Data
                               </span>
                             )}
@@ -253,7 +253,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                             key={item.id}
                             className={({ selected }) =>
                               clsx(
-                                "relative flex font-medium  pl-2 text-xs justify-between items-center cursor-default select-none py-2 text-center ",
+                                "relative flex font-medium  pl-2 text-sm justify-between items-center cursor-default select-none py-2 text-center ",
                                 selected
                                   ? "bg-gray-800 hover:bg-gray-800 text-white font-medium "
                                   : "text-gray-800 hover:bg-gray-800 hover:text-white",

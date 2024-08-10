@@ -8,7 +8,8 @@ import RatingComponent from "./RatingComponent";
 
 const QuestionPreviewComponent = () => {
   const [params, _setparams] = useSearchParams();
-  const { execute: fetchQuestionDetails } = useQuestionPreviewAPI();
+  const { execute: fetchQuestionDetails, prevQuestionDetails } =
+    useQuestionPreviewAPI();
   const step_id = params.get("step_id");
 
   useEffect(() => {
@@ -18,6 +19,8 @@ const QuestionPreviewComponent = () => {
       fetchQuestionDetails(group_id, survey_id);
     }
   }, [params.get("survey_id")]);
+  
+  console.log(prevQuestionDetails, "prevQuestionDetails");
 
   return (
     <div>

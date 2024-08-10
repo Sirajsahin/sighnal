@@ -1,3 +1,5 @@
+import { IUserProfileLogo } from "@/components/shared/UserProfile";
+
 //Create Org
 export interface IUserOrgCreateProps {
   org_name: string;
@@ -68,6 +70,7 @@ export interface IOrganizationDetails {
   about?: string | null;
   age?: string | null;
   website?: string | null;
+  attachment_file?: IUserProfileLogo;
 }
 export interface IOrganizationDetailsResponse {
   message: string;

@@ -37,23 +37,23 @@ const moodRange = [
   { id: "3", title: "4" },
   { id: "4", title: "5" },
 ];
-// const data = [
-//   {
-//     item: "1",
-//   },
-//   {
-//     item: "2",
-//   },
-//   {
-//     item: "3",
-//   },
-//   {
-//     item: "4",
-//   },
-//   {
-//     item: "5",
-//   },
-// ];
+const ratingRangeData5 = [
+  {
+    item: "1",
+  },
+  {
+    item: "2",
+  },
+  {
+    item: "3",
+  },
+  {
+    item: "4",
+  },
+  {
+    item: "5",
+  },
+];
 const ratingRangeData = [
   {
     item: "1",
@@ -92,34 +92,33 @@ const ratingRangeData = [
 //   { id: "false", name: "No" },
 // ];
 
-const moodScaleDate = [
+const moodScaleData = [
   { emoji: "😍", label: "Very Satisfied" },
   { emoji: "😃", label: "Satisfied" },
   { emoji: "😐", label: "It's Okay" },
   { emoji: "😕", label: "Unsatisfied" },
   { emoji: "😡", label: "Very unsatisfied" },
 ];
-// const moodScaleDate4 = [
-//   { emoji: "😍", label: "Very Satisfied" },
-//   { emoji: "😃", label: "Satisfied" },
-//   { emoji: "😐", label: "It's Okay" },
-//   { emoji: "😕", label: "Unsatisfied" },
-// ];
-// const moodScaleDate2 = [
-//   { emoji: "😍", label: "Very Satisfied" },
-//   { emoji: "😃", label: "Satisfied" },
-// ];
-// const moodScaleDate3 = [
-//   { emoji: "😍", label: "Very Satisfied" },
-//   { emoji: "😃", label: "Satisfied" },
-//   { emoji: "😐", label: "It's Okay" },
-// ];
+const moodScaleData4 = [
+  { emoji: "😍", label: "Very Satisfied" },
+  { emoji: "😃", label: "Satisfied" },
+  { emoji: "😐", label: "It's Okay" },
+  { emoji: "😕", label: "Unsatisfied" },
+];
+const moodScaleData2 = [
+  { emoji: "😍", label: "Very Satisfied" },
+  { emoji: "😃", label: "Satisfied" },
+];
+const moodScaleData3 = [
+  { emoji: "😍", label: "Very Satisfied" },
+  { emoji: "😃", label: "Satisfied" },
+  { emoji: "😐", label: "It's Okay" },
+];
 
 export interface IServiceDeskImage {
   base_64_string: string;
   file_extension: string;
   file_name: string;
-  is_thumbnail?: boolean;
   image_url?: string;
 }
 
@@ -152,7 +151,12 @@ export interface ICampaignQuestionDetailsInfo {
   attachment_file?: FileList;
   image?: IServiceDeskImage[];
 }
-
+//For API
+export interface ICampaignQuestionDetailsPreview {
+  message: string;
+  status: boolean;
+  data: ICampaignQuestionDetailsInfo[];
+}
 export interface ICreateSurveyFormFields {
   question_details: ICampaignQuestionDetailsInfo[];
 }
@@ -199,7 +203,9 @@ const AddSurveyQuestionComponent = () => {
       rating: "",
       mood: "",
       question_type_id: "",
-      options: [""],
+      options: ["yes", "no"],
+      rating_scale: "5",
+      mood_scale: "5",
       can_skipped: "false",
       group_id: group_id || "",
       survey_id: survey_id || "",
@@ -293,7 +299,6 @@ const AddSurveyQuestionComponent = () => {
             file_extension: image.file_extension,
             file_name: image.file_name,
             image_url: "", // Set image_url if needed
-            is_thumbnail: false,
           }));
           formHook.setValue(`question_details.${index}.image`, imageURLS);
         }
@@ -429,110 +434,117 @@ const AddSurveyQuestionComponent = () => {
                             />
                           </div>
 
-                          <div className="w-full">
-                            <p className="text-sm font-medium text-[#333333]">
-                              Limit
-                            </p>
+                          {formHook.watch(
+                            `question_details.${index}.question_type_id`
+                          ) === "rating_scale" && (
+                            <div className="w-full">
+                              <p className="text-sm font-medium text-[#333333]">
+                                Limit
+                              </p>
 
-                            <SearchableSelectMenu
-                              errorMessages={[
-                                {
-                                  message: "Parent theme is required",
-                                  type: "required",
-                                },
-                              ]}
-                              onSelectItem={(item) => {
-                                if (item) {
-                                  formHook.setValue(
-                                    `question_details.${index}.rating_scale`,
-                                    item.title
-                                  );
+                              <SearchableSelectMenu
+                                errorMessages={[
+                                  {
+                                    message: "Parent theme is required",
+                                    type: "required",
+                                  },
+                                ]}
+                                onSelectItem={(item) => {
+                                  if (item) {
+                                    formHook.setValue(
+                                      `question_details.${index}.rating_scale`,
+                                      item.title
+                                    );
+                                  }
+                                }}
+                                fieldError={
+                                  formHook?.formState?.errors?.question_details
+                                    ? formHook?.formState?.errors
+                                        ?.question_details[index]?.rating_scale
+                                    : null
                                 }
-                              }}
-                              fieldError={
-                                formHook?.formState?.errors?.question_details
-                                  ? formHook?.formState?.errors
-                                      ?.question_details[index]?.rating_scale
-                                  : null
-                              }
-                              register={formHook.register(
-                                `question_details.${index}.rating_scale`,
-                                {
-                                  required: false,
+                                register={formHook.register(
+                                  `question_details.${index}.rating_scale`,
+                                  {
+                                    required: false,
+                                  }
+                                )}
+                                selectItems={ratingRange}
+                                placeholder="Select Range"
+                                showTooltips={false}
+                                showTypedErrors={true}
+                                showDropdownIcon={true}
+                                defaultSelected={
+                                  ratingRange?.filter(
+                                    (oc) =>
+                                      oc.title ===
+                                      formHook.watch(
+                                        `question_details.${index}.rating_scale`
+                                      )
+                                  )[0]
                                 }
-                              )}
-                              selectItems={ratingRange}
-                              placeholder="Select Range"
-                              showTooltips={false}
-                              showTypedErrors={true}
-                              showDropdownIcon={true}
-                              defaultSelected={
-                                ratingRange?.filter(
-                                  (oc) =>
-                                    oc.title ===
-                                    formHook.watch(
-                                      `question_details.${index}.rating_scale`
-                                    )
-                                )[0]
-                              }
-                              listBoxClassName="w-full"
-                              className="text-gray-800"
-                              containerClassName="w-full"
-                            />
-                          </div>
+                                listBoxClassName="w-full"
+                                className="text-gray-800"
+                                containerClassName="w-full"
+                              />
+                            </div>
+                          )}
 
-                          <div className="w-full">
-                            <p className="text-sm font-medium text-[#333333]">
-                              Limit
-                            </p>
+                          {formHook.watch(
+                            `question_details.${index}.question_type_id`
+                          ) === "mood_scale" && (
+                            <div className="w-full">
+                              <p className="text-sm font-medium text-[#333333]">
+                                Limit
+                              </p>
 
-                            <SearchableSelectMenu
-                              errorMessages={[
-                                {
-                                  message: "Parent theme is required",
-                                  type: "required",
-                                },
-                              ]}
-                              onSelectItem={(item) => {
-                                if (item) {
-                                  formHook.setValue(
-                                    `question_details.${index}.mood_scale`,
-                                    item.title
-                                  );
+                              <SearchableSelectMenu
+                                errorMessages={[
+                                  {
+                                    message: "Parent theme is required",
+                                    type: "required",
+                                  },
+                                ]}
+                                onSelectItem={(item) => {
+                                  if (item) {
+                                    formHook.setValue(
+                                      `question_details.${index}.mood_scale`,
+                                      item.title
+                                    );
+                                  }
+                                }}
+                                fieldError={
+                                  formHook?.formState?.errors?.question_details
+                                    ? formHook?.formState?.errors
+                                        ?.question_details[index]?.mood_scale
+                                    : null
                                 }
-                              }}
-                              fieldError={
-                                formHook?.formState?.errors?.question_details
-                                  ? formHook?.formState?.errors
-                                      ?.question_details[index]?.mood_scale
-                                  : null
-                              }
-                              register={formHook.register(
-                                `question_details.${index}.mood_scale`,
-                                {
-                                  required: false,
+                                register={formHook.register(
+                                  `question_details.${index}.mood_scale`,
+                                  {
+                                    required: false,
+                                  }
+                                )}
+                                selectItems={moodRange}
+                                placeholder="Select Range"
+                                showTooltips={false}
+                                showTypedErrors={true}
+                                showDropdownIcon={true}
+                                defaultSelected={
+                                  moodRange?.filter(
+                                    (oc) =>
+                                      oc.title ===
+                                      formHook.watch(
+                                        `question_details.${index}.mood_scale`
+                                      )
+                                  )[0]
                                 }
-                              )}
-                              selectItems={moodRange}
-                              placeholder="Select Range"
-                              showTooltips={false}
-                              showTypedErrors={true}
-                              showDropdownIcon={true}
-                              defaultSelected={
-                                moodRange?.filter(
-                                  (oc) =>
-                                    oc.title ===
-                                    formHook.watch(
-                                      `question_details.${index}.mood_scale`
-                                    )
-                                )[0]
-                              }
-                              listBoxClassName="w-full"
-                              className="text-gray-800"
-                              containerClassName="w-full"
-                            />
-                          </div>
-
+                                listBoxClassName="w-full"
+                                className="text-gray-800"
+                                containerClassName="w-full"
+                              />
+                            </div>
+                          )}
                           <div className="w-full">
                             <p className="text-sm font-medium text-[#333333] ">
                               Can this question be skipped? *
@@ -591,64 +603,69 @@ const AddSurveyQuestionComponent = () => {
                           `question_details.${index}.question_type_id`
                         ) === "image_single_choice" && (
                           <div className="mt-8">
-                            <InputWithFileUpload
-                              variant="DRAG_AND_DROP"
-                              fieldError={
-                                formHook?.formState?.errors?.question_details
-                                  ? formHook?.formState?.errors
-                                      ?.question_details[index]?.attachment_file
-                                  : null
-                              }
-                              {...formHook.register(
-                                `question_details.${index}.attachment_file`
-                              )}
-                              register={formHook.register(
-                                `question_details.${index}.attachment_file`,
-                                {
-                                  validate: {
-                                    maxSize: (files: FileList) => {
-                                      return (
-                                        Array.from(files).every(
-                                          (file) => file.size < 5 * 1024 * 1024
-                                        ) ||
-                                        "Each file must be smaller than 5MB"
-                                      );
-                                    },
-                                    fileType: (files: FileList) => {
-                                      const validTypes = [
-                                        "image/png",
-                                        "image/jpeg",
-                                        "application/pdf",
-                                      ];
-                                      return (
-                                        Array.from(files).every((file) =>
-                                          validTypes.includes(file.type)
-                                        ) || "Invalid file type"
-                                      );
-                                    },
-                                  },
+                            {formHook.watch(`question_details.${index}.image`)
+                              ?.length > 0 ? null : (
+                              <InputWithFileUpload
+                                variant="DRAG_AND_DROP"
+                                fieldError={
+                                  formHook?.formState?.errors?.question_details
+                                    ? formHook?.formState?.errors
+                                        ?.question_details[index]
+                                        ?.attachment_file
+                                    : null
                                 }
-                              )}
-                              isMultiple
-                              onClear={() => {
-                                formHook.resetField(
+                                {...formHook.register(
                                   `question_details.${index}.attachment_file`
-                                );
-                              }}
-                              type="file"
-                              className="w-full"
-                              id={`question_details.${index}.attachment_file`}
-                              errorMessages={[
-                                {
-                                  type: "",
-                                  message: "Please upload Issues",
-                                },
-                              ]}
-                              dragAndDropDescription={{
-                                allowedFormats: ["PDF", "JPEG", "PNG"],
-                                maxFileSize: "5MB",
-                              }}
-                            />
+                                )}
+                                register={formHook.register(
+                                  `question_details.${index}.attachment_file`,
+                                  {
+                                    validate: {
+                                      maxSize: (files: FileList) => {
+                                        return (
+                                          Array.from(files).every(
+                                            (file) =>
+                                              file.size < 5 * 1024 * 1024
+                                          ) ||
+                                          "Each file must be smaller than 5MB"
+                                        );
+                                      },
+                                      fileType: (files: FileList) => {
+                                        const validTypes = [
+                                          "image/png",
+                                          "image/jpeg",
+                                          "application/pdf",
+                                        ];
+                                        return (
+                                          Array.from(files).every((file) =>
+                                            validTypes.includes(file.type)
+                                          ) || "Invalid file type"
+                                        );
+                                      },
+                                    },
+                                  }
+                                )}
+                                isMultiple
+                                onClear={() => {
+                                  formHook.resetField(
+                                    `question_details.${index}.attachment_file`
+                                  );
+                                }}
+                                type="file"
+                                className="w-full"
+                                id={`question_details.${index}.attachment_file`}
+                                errorMessages={[
+                                  {
+                                    type: "",
+                                    message: "Please upload Issues",
+                                  },
+                                ]}
+                                dragAndDropDescription={{
+                                  allowedFormats: ["PDF", "JPEG", "PNG"],
+                                  maxFileSize: "5MB",
+                                }}
+                              />
+                            )}
                             {formHook
                               .watch(`question_details.${index}.image`)
                               ?.map((image, imgIndex) => (
@@ -815,7 +832,7 @@ const AddSurveyQuestionComponent = () => {
                         ) === "multiple_choice" && (
                           <div>
                             {formHook
-                              .watch(`question_details.${index}.options`)
+                              .getValues(`question_details.${index}.options`)
                               ?.map((item, id) => (
                                 <>
                                   <div
@@ -865,53 +882,6 @@ const AddSurveyQuestionComponent = () => {
                                       <XMarkIcon className="w-4 h-4" />
                                     </p>
                                   </div>
-                                  {/* <div
-                                    className={`flex items-center w-full relative mb-2 mt-1`}
-                                    key={`${id}-${item}`} // Updated key to avoid potential issues with duplicate values
-                                  >
-                                    <Input
-                                      className="text-sm w-full mt-2"
-                                      placeholder={`Add Option ${id + 1}`}
-                                      {...formHook.register(
-                                        `question_details.${index}.options.${id}`,
-                                        {
-                                          required: "Option is required",
-                                        }
-                                      )}
-                                      register={formHook.register(
-                                        `question_details.${index}.options.${id}`,
-                                        {
-                                          required: true,
-                                          ...forAlphaNumericWithoutDot.validations,
-                                        }
-                                      )}
-                                      fieldError={
-                                        formHook?.formState?.errors
-                                          ?.question_details
-                                          ? formHook.formState.errors
-                                              .question_details[index]
-                                              ?.options?.[id]
-                                          : null
-                                      }
-                                      errorMessages={[
-                                        {
-                                          message: "Option is required",
-                                          type: "required",
-                                        },
-                                      ]}
-                                    />
-
-                                    <p
-                                      className="pr-3 items-center absolute cursor-pointer right-0"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        handleDeleteProductOptions(index, id);
-                                      }}
-                                    >
-                                      <XMarkIcon className="w-4 h-4" />
-                                    </p>
-                                  </div> */}
                                 </>
                               ))}
 
@@ -964,9 +934,22 @@ const AddSurveyQuestionComponent = () => {
                           `question_details.${index}.question_type_id`
                         ) === "mood_scale" && (
                           <div>
-                            {/* <input hidden {...regester} fo/> */}
                             <MoodScaleComponent
-                              data={moodScaleDate}
+                              data={
+                                formHook.watch(
+                                  `question_details.${index}.mood_scale`
+                                ) === "2"
+                                  ? moodScaleData2
+                                  : formHook.watch(
+                                        `question_details.${index}.mood_scale`
+                                      ) === "3"
+                                    ? moodScaleData3
+                                    : formHook.watch(
+                                          `question_details.${index}.mood_scale`
+                                        ) === "4"
+                                      ? moodScaleData4
+                                      : moodScaleData
+                              }
                               setValue={setValue}
                               fieldPath={`question_details.${index}.mood`}
                             />
@@ -976,7 +959,13 @@ const AddSurveyQuestionComponent = () => {
                           `question_details.${index}.question_type_id`
                         ) === "rating_scale" && (
                           <RatingScaleComponent
-                            data={ratingRangeData}
+                            data={
+                              formHook.watch(
+                                `question_details.${index}.rating_scale`
+                              ) === "5"
+                                ? ratingRangeData5
+                                : ratingRangeData
+                            }
                             setValue={setValue}
                             fieldPath={`question_details.${index}.rating`}
                           />

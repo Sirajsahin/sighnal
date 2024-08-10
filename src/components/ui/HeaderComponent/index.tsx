@@ -14,6 +14,8 @@ export default function HeaderComponent() {
 
   const profilePic = localStorage.getItem("displayName")?.slice(0, 1);
 
+  console.log(localStorage.getItem("displayName"), "fff");
+
   return (
     <div className="">
       <div

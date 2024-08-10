@@ -1,4 +1,3 @@
-import { ROUTES } from "@/app/routes/routes";
 import { FirebaseError, initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider,
@@ -58,7 +57,7 @@ export const useFirebaseLogin = () => {
         localStorage.clear();
         sessionStorage.clear();
         toast.error("Google authentication error.");
-        window.location.replace(ROUTES.LOGIN_PAGE.url);
+        navigate("/app/login/sign-in");
         return null;
       }
 
@@ -73,7 +72,7 @@ export const useFirebaseLogin = () => {
       sessionStorage.clear();
       const firebaseError = error as FirebaseError;
       toast.error(`Error with login: ${firebaseError.message}`);
-      navigate(ROUTES.LOGIN_PAGE.url);
+      navigate("/app/login/sign-in");
       setAccessToken(null);
       return null;
     }

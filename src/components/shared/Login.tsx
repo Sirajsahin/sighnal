@@ -298,7 +298,7 @@ export default function Login() {
                         disabled={!isValidPassword()}
                         className="flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       >
-                        Create Account
+                        Sign in{" "}
                       </button>
                     </div>
                   </form>
@@ -318,7 +318,13 @@ export default function Login() {
               </div>
             </div>
           </div>
-          {open && <OTPModalComponent open={open} setOpen={setOpen} email={formHook.watch("email")} />}
+          {open && (
+            <OTPModalComponent
+              open={open}
+              setOpen={setOpen}
+              email={formHook.watch("email")}
+            />
+          )}
           <div className="">
             <div className="flex justify-end my-4 pr-6 items-center gap-3 text-sm font-medium text-[#333333]">
               <p>Already have an account?</p>

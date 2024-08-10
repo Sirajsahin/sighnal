@@ -1,16 +1,18 @@
 // import { ROTA_APIS } from "@/api_framework/api_config";
 import { USER_LOGIN_APIS } from "@/api_framework/api_config";
 import {
-  IGroupStatsresponse,
-  IGroupStatsresponseData,
-} from "@/api_framework/api_modals/group";
+  ICampaignQuestionDetailsInfo,
+  ICampaignQuestionDetailsPreview,
+} from "@/components/routes/auth_routes/CreateSurveyStepComponent/AddSurveyQuestionComponent";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 export const useQuestionPreviewAPI = () => {
-  const [groupStats, setGroupStats] = useState<IGroupStatsresponseData[]>([]);
+  const [prevQuestionDetails, setPrevQuestionDetails] = useState<
+    ICampaignQuestionDetailsInfo[]
+  >([]);
   const execute = useCallback(async (group_id: string, survey_id: string) => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
@@ -23,15 +25,15 @@ export const useQuestionPreviewAPI = () => {
             },
           }
         )
-        .then((res: AxiosResponse<IGroupStatsresponse>) => {
+        .then((res: AxiosResponse<ICampaignQuestionDetailsPreview>) => {
           if (res.data.status === true) {
-            setGroupStats(res.data?.data);
+            setPrevQuestionDetails(res.data?.data);
           } else {
-            setGroupStats([]);
+            setPrevQuestionDetails([]);
           }
         })
         .catch((e: AxiosError) => {
-          setGroupStats([]);
+          setPrevQuestionDetails([]);
           if (e.code === "ERR_BAD_REQUEST") {
             //
           }
@@ -43,8 +45,9 @@ export const useQuestionPreviewAPI = () => {
           }
         });
     } catch (e: any) {
+      setPrevQuestionDetails([]);
       toast.error("Server Error: " + e.message);
     }
   }, []);
-  return { execute, groupStats };
+  return { execute, prevQuestionDetails };
 };
