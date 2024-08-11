@@ -124,7 +124,13 @@ const AudienceLaunchComponent = () => {
 
   const handelOpenPreview = () => {
     navigate(
-      `/app/campaign/survey-preview?step_id=1&group_id=${group_id}&survey_id=${survey_id}`
+      `/app/campaign/survey-preview?group_id=${group_id}&survey_id=${survey_id}`
+    );
+  };
+
+  const handelBack = () => {
+    navigate(
+      `/app/campaign/create-survey?step_id=2&group_id=${params.get("group_id")}&survey_id=${params.get("survey_id")}`
     );
   };
 
@@ -220,7 +226,7 @@ const AudienceLaunchComponent = () => {
                   }}
                   fieldError={formHook?.formState?.errors?.startTime}
                   register={formHook.register("startTime", {
-                    required: true,
+                    required: false,
                   })}
                   selectItems={startTime}
                   placeholder="HH"
@@ -251,7 +257,7 @@ const AudienceLaunchComponent = () => {
                   }}
                   fieldError={formHook?.formState?.errors?.startTimeMinute}
                   register={formHook.register("startTimeMinute", {
-                    required: true,
+                    required: false,
                   })}
                   selectItems={endTime}
                   placeholder="MM"
@@ -289,7 +295,7 @@ const AudienceLaunchComponent = () => {
                   }}
                   fieldError={formHook?.formState?.errors?.endTime}
                   register={formHook.register("endTime", {
-                    required: true,
+                    required: false,
                   })}
                   selectItems={startTime}
                   placeholder="HH"
@@ -320,7 +326,7 @@ const AudienceLaunchComponent = () => {
                   }}
                   fieldError={formHook?.formState?.errors?.endTimeMinute}
                   register={formHook.register("endTimeMinute", {
-                    required: true,
+                    required: false,
                   })}
                   selectItems={endTime}
                   placeholder="MM"
@@ -344,8 +350,7 @@ const AudienceLaunchComponent = () => {
           <button
             type="button"
             className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium  ring-1 ring-inset ring-gray-300  sm:col-start-1 sm:mt-0"
-            // onClick={() => setOpen(false)}
-            data-autofocus
+            onClick={() => handelBack()}
           >
             <span>
               <MdOutlineKeyboardBackspace className="w-4 h-4" />

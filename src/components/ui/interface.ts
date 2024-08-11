@@ -69,6 +69,7 @@ export interface IInputWithFileUpload
     | undefined;
   inputClassName?: string;
   onClear?: () => void;
+  onUploadSuccess?: () => void;
   onFileRemove?: (Files?: File[]) => void;
   isMultiple?: boolean;
   dragAndDropIcon?: React.ReactNode;
@@ -262,6 +263,8 @@ export interface ISearchableMultiSelectMenu
   label?: string;
   iconURLKey?: string;
   withDropDownSearch?: boolean;
+  asButton?: any;
+  renderAsButton?: any;
   containerClassName?: string;
   showTooltips?: boolean;
   withSelectAll?: boolean;

@@ -31,6 +31,10 @@ type useUtilsReturnType = {
   convertTime12HrFormat: (timeString: string) => string;
   convertTo12HourFormatWithAMPM: (timeString: string) => string;
   to12HrFormat: (createdAt: string) => string;
+  splitEmojiAndText: (input: string) => {
+    emoji: string;
+    title: string;
+  };
   dateToAge: (dateOfBirth: string) => string;
   DOBToAge: (dob: string) => {
     years: number;
@@ -330,6 +334,22 @@ export const useUtils = (): useUtilsReturnType => {
     // Format the time in 12-hour format
     const time12Hour = `${hours12Hour}:${minutes} ${period}`;
     return time12Hour;
+  };
+
+  // Split emoji and text
+
+  const splitEmojiAndText = (
+    input: string
+  ): { emoji: string; title: string } => {
+    const match = input.match(/^([\p{Emoji}\p{L}]+)\s(.*)$/u);
+
+    if (match) {
+      return {
+        emoji: match[1],
+        title: match[2],
+      };
+    }
+    return { emoji: "", title: "" };
   };
 
   /* Converts createdAt timestamp to valid 12HR format string */
@@ -666,6 +686,7 @@ export const useUtils = (): useUtilsReturnType => {
     truncateString,
     convertTime12HrFormat,
     to12HrFormat,
+    splitEmojiAndText,
     dateToAge,
     DOBToAge,
     ISOToRelativeTime,

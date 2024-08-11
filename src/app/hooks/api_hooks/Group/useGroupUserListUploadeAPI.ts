@@ -19,7 +19,7 @@ export const useGroupUserListUploadeAPI = () => {
       formData.append("file", file);
       const response: InventoryTaxCreateAPIResponse = await axios
         .post(
-          `${USER_LOGIN_APIS.UPLOAD_USER_SHEET.baseURL}${groupId}` ?? "",
+          `${USER_LOGIN_APIS.UPLOAD_USER_SHEET.baseURL}${groupId}`,
           formData,
           {
             headers: {

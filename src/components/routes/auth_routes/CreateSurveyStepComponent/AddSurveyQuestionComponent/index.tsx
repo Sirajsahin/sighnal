@@ -1,8 +1,10 @@
 import { useGroupQuestionTypeAPI } from "@/app/hooks/api_hooks/Group/useGroupQuestionTypeAPI";
+import { useQuestionPreviewAPI } from "@/app/hooks/api_hooks/Group/useQuestionPreviewAPI";
 import { useSurveyQuestionCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyQuestionCreateAPI";
 import { useUtils } from "@/app/hooks/useUtils";
 import useFormValidations from "@/components/shared/UI_Interface/useFormValidation";
 import Input from "@/components/ui/Input";
+import SearchableMultiSelectMenu from "@/components/ui/SearchableMultiSelectMenu";
 import {
   Disclosure,
   DisclosureButton,
@@ -32,12 +34,7 @@ const ratingRange = [
   { id: "1", title: "5" },
   { id: "2", title: "10" },
 ];
-const moodRange = [
-  { id: "1", title: "2" },
-  { id: "2", title: "3" },
-  { id: "3", title: "4" },
-  { id: "4", title: "5" },
-];
+
 const ratingRangeData5 = [
   {
     item: "1",
@@ -94,26 +91,11 @@ const ratingRangeData = [
 // ];
 
 const moodScaleData = [
-  { emoji: "😡", label: "Very unsatisfied" },
-  { emoji: "😕", label: "Unsatisfied" },
-  { emoji: "😐", label: "It's Okay" },
-  { emoji: "😃", label: "Satisfied" },
-  { emoji: "😍", label: "Very Satisfied" },
-];
-const moodScaleData4 = [
-  { emoji: "😕", label: "Unsatisfied" },
-  { emoji: "😃", label: "Satisfied" },
-  { emoji: "😐", label: "It's Okay" },
-  { emoji: "😍", label: "Very Satisfied" },
-];
-const moodScaleData2 = [
-  { emoji: "😃", label: "Satisfied" },
-  { emoji: "😍", label: "Very Satisfied" },
-];
-const moodScaleData3 = [
-  { emoji: "😐", label: "It's Okay" },
-  { emoji: "😃", label: "Satisfied" },
-  { emoji: "😍", label: "Very Satisfied" },
+  { id: "1", title: "😡 Very unsatisfied" },
+  { id: "2", title: "😕 Unsatisfied" },
+  { id: "3", title: "😐 It's Okay" },
+  { id: "4", title: "😃 Satisfied" },
+  { id: "5", title: "😍 Very Satisfied" },
 ];
 
 export interface IServiceDeskImage {
@@ -133,7 +115,7 @@ export interface ICampaignQuestionProps {
   openText: string;
   group_id: string;
   rating?: string;
-  mood?: string;
+  mood: Array<string>;
   survey_id: string;
   attachment?: IServiceDeskImage[];
 }
@@ -148,7 +130,7 @@ export interface ICampaignQuestionDetailsInfo {
   openText: string;
   rating: string;
   survey_id: string;
-  mood: string;
+  mood: Array<string>;
   attachment_file?: FileList;
   image?: IServiceDeskImage[];
 }
@@ -187,6 +169,9 @@ const AddSurveyQuestionComponent = () => {
   const survey_id = params.get("survey_id");
 
   const { execute: createQuestion } = useSurveyQuestionCreateAPI();
+  const { execute: fetchQuestionDetails, prevQuestionDetails } =
+    useQuestionPreviewAPI();
+
   const { execute: fetchQuestionType, groupQuestionType } =
     useGroupQuestionTypeAPI();
 
@@ -195,7 +180,7 @@ const AddSurveyQuestionComponent = () => {
       question: "",
       openText: "",
       rating: "",
-      mood: "",
+      mood: [],
       question_type_id: "",
       options: ["", ""],
       rating_scale: "5",
@@ -204,10 +189,10 @@ const AddSurveyQuestionComponent = () => {
       group_id: group_id || "",
       survey_id: survey_id || "",
       attachment_file: null,
+      image: [],
     });
   };
   useEffect(() => {
-    handleAddProductItem();
     fetchQuestionType();
   }, []);
 
@@ -219,7 +204,7 @@ const AddSurveyQuestionComponent = () => {
       mood_scale: "5",
       openText: "",
       rating: "",
-      mood: "",
+      mood: [],
       attachment_file: null,
       image: [],
     });
@@ -348,8 +333,30 @@ const AddSurveyQuestionComponent = () => {
   };
 
   useEffect(() => {
-    handleSetImageURL();
+    const callFunctionsSequentially = async () => {
+      await handleSetImageURL();
+      await handleSetImageURL();
+    };
+
+    callFunctionsSequentially();
   }, [questionDetailsFormHook]);
+
+  useEffect(() => {
+    const survey_id = params.get("survey_id");
+    const group_id = params.get("group_id");
+    if (group_id && survey_id) {
+      fetchQuestionDetails(group_id, survey_id);
+    }
+  }, [params.get("survey_id")]);
+
+  useEffect(() => {
+    if (prevQuestionDetails?.length > 0) {
+      questionDetailsFormHook.remove();
+      questionDetailsFormHook.replace(prevQuestionDetails);
+    } else {
+      handleAddProductItem();
+    }
+  }, [prevQuestionDetails]);
 
   return (
     <div className="flex justify-center items-center mr-auto">
@@ -470,7 +477,7 @@ const AddSurveyQuestionComponent = () => {
                                     )
                                 )[0]
                               }
-                              listBoxClassName="w-full"
+                              listBoxClassName="w-full z-40"
                               className="text-gray-800"
                               containerClassName="w-full"
                             />
@@ -540,50 +547,41 @@ const AddSurveyQuestionComponent = () => {
                                 Limit
                               </p>
 
-                              <SearchableSelectMenu
-                                errorMessages={[
-                                  {
-                                    message: "Parent theme is required",
-                                    type: "required",
-                                  },
-                                ]}
-                                onSelectItem={(item) => {
-                                  if (item) {
+                              <SearchableMultiSelectMenu
+                                onSelectItem={(items) => {
+                                  if (items) {
+                                    const moodId = items.map((i) => i.title);
                                     formHook.setValue(
-                                      `question_details.${index}.mood_scale`,
-                                      item.title
+                                      `question_details.${index}.mood`,
+                                      moodId
                                     );
                                   }
                                 }}
+                                withSelectAll
+                                errorMessages={[
+                                  { message: "Required", type: "required" },
+                                ]}
                                 fieldError={
                                   formHook?.formState?.errors?.question_details
                                     ? formHook?.formState?.errors
-                                        ?.question_details[index]?.mood_scale
+                                        ?.question_details[index]?.can_skipped
                                     : null
                                 }
                                 register={formHook.register(
-                                  `question_details.${index}.mood_scale`,
+                                  `question_details.${index}.mood`,
                                   {
-                                    required: false,
+                                    required: true,
                                   }
                                 )}
-                                selectItems={moodRange}
-                                placeholder="Select Range"
-                                showTooltips={false}
-                                showTypedErrors={true}
-                                showDropdownIcon={true}
-                                defaultSelected={
-                                  moodRange?.filter(
-                                    (oc) =>
-                                      oc.title ===
-                                      formHook.watch(
-                                        `question_details.${index}.mood_scale`
-                                      )
-                                  )[0]
-                                }
-                                listBoxClassName="w-full"
-                                className="text-gray-800"
-                                containerClassName="w-full"
+                                showTypedErrors={false}
+                                containerClassName=""
+                                placeholder="Select Clinics"
+                                defaultSelected={moodScaleData.filter((c) =>
+                                  formHook
+                                    .watch(`question_details.${index}.mood`)
+                                    ?.includes(c.title)
+                                )}
+                                selectItems={moodScaleData}
                               />
                             </div>
                           )}
@@ -1038,21 +1036,9 @@ const AddSurveyQuestionComponent = () => {
                         ) === "mood_scale" && (
                           <div>
                             <MoodScaleComponent
-                              data={
-                                formHook.watch(
-                                  `question_details.${index}.mood_scale`
-                                ) === "2"
-                                  ? moodScaleData2
-                                  : formHook.watch(
-                                        `question_details.${index}.mood_scale`
-                                      ) === "3"
-                                    ? moodScaleData3
-                                    : formHook.watch(
-                                          `question_details.${index}.mood_scale`
-                                        ) === "4"
-                                      ? moodScaleData4
-                                      : moodScaleData
-                              }
+                              data={formHook.watch(
+                                `question_details.${index}.mood`
+                              )}
                             />
                           </div>
                         )}
