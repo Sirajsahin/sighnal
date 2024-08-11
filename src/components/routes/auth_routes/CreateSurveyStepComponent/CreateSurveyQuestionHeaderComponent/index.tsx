@@ -1,10 +1,12 @@
 import { ISurveyCreateProps } from "@/api_framework/api_modals/group";
 import { useSurveyCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyCreateAPI";
+import { useSurveyDetailsAPI } from "@/app/hooks/api_hooks/Group/useSurveyDetailsAPI";
 import useFormValidations from "@/components/shared/UI_Interface/useFormValidation";
 import Input from "@/components/ui/Input";
 
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { Field, Label } from "@headlessui/react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -21,6 +23,7 @@ const CreateSurveyQuestionHeaderComponent = () => {
   });
 
   const { forAlphaNumeric, forAlphaNumericWithoutDot } = useFormValidations();
+  const { execute: fetchServeyDetails, serveyDetails } = useSurveyDetailsAPI();
 
   const navigate = useNavigate();
   const { execute: createSurvey } = useSurveyCreateAPI();
@@ -58,6 +61,20 @@ const CreateSurveyQuestionHeaderComponent = () => {
         }
       });
     }
+  };
+
+  useEffect(() => {
+    if (serveyDetails) {
+      formHook.setValue("surveyTitle", serveyDetails?.survey_name);
+      formHook.setValue("surveyDescription", serveyDetails?.survey_description);
+    }
+  }, [serveyDetails]);
+  useEffect(() => {
+    fetchServeyDetails(params.get("survey_id"));
+  }, []);
+
+  const handelBack = () => {
+    navigate(`/app/campaign/campaign-list?group_id=${params.get("group_id")}`);
   };
 
   return (
@@ -129,8 +146,7 @@ const CreateSurveyQuestionHeaderComponent = () => {
             <button
               type="button"
               className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium  ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-              // onClick={() => setOpen(false)}
-              data-autofocus
+              onClick={() => handelBack()}
             >
               <span>
                 <MdOutlineKeyboardBackspace className="w-4 h-4" />

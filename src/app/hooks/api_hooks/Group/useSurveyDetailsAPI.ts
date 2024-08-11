@@ -18,14 +18,11 @@ export const useSurveyDetailsAPI = () => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
       const response: InventoryTaxCreateAPIResponse = await axios
-        .get(
-          `${USER_LOGIN_APIS.SURVEY_CREATE_API.baseURL}?survey_id=${survey_id}`,
-          {
-            headers: {
-              Authorization: `${accessToken}`,
-            },
-          }
-        )
+        .get(`${USER_LOGIN_APIS.SURVEY_CREATE_API.baseURL}${survey_id}`, {
+          headers: {
+            Authorization: `${accessToken}`,
+          },
+        })
         .then((res: AxiosResponse<any>) => {
           if (res.data.status === true) {
             setServeyDetails(res.data?.data);

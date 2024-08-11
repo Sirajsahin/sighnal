@@ -358,6 +358,11 @@ const AddSurveyQuestionComponent = () => {
     }
   }, [prevQuestionDetails]);
 
+  const handelBack = () => {
+    navigate(
+      `/app/campaign/create-survey?step_id=1&group_id=${params.get("group_id")}&survey_id=${params.get("survey_id")}`
+    );
+  };
   return (
     <div className="flex justify-center items-center mr-auto">
       <div className="px-4 w-2/3">
@@ -1089,7 +1094,11 @@ const AddSurveyQuestionComponent = () => {
             <button
               type="button"
               className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-              data-autofocus
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handelBack();
+              }}
             >
               <span>
                 <MdOutlineKeyboardBackspace className="w-4 h-4" />
