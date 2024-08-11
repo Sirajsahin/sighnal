@@ -211,6 +211,19 @@ const AddSurveyQuestionComponent = () => {
     fetchQuestionType();
   }, []);
 
+  const handleDeleteProductOptionChnage = (id: number) => {
+    questionDetailsFormHook.update(id, {
+      ...formHook.getValues(`question_details.${id}`),
+      options: ["", ""],
+      rating_scale: "5",
+      mood_scale: "5",
+      openText: "",
+      rating: "",
+      mood: "",
+      attachment_file: null,
+      image: [],
+    });
+  };
   const handleDeleteProductOptions = (id: number, optionIndex: number) => {
     const updatedOptions = formHook
       .getValues(`question_details.${id}.options`)
@@ -222,22 +235,27 @@ const AddSurveyQuestionComponent = () => {
   };
 
   const handleDeleteProductImage = (id: number, imageIndex: number) => {
-    console.log(imageIndex, "imageindex");
     const currentFiles =
       formHook.getValues(`question_details.${id}.attachment_file`) || [];
+    const currentFilesImage =
+      formHook.getValues(`question_details.${id}.image`) || [];
+
     const currentFilesArray = Array.from(currentFiles);
-    if (imageIndex >= 0 && imageIndex < currentFilesArray.length) {
-      const updatedFilesArray = currentFilesArray.filter(
-        (_, index) => index !== imageIndex
-      );
-      const updatedFiles = arrayToFileList(updatedFilesArray);
-      questionDetailsFormHook.update(id, {
-        ...formHook.getValues(`question_details.${id}`),
-        attachment_file: updatedFiles,
-      });
-    } else {
-      console.warn(`Invalid imageIndex: ${imageIndex}`);
-    }
+    const currentFilesArrayImage = Array.from(currentFilesImage);
+
+    const updatedFilesArray = currentFilesArray.filter(
+      (_, index) => index !== imageIndex
+    );
+
+    const currentFilesArrayImageItem = currentFilesArrayImage.filter(
+      (_, index) => index !== imageIndex
+    );
+    const updatedFiles = arrayToFileList(updatedFilesArray);
+    questionDetailsFormHook.update(id, {
+      ...formHook.getValues(`question_details.${id}`),
+      attachment_file: updatedFiles,
+      image: currentFilesArrayImageItem,
+    });
   };
 
   function arrayToFileList(files: File[]): FileList {
@@ -419,6 +437,7 @@ const AddSurveyQuestionComponent = () => {
                                     `question_details.${index}.question_type_id`,
                                     item.id
                                   );
+                                  handleDeleteProductOptionChnage(index);
                                   formHook.clearErrors(
                                     `question_details.${index}.question_type_id`
                                   ); // Clear error on change
@@ -713,7 +732,7 @@ const AddSurveyQuestionComponent = () => {
                                       {truncateString(image.file_name, 25)}
                                     </div>
                                     <p
-                                      className="pr-3 items-center cursor-pointer right-0"
+                                      className=" items-center cursor-pointer "
                                       onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
@@ -821,7 +840,7 @@ const AddSurveyQuestionComponent = () => {
                                       {truncateString(image.file_name, 25)}
                                     </div>
                                     <p
-                                      className="pr-3 items-center  cursor-pointer right-0"
+                                      className=" items-center  cursor-pointer "
                                       onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
@@ -844,56 +863,57 @@ const AddSurveyQuestionComponent = () => {
                         ) === "single_choice" && (
                           <div>
                             {formHook
-                              .watch(`question_details.${index}.options`)
+                              .getValues(`question_details.${index}.options`)
                               ?.map((item, id) => (
-                                <div
-                                  className={`flex items-center w-full relative mb-2 mt-1`}
-                                  key={`${id}-${item}`} // Updated key to avoid potential issues with duplicate values
-                                >
-                                  <Input
-                                    className="text-sm w-full mt-2"
-                                    placeholder={`Add Option ${id + 1}`}
-                                    {...formHook.register(
-                                      `question_details.${index}.options.${id}`,
-                                      {
-                                        required: "Option is required",
-                                      }
-                                    )}
-                                    register={formHook.register(
-                                      `question_details.${index}.options.${id}`,
-                                      {
-                                        required: true,
-                                        ...forAlphaNumericWithoutDot.validations,
-                                      }
-                                    )}
-                                    fieldError={
-                                      formHook?.formState?.errors
-                                        ?.question_details
-                                        ? formHook.formState.errors
-                                            .question_details[index]?.options?.[
-                                            id
-                                          ]
-                                        : null
-                                    }
-                                    errorMessages={[
-                                      {
-                                        message: "Option is required",
-                                        type: "required",
-                                      },
-                                    ]}
-                                  />
-
-                                  <p
-                                    className="pr-3 items-center absolute cursor-pointer right-0"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      handleDeleteProductOptions(index, id);
-                                    }}
+                                <>
+                                  <div
+                                    className={`flex items-center w-full relative mb-2 mt-1`}
+                                    key={`${id}-${item}`} // Updated key to avoid potential issues with duplicate values
                                   >
-                                    <XMarkIcon className="w-4 h-4" />
-                                  </p>
-                                </div>
+                                    <Input
+                                      className="text-sm w-full mt-2"
+                                      placeholder={`Add Option ${id + 1}`}
+                                      {...formHook.register(
+                                        `question_details.${index}.options.${id}`,
+                                        {
+                                          required: "Option is required",
+                                        }
+                                      )}
+                                      register={formHook.register(
+                                        `question_details.${index}.options.${id}`,
+                                        {
+                                          required: true,
+                                          ...forAlphaNumericWithoutDot.validations,
+                                        }
+                                      )}
+                                      fieldError={
+                                        formHook?.formState?.errors
+                                          ?.question_details
+                                          ? formHook.formState.errors
+                                              .question_details[index]
+                                              ?.options?.[id]
+                                          : null
+                                      }
+                                      errorMessages={[
+                                        {
+                                          message: "Option is required",
+                                          type: "required",
+                                        },
+                                      ]}
+                                    />
+
+                                    <p
+                                      className="pr-3 mt-2 items-center absolute cursor-pointer right-0"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleDeleteProductOptions(index, id);
+                                      }}
+                                    >
+                                      <XMarkIcon className="w-4 h-4" />
+                                    </p>
+                                  </div>
+                                </>
                               ))}
 
                             <button
