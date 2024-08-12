@@ -1,6 +1,7 @@
 import { ISurveyCreateProps } from "@/api_framework/api_modals/group";
 import { useSurveyCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyCreateAPI";
 import { useSurveyDetailsAPI } from "@/app/hooks/api_hooks/Group/useSurveyDetailsAPI";
+import { useSurveyUpdateAPI } from "@/app/hooks/api_hooks/Group/useSurveyUpdateAPIAPI";
 import useFormValidations from "@/components/shared/UI_Interface/useFormValidation";
 import Input from "@/components/ui/Input";
 
@@ -27,6 +28,7 @@ const CreateSurveyQuestionHeaderComponent = () => {
 
   const navigate = useNavigate();
   const { execute: createSurvey } = useSurveyCreateAPI();
+  const { execute: updateSurvey } = useSurveyUpdateAPI();
 
   const [params, _setparams] = useSearchParams();
 
@@ -53,13 +55,26 @@ const CreateSurveyQuestionHeaderComponent = () => {
         survey_description: data.surveyDescription,
         group_id: groupId,
       };
-      createSurvey(constructedData).then(({ status, message }) => {
-        if (status) {
-          navigate(
-            `/app/campaign/create-survey?step_id=2&group_id=${groupId}&survey_id=${message}`
-          );
-        }
-      });
+
+      if (serveyDetails) {
+        updateSurvey(constructedData, params.get("survey_id")).then(
+          ({ status }) => {
+            if (status) {
+              navigate(
+                `/app/campaign/create-survey?step_id=2&group_id=${groupId}&survey_id=${params.get("survey_id")}`
+              );
+            }
+          }
+        );
+      } else {
+        createSurvey(constructedData).then(({ status, message }) => {
+          if (status) {
+            navigate(
+              `/app/campaign/create-survey?step_id=2&group_id=${groupId}&survey_id=${message}`
+            );
+          }
+        });
+      }
     }
   };
 

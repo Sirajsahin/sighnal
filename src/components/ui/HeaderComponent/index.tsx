@@ -21,7 +21,7 @@ export default function HeaderComponent() {
 
   const { clientSignOut } = useFirebaseLogin();
 
-  const profilePic = localStorage.getItem("displayName")?.slice(0, 1);
+  // const profilePic = localStorage.getItem("displayName")?.slice(0, 1);
 
   console.log(localStorage.getItem("displayName"), "fff");
 
@@ -140,19 +140,12 @@ export default function HeaderComponent() {
             <Menu as="div" className="">
               <Menu.Button className="-m-1.5 flex items-center p-1.5">
                 <span className="sr-only">Open user menu</span>
-                {localStorage.getItem("photoURL") === "null" ? (
-                  <div className="h-8 w-8 rounded-full bg-gray-50 text-center text-black justify-center flex">
-                    <span className="flex justify-center items-center">
-                      {profilePic}
-                    </span>
-                  </div>
-                ) : (
-                  <img
-                    className="h-8 w-8 rounded-full bg-gray-50"
-                    src={localStorage.getItem("photoURL")}
-                    alt=""
-                  />
-                )}
+                {/* {localStorage.getItem("photoURL") === "null" ? ( */}
+                <div className="h-8 w-8 rounded-full bg-gray-50 text-center text-black justify-center flex">
+                  <span className="flex justify-center items-center">
+                    {localStorage.getItem("displayName")?.split("")[0]}
+                  </span>
+                </div>
 
                 <span className="hidden lg:flex lg:items-center">
                   <span

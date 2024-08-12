@@ -1,3 +1,4 @@
+import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsAPI";
 import { useGroupUserListAPI } from "@/app/hooks/api_hooks/Group/useGroupUserListAPI";
 import CheckBoxComponent from "@/components/ui/CheckBoxComponent";
 import Pagination from "@/components/ui/Pagination";
@@ -30,6 +31,8 @@ const PageSize = 5;
 export default function GroupuserTableComponent({ setOpen, open }) {
   const [params, _setparams] = useSearchParams();
   const { execute: fetchUserListData, userData } = useGroupUserListAPI();
+  const { execute: fetchGroupDetails } = useGroupDetailsAPI();
+
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +51,7 @@ export default function GroupuserTableComponent({ setOpen, open }) {
     const groupId = params.get("group_id");
     if (groupId) {
       fetchUserListData(groupId);
+      fetchGroupDetails(groupId);
     }
   }, [params.get("group_id")]);
 

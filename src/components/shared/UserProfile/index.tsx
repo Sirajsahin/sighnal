@@ -13,7 +13,7 @@ import Input from "@/components/ui/Input";
 import SearchableSelectMenu from "@/components/ui/SearchableSelectMenu";
 import TextareaComponent from "@/components/ui/TextareaComponent";
 import { useSelectMenuReducer } from "@/components/ui/useSelectMenuReducer";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useFormValidations from "../UI_Interface/useFormValidation";
 
@@ -37,12 +37,11 @@ export interface ICreateGroupFromFields {
   org_age: string;
   org_about: string;
   Industry: string;
-  attachment_file?: IUserProfileLogo;
+  icon?: IUserProfileLogo;
+  icon_url?: string;
 }
 
 const UserProfile = () => {
-  const [logo, setLogo] = useState<File | null>(null);
-
   const { forAlphaNumericWithoutDot, forEmail, forMobile, forOnlyNumber } =
     useFormValidations();
   // const { fileListToBase64 } = useUtils();
@@ -87,7 +86,7 @@ const UserProfile = () => {
         about: data.org_about,
         age: data.org_age,
         website: data.org_website,
-        attachment_file: data.attachment_file ? data.attachment_file : null,
+        icon: data.icon ? data.icon : null,
       };
       const constructedDataUser: IUserDetails = {
         name: data.name,
@@ -133,6 +132,7 @@ const UserProfile = () => {
       formHook.setValue("Industry", organization.industry);
       formHook.setValue("citizen", organization.country);
       formHook.setValue("org_about", organization.about);
+      formHook.setValue("icon", organization?.icon);
     }
   }, [userDetails, organization]);
 
@@ -144,7 +144,11 @@ const UserProfile = () => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64String = result.split(",")[1]; // Extract the base64 part only
+        resolve(base64String);
+      };
       reader.onerror = (error) => reject(error);
     });
   };
@@ -157,8 +161,12 @@ const UserProfile = () => {
         file_extension: file?.type,
         file_name: file?.name,
       };
-      formHook.setValue("attachment_file", attachmentFile);
-      console.log("Base64 String: ", base64File); // This logs the base64 string of the image
+      formHook.setValue("icon", attachmentFile);
+      const data = { ...organization, icon: attachmentFile };
+      updateOrganization(data).then(() => {
+        fetchOrganizationDetailsAPI();
+      });
+      console.log("Base64 String: ", base64File); // Logs the base64 string without the prefix
       // You can use this base64 string as needed, e.g., display it, upload to a server, etc.
     } catch (error) {
       console.error("Error converting file to base64:", error);
@@ -175,7 +183,6 @@ const UserProfile = () => {
 
       img.onload = () => {
         // if (img.width === 400 && img.height === 400) {
-        setLogo(file);
         // toast.success("Logo Upload Successfully");
         // } else {
         //   toast.error("Please upload an image with dimensions 400x400 pixels.");
@@ -194,9 +201,9 @@ const UserProfile = () => {
       >
         <div className="flex gap-3 items-center my-4">
           <div className="h-20 w-20 rounded-full bg-[#D9D9D9] flex items-center justify-center relative overflow-hidden cursor-pointer">
-            {logo ? (
+            {organization ? (
               <img
-                src={URL.createObjectURL(logo)}
+                src={organization?.icon_url}
                 alt="Company Logo"
                 className="h-full w-full object-cover rounded-full cursor-pointer"
               />
@@ -212,7 +219,7 @@ const UserProfile = () => {
               </label>
             )}
           </div>
-          {logo ? (
+          {organization ? (
             <div className="mt-2 w-32 flex items-center">
               <label className="text-xs text-gray-500 flex justify-center cursor-pointer border border-[#333333] px-3 py-1 rounded-xl">
                 Change Logo
@@ -462,7 +469,6 @@ const UserProfile = () => {
                 Country <span className="text-red-400">*</span>
               </p>
               <SearchableSelectMenu
-                // label="I’m a citizen of"
                 errorMessages={[
                   {
                     message: "Country is required",
@@ -555,13 +561,11 @@ const UserProfile = () => {
           </div>
           <div className="mt-4">
             <p className="flex items-center gap-1 text-sm">
-              End Consumers<span className="text-red-400">*</span>
+              End Consumers
+              <span className="text-red-400">*</span>
             </p>
-            <div
-              className="w-full border border-[#D0D5DD] px-4 py-3 rounded-lg  cursor-pointer"
-              // onClick={() => setOpen(true)}
-            >
-              <p className="text-sm">End </p>
+            <div className="w-full border border-[#D0D5DD] px-4 py-3 rounded-lg  cursor-pointer">
+              <p className="text-sm">Your End Consumers Displayed Here </p>
             </div>
           </div>
 
@@ -573,8 +577,6 @@ const UserProfile = () => {
           </button>
         </div>
       </form>
-
-      {/* {open && <GroupUploadUsersModalComponent setOpen={setOpen} open={open} />} */}
     </div>
   );
 };

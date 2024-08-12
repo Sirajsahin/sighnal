@@ -155,9 +155,7 @@ const AddSurveyQuestionComponent = () => {
   const { forAlphaNumericWithoutDot } = useFormValidations();
 
   const formHook = useForm<ICreateSurveyFormFields>({
-    defaultValues: {
-      question_details: [],
-    },
+    defaultValues: {},
   });
   const navigate = useNavigate();
   const questionDetailsFormHook = useFieldArray<ICreateSurveyFormFields>({
@@ -353,7 +351,7 @@ const AddSurveyQuestionComponent = () => {
     if (prevQuestionDetails?.length > 0) {
       questionDetailsFormHook.remove();
       questionDetailsFormHook.replace(prevQuestionDetails);
-    } else {
+    } else if (questionDetailsFormHook.fields.length === 0) {
       handleAddProductItem();
     }
   }, [prevQuestionDetails]);
@@ -1084,27 +1082,31 @@ const AddSurveyQuestionComponent = () => {
               </p>
             </div>
           </div>
-          <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 float-right sm:gap-3">
-            <button
-              type="submit"
-              className="inline-flex w-full justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-            >
-              Next
-            </button>
-            <button
-              type="button"
-              className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handelBack();
-              }}
-            >
-              <span>
-                <MdOutlineKeyboardBackspace className="w-4 h-4" />
-              </span>
-              Back
-            </button>
+          <div className="grid grid-cols-3">
+            <div></div>
+            <div></div>
+            <div className="flex items-center gap-4 my-4">
+              <button
+                type="button"
+                className="mt-3 inline-flex w-full text-[#333333] items-center gap-1 justify-center rounded-md bg-white px-4 py-2 text-sm font-medium ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handelBack();
+                }}
+              >
+                <span>
+                  <MdOutlineKeyboardBackspace className="w-4 h-4" />
+                </span>
+                Back
+              </button>
+              <button
+                type="submit"
+                className=" w-full justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+              >
+                Next
+              </button>
+            </div>
           </div>
         </form>
       </div>

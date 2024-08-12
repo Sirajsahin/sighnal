@@ -70,7 +70,8 @@ export interface IOrganizationDetails {
   about?: string | null;
   age?: string | null;
   website?: string | null;
-  attachment_file?: IUserProfileLogo;
+  icon?: IUserProfileLogo;
+  icon_url?: string;
 }
 export interface IOrganizationDetailsResponse {
   message: string;
