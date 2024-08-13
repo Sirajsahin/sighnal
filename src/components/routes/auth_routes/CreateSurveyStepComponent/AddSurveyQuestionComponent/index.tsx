@@ -2,7 +2,6 @@ import { useGroupQuestionTypeAPI } from "@/app/hooks/api_hooks/Group/useGroupQue
 import { useImageUploadAPI } from "@/app/hooks/api_hooks/Group/useImageUploadAPI";
 import { useQuestionPreviewAPI } from "@/app/hooks/api_hooks/Group/useQuestionPreviewAPI";
 import { useSurveyQuestionCreateAPI } from "@/app/hooks/api_hooks/Group/useSurveyQuestionCreateAPI";
-import { useUtils } from "@/app/hooks/useUtils";
 import useFormValidations from "@/components/shared/UI_Interface/useFormValidation";
 import Input from "@/components/ui/Input";
 import SearchableMultiSelectMenu from "@/components/ui/SearchableMultiSelectMenu";
@@ -117,7 +116,7 @@ export interface ICampaignQuestionProps {
   rating?: string;
   mood: Array<string>;
   survey_id: string;
-  attachment?: IServiceDeskImage[];
+  image?: IServiceDeskImage[];
 }
 export interface ICampaignQuestionDetailsInfo {
   question: string;
@@ -131,7 +130,6 @@ export interface ICampaignQuestionDetailsInfo {
   rating: string;
   survey_id: string;
   mood: Array<string>;
-  attachment_file?: FileList;
   image?: IServiceDeskImage[];
 }
 //For API
@@ -151,7 +149,7 @@ const dataItem = [
 
 const AddSurveyQuestionComponent = () => {
   const [params] = useSearchParams();
-  const { fileListToBase64 } = useUtils();
+
   const { forAlphaNumericWithoutDot } = useFormValidations();
 
   const formHook = useForm<ICreateSurveyFormFields>({
@@ -186,7 +184,6 @@ const AddSurveyQuestionComponent = () => {
       can_skipped: "false",
       group_id: group_id || "",
       survey_id: survey_id || "",
-      attachment_file: null,
       image: [],
     });
   };
@@ -203,7 +200,6 @@ const AddSurveyQuestionComponent = () => {
       openText: "",
       rating: "",
       mood: [],
-      attachment_file: null,
       image: [],
     });
   };
@@ -218,34 +214,20 @@ const AddSurveyQuestionComponent = () => {
   };
 
   const handleDeleteProductImage = (id: number, imageIndex: number) => {
-    const currentFiles =
-      formHook.getValues(`question_details.${id}.attachment_file`) || [];
     const currentFilesImage =
       formHook.getValues(`question_details.${id}.image`) || [];
-
-    const currentFilesArray = Array.from(currentFiles);
     const currentFilesArrayImage = Array.from(currentFilesImage);
-
-    const updatedFilesArray = currentFilesArray.filter(
-      (_, index) => index !== imageIndex
-    );
 
     const currentFilesArrayImageItem = currentFilesArrayImage.filter(
       (_, index) => index !== imageIndex
     );
-    const updatedFiles = arrayToFileList(updatedFilesArray);
+
     questionDetailsFormHook.update(id, {
       ...formHook.getValues(`question_details.${id}`),
-      attachment_file: updatedFiles,
+
       image: currentFilesArrayImageItem,
     });
   };
-
-  function arrayToFileList(files: File[]): FileList {
-    const dataTransfer = new DataTransfer();
-    files.forEach((file) => dataTransfer.items.add(file));
-    return dataTransfer.files;
-  }
 
   const handleAddProductOptions = (id: number) => {
     questionDetailsFormHook.update(id, {
@@ -255,97 +237,21 @@ const AddSurveyQuestionComponent = () => {
   };
 
   const onSubmit = async (data: ICreateSurveyFormFields) => {
-    try {
-      const updatedQuestionDetails = await Promise.all(
-        data.question_details.map(async (item) => {
-          if (item) {
-            // Ensure item is not null
-            // Convert files to Base64 if there are any
-            if (
-              item.attachment_file &&
-              Object.keys(item.attachment_file).length > 0
-            ) {
-              const filesArray = Object.values(item.attachment_file) as any;
-              const base64Files = await fileListToBase64(filesArray);
-              // Return item with `attachment_file` removed and `image` added
-              return {
-                ...item,
-                image: base64Files, // Add Base64-encoded files to `image`
-                attachment_file: null, // Remove `attachment_file`
-              };
-            } else {
-              // Return item with `attachment_file` removed
-              const { attachment_file, ...rest } = item;
-              return rest;
-            }
-          } else {
-            // Return null to indicate this item should be removed
-            return null;
-          }
-        })
+    const { status } = await createQuestion(data?.question_details);
+    if (status) {
+      navigate(
+        `/app/campaign/create-survey?step_id=3&group_id=${group_id}&survey_id=${survey_id}`
       );
-
-      // Filter out null items
-      const filteredQuestionDetails = updatedQuestionDetails.filter(
-        (item) => item !== null
-      );
-
-      const { status } = await createQuestion(filteredQuestionDetails);
-      if (status) {
-        navigate(
-          `/app/campaign/create-survey?step_id=3&group_id=${group_id}&survey_id=${survey_id}`
-        );
-      }
-    } catch (error) {
-      console.error("Error processing files:", error);
     }
   };
 
   const dataItemList = useSelectMenuReducer(dataItem, "name", "id");
+
   const questionType = useSelectMenuReducer(
     groupQuestionType,
     "question_type_name",
     "question_type_id"
   );
-
-  const handleSetImageURL = async () => {
-    const questions = formHook.getValues("question_details");
-    if (questions.length > 0) {
-      for (const [index, question] of questions.entries()) {
-        if (
-          question?.attachment_file &&
-          Object.keys(question.attachment_file).length > 0
-        ) {
-          const filesArray = Object.values(question.attachment_file) as any;
-
-          console.log(filesArray, "filesArray");
-
-          const base64Files = await fileListToBase64(filesArray);
-          const imageURLS = base64Files.map((image) => ({
-            base_64_string: image.base_64_string,
-            file_extension: image.file_extension,
-            file_name: image.file_name,
-            image_url: "", // Set image_url if needed
-          }));
-          formHook.setValue(`question_details.${index}.image`, imageURLS);
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    const callFunctionsSequentially = async () => {
-      await handleSetImageURL();
-      await handleSetImageURL();
-    };
-
-    callFunctionsSequentially();
-  }, [questionDetailsFormHook]);
-
-  // useEffect(() => {
-  //   console.log(imagefile, "imagefile");
-
-  // }, []);
 
   useEffect(() => {
     const survey_id = params.get("survey_id");
