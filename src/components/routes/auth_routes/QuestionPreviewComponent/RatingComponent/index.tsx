@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const RatingComponent = ({ data }) => {
+const RatingComponent = ({ data, flage }) => {
   const [selected, setSelected] = useState<number>(null);
 
   const createRatingData = (value: string) => {
@@ -12,7 +12,7 @@ const RatingComponent = ({ data }) => {
   };
   return (
     <div>
-      <div className="grid grid-cols-12 gap-3">
+      <div className={`grid grid-cols-${flage ? "12" : "5"} gap-3  `}>
         {createRatingData(data)?.map((val, index) => {
           return (
             <div
@@ -25,10 +25,14 @@ const RatingComponent = ({ data }) => {
           );
         })}
       </div>
-      <div className="text-sm justify-between flex items-center my-3">
-        <p>Very unsatisfied</p>
-        <p>Very Satisfied</p>
-      </div>
+      {flage && (
+        <div className="w-2/5">
+          <div className="text-sm justify-between flex items-center my-3 w-full">
+            <p>Very unsatisfied</p>
+            <p>Very Satisfied</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

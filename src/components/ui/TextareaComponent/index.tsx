@@ -12,6 +12,7 @@ const TextareaComponent: React.FC<ITextarea> = ({
   register,
   endIcon,
   startIcon,
+  rows,
   inputClassName,
   ...props
 }) => {
@@ -35,7 +36,7 @@ const TextareaComponent: React.FC<ITextarea> = ({
         <Textarea
           {...register}
           {...props}
-          rows={3}
+          rows={rows | 3}
           autoComplete="off"
           autoCorrect="off"
           className={clsx(

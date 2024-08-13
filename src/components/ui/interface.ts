@@ -40,6 +40,7 @@ export interface ITextarea
   endIcon?: React.ReactNode;
   startIcon?: React.ReactNode;
   inputClassName?: string;
+  rows?: number;
 }
 
 // Inputs Interfaces

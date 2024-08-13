@@ -12,7 +12,8 @@ const OpenTextArea = () => {
     <>
       <TextareaComponent
         className="text-sm w-full"
-        placeholder="Your end consumer can write their response here without any limitations."
+        rows={4}
+        placeholder="Your end consumers give there comments here..."
         register={formHook.register(`question_details`, {
           required: false,
         })}

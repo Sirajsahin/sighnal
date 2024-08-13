@@ -1,7 +1,7 @@
 import { useUtils } from "@/app/hooks/useUtils";
 import { useState } from "react";
 
-const NPSComponent = ({ data }) => {
+const NPSComponent = ({ data, flage }) => {
   const { splitEmojiAndText } = useUtils();
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -12,18 +12,22 @@ const NPSComponent = ({ data }) => {
 
   return (
     <div>
-      <div className="grid grid-cols-5 gap-3 my-4">
+      <div
+        className={`${flage ? "grid grid-cols-5" : "flex flex-wrap"} gap-3 my-4`}
+      >
         {data?.map((option, index) => (
           <div
             key={index}
-            className={`p-3 w-full flex items-center justify-between rounded-lg gap-3 text-sm flex-col cursor-pointer transition-colors duration-500 ${
+            className={`${flage ? "p-3 gap-3 flex-col justify-between" : "p-2 gap-3 flex "} w-full flex items-center  rounded-lg  text-sm  cursor-pointer transition-colors duration-500 ${
               selectedOption === index
-                ? "border-[#333333] text-black bg-white border"
+                ? "bg-[#0C6243] text-white border"
                 : "bg-white text-[#333333]"
             }`}
             onClick={() => handleOptionClick(index)}
           >
-            <p className="text-2xl">{splitEmojiAndText(option)?.emoji}</p>
+            <p className={`text-2xl ${!flage && "bg-white rounded-md px-1"}`}>
+              {splitEmojiAndText(option)?.emoji}
+            </p>
             <p className="text-xs">{splitEmojiAndText(option)?.title}</p>
           </div>
         ))}
