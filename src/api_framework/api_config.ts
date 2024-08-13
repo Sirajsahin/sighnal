@@ -107,4 +107,8 @@ export const USER_LOGIN_APIS: SighnalAuthAPIS = {
     baseURL: `${BASE_URL}/question/list/`,
     params: {},
   },
+  IMAGE_UPLOAD_API: {
+    baseURL: `${BASE_URL}/static/upload-file/`,
+    params: {},
+  },
 };
