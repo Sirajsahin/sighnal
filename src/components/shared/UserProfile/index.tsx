@@ -177,17 +177,6 @@ const UserProfile = () => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0] as any;
       handleFileUpload(file);
-      console.log(file, "file");
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-
-      img.onload = () => {
-        // if (img.width === 400 && img.height === 400) {
-        // toast.success("Logo Upload Successfully");
-        // } else {
-        //   toast.error("Please upload an image with dimensions 400x400 pixels.");
-        // }
-      };
     }
   };
 
