@@ -6,6 +6,7 @@ import { CiMobile1 } from "react-icons/ci";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { SlScreenDesktop } from "react-icons/sl";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import ImagePreviewComponent from "./ImagePreviewComponent";
 import MultipleOptionComponent from "./MultipleOptionComponent";
 import NPSComponent from "./NPSComponent";
 import OpenTextArea from "./OpenTextArea";
@@ -71,6 +72,22 @@ const QuestionPreviewComponent = () => {
         );
       case "open_text_response":
         return <OpenTextArea />;
+      case "image_single_choice":
+        return (
+          <ImagePreviewComponent
+            data={currentQuestion?.image}
+            flage={prevFlage}
+            type={false}
+          />
+        );
+      case "image_multiple_choice":
+        return (
+          <ImagePreviewComponent
+            data={currentQuestion?.image}
+            flage={prevFlage}
+            type={true}
+          />
+        );
       default:
         return null;
     }
@@ -220,7 +237,9 @@ const QuestionPreviewComponent = () => {
                   {currentQuestion?.question}
                 </p>
                 {renderQuestionComponent()}
-                <div className="flex items-center gap-8 mx-5">
+                <div
+                  className={`flex items-center gap-${currentQuestion?.can_skipped === "true" && "5"} `}
+                >
                   {currentQuestion?.can_skipped === "true" && (
                     <button
                       className="text-[#333333] font-medium cursor-pointer"
@@ -234,7 +253,7 @@ const QuestionPreviewComponent = () => {
                     <button
                       type="submit"
                       onClick={handlePreviews}
-                      className="inline-flex justify-center rounded-md text-[#333333] px-6 py-2 text-sm font-semibold bg-white border cursor-pointer"
+                      className="inline-flex justify-center rounded-md text-[#333333] px-6 py-2 text-sm font-semibold  cursor-pointer"
                     >
                       Back
                     </button>
@@ -242,7 +261,7 @@ const QuestionPreviewComponent = () => {
                   <button
                     type="submit"
                     onClick={handleContinue}
-                    className="inline-flex justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-semibold text-white cursor-pointer border"
+                    className="inline-flex justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-semibold text-white cursor-pointer border-transparent"
                   >
                     Continue
                   </button>
