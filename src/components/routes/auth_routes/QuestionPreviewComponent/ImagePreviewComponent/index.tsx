@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdDone } from "react-icons/md";
 
 const ImagePreviewComponent = ({ data, flage, type }) => {
@@ -17,6 +17,9 @@ const ImagePreviewComponent = ({ data, flage, type }) => {
       setSelected([id]);
     }
   };
+  useEffect(() => {
+    setSelected([]);
+  }, [type]);
 
   return (
     <div
