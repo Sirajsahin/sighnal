@@ -137,9 +137,9 @@ const QuestionPreviewComponent = () => {
             <div className="col-span-4">
               <div className="mb-4">
                 <div className="h-20 w-20 rounded-full bg-[#D9D9D9] flex items-center justify-center relative overflow-hidden cursor-pointer">
-                  {organization?.icon_url && (
+                  {organization?.icon && (
                     <img
-                      src={organization?.icon_url}
+                      src={organization?.icon}
                       alt="Company Logo"
                       className="h-full w-full object-cover rounded-full cursor-pointer"
                     />
@@ -200,9 +200,9 @@ const QuestionPreviewComponent = () => {
             <div>
               <div className="">
                 <div className="h-20 w-20 rounded-full bg-[#D9D9D9] flex items-center justify-center relative overflow-hidden cursor-pointer">
-                  {organization?.icon_url && (
+                  {organization?.icon && (
                     <img
-                      src={organization?.icon_url}
+                      src={organization?.icon}
                       alt="Company Logo"
                       className="h-full w-full object-cover rounded-full cursor-pointer"
                     />

@@ -2,6 +2,7 @@ import {
   IOrganizationDetails,
   IUserDetails,
 } from "@/api_framework/api_modals/user";
+import { useImageUploadAPI } from "@/app/hooks/api_hooks/Group/useImageUploadAPI";
 import { useIndratryListAPI } from "@/app/hooks/api_hooks/user/useIndratryListAPI";
 import { useJobTypetListAPI } from "@/app/hooks/api_hooks/user/useJobTypeListAPI";
 import { useOrganizationDetailsAPI } from "@/app/hooks/api_hooks/user/useOrganizationDetailsAPI";
@@ -37,8 +38,7 @@ export interface ICreateGroupFromFields {
   org_age: string;
   org_about: string;
   Industry: string;
-  icon?: IUserProfileLogo;
-  icon_url?: string;
+  icon?: string;
 }
 
 const UserProfile = () => {
@@ -54,6 +54,7 @@ const UserProfile = () => {
   const { execute: fetchJobType, jobType } = useJobTypetListAPI();
   const { execute: updateOrganization } = useUpdatedOrganizationDetailsAPI();
   const { execute: updateUserDetails } = useUpdateUserDetailsAPI();
+  const { execute: convertImageToS3LinkAPI } = useImageUploadAPI();
 
   const formHook = useForm<ICreateGroupFromFields>({
     mode: "onChange",
@@ -140,43 +141,18 @@ const UserProfile = () => {
   const industryListItem = useSelectMenuReducer(industry, "name", "id");
   const jobTypeListItem = useSelectMenuReducer(jobType, "name", "id");
 
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const result = reader.result as string;
-        const base64String = result.split(",")[1]; // Extract the base64 part only
-        resolve(base64String);
-      };
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
-  const handleFileUpload = async (file: File) => {
-    try {
-      const base64File = await fileToBase64(file);
-      const attachmentFile: IUserProfileLogo = {
-        base_64_string: base64File,
-        file_extension: file?.type,
-        file_name: file?.name,
-      };
-      formHook.setValue("icon", attachmentFile);
-      const data = { ...organization, icon: attachmentFile };
-      updateOrganization(data).then(() => {
-        fetchOrganizationDetailsAPI();
-      });
-      console.log("Base64 String: ", base64File); // Logs the base64 string without the prefix
-      // You can use this base64 string as needed, e.g., display it, upload to a server, etc.
-    } catch (error) {
-      console.error("Error converting file to base64:", error);
-    }
-  };
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0] as any;
-      handleFileUpload(file);
+      convertImageToS3LinkAPI(file).then(({ status, message }) => {
+        if (status) {
+          formHook.setValue("icon", message);
+          const data = { ...organization, icon: message };
+          updateOrganization(data).then(() => {
+            fetchOrganizationDetailsAPI();
+          });
+        }
+      });
     }
   };
 
@@ -190,9 +166,9 @@ const UserProfile = () => {
       >
         <div className="flex gap-3 items-center my-4">
           <div className="h-20 w-20 rounded-full bg-[#D9D9D9] flex items-center justify-center relative overflow-hidden cursor-pointer">
-            {organization?.icon_url ? (
+            {organization?.icon ? (
               <img
-                src={organization?.icon_url}
+                src={organization?.icon}
                 alt="Company Logo"
                 className="h-full w-full object-cover rounded-full cursor-pointer"
               />
@@ -208,7 +184,7 @@ const UserProfile = () => {
               </label>
             )}
           </div>
-          {organization?.icon_url ? (
+          {organization?.icon ? (
             <div className="mt-2 w-32 flex items-center">
               <label className="text-xs text-gray-500 flex justify-center cursor-pointer border border-[#333333] px-3 py-1 rounded-xl">
                 Change Logo
