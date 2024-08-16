@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateSurveryComponent from "../CreateFeedbackGroupComponent/CreateSurveryComponent";
 
+import {
+  ISurveyListProps,
+  useSurveyListAPI,
+} from "@/app/hooks/api_hooks/Group/useSurveyListAPI";
 import useRouteInfo from "@/app/hooks/useRouteInfo";
 import { useRouter } from "@/app/hooks/useRouter";
 import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
@@ -24,11 +28,17 @@ const FeedbackCampaignSurveyComponent = () => {
   )?.routeState?.state as ISurvetSliceState;
 
   const { execute: fetchGroupDetails } = useGroupDetailsAPI();
+  const { execute: fetchSurveyList } = useSurveyListAPI();
 
   useEffect(() => {
     const groupId = params.get("group_id");
     if (groupId) {
       fetchGroupDetails(groupId);
+      const cc: ISurveyListProps = {
+        group_id: groupId,
+        status: "total",
+      };
+      fetchSurveyList(cc);
     }
   }, [params.get("group_id")]);
 
@@ -77,7 +87,9 @@ const FeedbackCampaignSurveyComponent = () => {
 
       <div className="my-5 mt-10 flex justify-between ">
         <GroupHeaderComponent header="Survey" />
-        {surveyList?.length > 0 && <CreateSurveryComponent flage={true} />}
+        <div className="w-48">
+          {surveyList?.length > 0 && <CreateSurveryComponent flage={true} />}
+        </div>
       </div>
       <SurveyStatsComponent />
       {surveyList?.length > 0 && <GroupListTableComponent source={false} />}

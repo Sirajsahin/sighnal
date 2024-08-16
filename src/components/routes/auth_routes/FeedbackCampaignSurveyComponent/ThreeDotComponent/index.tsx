@@ -26,8 +26,8 @@ export default function ThreeDotComponent() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <MenuButton className="border rounded-xl p-2 items-center flex w-full justify-center  text-sm font-semibold  ">
-          <BsThreeDots className="-mr-1 h-5 w-5 " aria-hidden="true" />
+        <MenuButton className="border rounded-xl w-8 h-9 items-center flex  justify-center  text-sm font-semibold  ">
+          <BsThreeDots className=" h-5 w-5 " aria-hidden="true" />
         </MenuButton>
       </div>
 

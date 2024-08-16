@@ -14,9 +14,9 @@ const CreateSurveryComponent = ({ flage }) => {
   return (
     <>
       {flage ? (
-        <div className="flex justify-end w-40">
+        <div className="w-full">
           <button
-            className="text-[#0C6243] flex items-center gap-2 bg-[#E7F0EC] border-[#0C6243] border w-full font-bold p-3 rounded-lg text-sm border-transparent"
+            className="text-[#0C6243]  flex items-center justify-center gap-2 bg-[#E7F0EC] border-[#0C6243] border w-full font-bold p-3 rounded-lg text-sm border-transparent"
             onClick={handelRouteSurvey}
           >
             <IoAdd className="h-4 w-4" /> Create Survey

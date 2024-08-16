@@ -25,16 +25,11 @@ import { useSelectMenuReducer } from "@ui/useSelectMenuReducer";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { MdDelete, MdOutlineKeyboardBackspace } from "react-icons/md";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import MoodScaleComponent from "../MoodScalComponent";
 import RatingScaleComponent from "../RatingScaleCoponent";
-
-const ratingRange = [
-  { id: "1", title: "5" },
-  { id: "2", title: "10" },
-];
 
 const ratingRangeData5 = [
   {
@@ -53,43 +48,6 @@ const ratingRangeData5 = [
     item: "5",
   },
 ];
-const ratingRangeData = [
-  {
-    item: "1",
-  },
-  {
-    item: "2",
-  },
-  {
-    item: "3",
-  },
-  {
-    item: "4",
-  },
-  {
-    item: "5",
-  },
-  {
-    item: "6",
-  },
-  {
-    item: "7",
-  },
-  {
-    item: "8",
-  },
-  {
-    item: "9",
-  },
-  {
-    item: "10",
-  },
-];
-
-// const _dataItem = [
-//   { id: "true", name: "Yes" },
-//   { id: "false", name: "No" },
-// ];
 
 const moodScaleData = [
   { id: "1", title: "😡 Very unsatisfied" },
@@ -176,7 +134,7 @@ const AddSurveyQuestionComponent = () => {
       question: "",
       openText: "",
       rating: "",
-      mood: [],
+      mood: ["dsdshg"],
       question_type_id: "",
       options: ["", ""],
       rating_scale: "5",
@@ -388,7 +346,7 @@ const AddSurveyQuestionComponent = () => {
                             <SearchableSelectMenu
                               errorMessages={[
                                 {
-                                  message: "Parent theme is required",
+                                  message: "Question Type is required",
                                   type: "required",
                                 },
                               ]}
@@ -414,7 +372,7 @@ const AddSurveyQuestionComponent = () => {
                               register={formHook.register(
                                 `question_details.${index}.question_type_id`,
                                 {
-                                  required: false,
+                                  required: true,
                                 }
                               )}
                               selectItems={questionType}
@@ -437,7 +395,7 @@ const AddSurveyQuestionComponent = () => {
                             />
                           </div>
 
-                          {formHook.watch(
+                          {/* {formHook.watch(
                             `question_details.${index}.question_type_id`
                           ) === "rating_scale" && (
                             <div className="w-full">
@@ -491,7 +449,7 @@ const AddSurveyQuestionComponent = () => {
                                 containerClassName="w-full"
                               />
                             </div>
-                          )}
+                          )} */}
 
                           {formHook.watch(
                             `question_details.${index}.question_type_id`
@@ -512,6 +470,7 @@ const AddSurveyQuestionComponent = () => {
                                   }
                                 }}
                                 withSelectAll
+                                defaultSelectAll
                                 errorMessages={[
                                   { message: "Required", type: "required" },
                                 ]}
@@ -524,7 +483,7 @@ const AddSurveyQuestionComponent = () => {
                                 register={formHook.register(
                                   `question_details.${index}.mood`,
                                   {
-                                    required: true,
+                                    required: false,
                                   }
                                 )}
                                 showTypedErrors={false}
@@ -633,7 +592,7 @@ const AddSurveyQuestionComponent = () => {
                                           );
                                         }}
                                       >
-                                        <MdDelete className="w-4 h-4 fill-red-600" />
+                                        <TrashIcon className="w-4 h-4 text-red-500" />{" "}
                                       </p>
                                     </div>
                                   </div>
@@ -831,15 +790,7 @@ const AddSurveyQuestionComponent = () => {
                         {formHook.watch(
                           `question_details.${index}.question_type_id`
                         ) === "rating_scale" && (
-                          <RatingScaleComponent
-                            data={
-                              formHook.watch(
-                                `question_details.${index}.rating_scale`
-                              ) === "5"
-                                ? ratingRangeData5
-                                : ratingRangeData
-                            }
-                          />
+                          <RatingScaleComponent data={ratingRangeData5} />
                         )}
                       </div>
                     </DisclosurePanel>

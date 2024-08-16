@@ -1,4 +1,4 @@
-import { HomeIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { HomeIcon } from "@heroicons/react/24/outline";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 const navigation = [
@@ -9,7 +9,7 @@ const navigation = [
     count: "5",
     current: true,
   },
-  { name: "Campaign", href: "/app/campaign", icon: UsersIcon, current: false },
+  // { name: "Campaign", href: "/app/campaign", icon: UsersIcon, current: false },
 ];
 
 function classNames(...classes: any[]) {
@@ -36,7 +36,7 @@ export default function SidebarComponent({ collapsed, setCollapsed }) {
       <nav className="flex flex-1 flex-col w-full">
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
-            <ul role="list" className="-mx-2 space-y-1">
+            <ul role="list" className=" space-y-1">
               {navigation?.map((item) => (
                 <li key={item.name}>
                   <a

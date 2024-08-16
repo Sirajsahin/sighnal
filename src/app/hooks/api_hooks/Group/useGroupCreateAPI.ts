@@ -30,12 +30,9 @@ export const useGroupCreateAPI = () => {
           }
         })
         .catch((e: AxiosError) => {
-          if (e.code === "ERR_BAD_REQUEST") {
-            toast.error("Group Created Faild");
-            return { status: false, message: null };
-          }
+          const ee = e.response.data as any;
           if (e.response.status === 400) {
-            toast.error("Group Created Faild");
+            toast.error(ee.message);
             return { status: false, message: null };
           }
           if (e.response.status === 500) {

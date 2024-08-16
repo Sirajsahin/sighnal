@@ -100,7 +100,8 @@ const AudienceLaunchComponent = () => {
   const survey_id = params.get("survey_id");
   const group_id = params.get("group_id");
 
-  const onSubmit = (data: ICreateSurveyFromFields) => {
+  const handelSubmit = () => {
+    const data = formHook.getValues();
     if (data) {
       const constructedData: ISurveyLiveProps = {
         end_date: data.endDate,
@@ -136,10 +137,7 @@ const AudienceLaunchComponent = () => {
 
   return (
     <div className="w-full flex justify-center items-center">
-      <form
-        className=" w-2/4  bg-white shadow-sm border  p-5  rounded-xl"
-        onSubmit={formHook.handleSubmit(onSubmit)}
-      >
+      <div className=" w-2/4  bg-white shadow-sm border  p-5  rounded-xl">
         <div>
           <p className="text-[#475467] font-medium text-xs">Step 3/3</p>
           <p className="text-base font-bold py-2">Launch It</p>
@@ -368,13 +366,14 @@ const AudienceLaunchComponent = () => {
             Open Preview
           </button>
           <button
+            onClick={handelSubmit}
             type="submit"
             className="inline-flex w-full justify-center rounded-md bg-[#333333] px-3 py-2 text-sm font-medium text-white shadow-sm "
           >
             Make it Live!
           </button>
         </div>
-      </form>
+      </div>
 
       {open && (
         <GroupUsersCategoryModalComponent

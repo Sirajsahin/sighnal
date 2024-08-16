@@ -88,6 +88,8 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
         updateGroup(constructedData, group_id).then(({ status }) => {
           if (status) {
             fetchGroupDetails(group_id);
+            formHook.setValue("groupName", null);
+            formHook.setValue("groupDescription", null);
             navigate(`/app/campaign/campaign-list?group_id=${group_id}`);
             setOpen(false);
           }
@@ -95,6 +97,8 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
       } else {
         createGroup(constructedData).then(({ status, message }) => {
           if (status) {
+            formHook.setValue("groupName", null);
+            formHook.setValue("groupDescription", null);
             navigate(`/app/campaign/campaign-list?group_id=${message}`);
           }
         });

@@ -82,7 +82,7 @@ const GroupListTableComponent = ({ source }) => {
 
   return (
     <>
-      {surveyList?.length > 0 ? (
+      {surveyList?.length > 0 && (
         <div className="overflow-x-auto overflow-y-auto mt-3 max-h-[438px] shadow-md rounded-md">
           <table className="min-w-full divide-y divide-gray-200 rounded-md">
             <thead className="bg-[#F6F6F7] sticky top-0">
@@ -195,8 +195,6 @@ const GroupListTableComponent = ({ source }) => {
             </tbody>
           </table>
         </div>
-      ) : (
-        <p className="flex items-center justify-center mt-6">No Record</p>
       )}
     </>
   );

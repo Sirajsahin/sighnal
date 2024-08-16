@@ -17,7 +17,7 @@ export const useGroupUpdateAPI = () => {
         const accessToken = localStorage.getItem("AuthToken");
         const response: InventoryTaxCreateAPIResponse = await axios
           .put(
-            `${USER_LOGIN_APIS.GROUP_CREATE_API.baseURL}${group_id}` ?? "",
+            `${USER_LOGIN_APIS.GROUP_CREATE_API.baseURL}${group_id}`,
             paramProps,
             {
               headers: {
@@ -35,8 +35,9 @@ export const useGroupUpdateAPI = () => {
             }
           })
           .catch((e: AxiosError) => {
-            if (e.code === "ERR_BAD_REQUEST") {
-              toast.error("Group Updation Faild");
+            const ee = e.response.data as any;
+            if (e.response.status === 400) {
+              toast.error(ee.message);
               return { status: false, message: null };
             }
             if (e.response.status === 400) {
