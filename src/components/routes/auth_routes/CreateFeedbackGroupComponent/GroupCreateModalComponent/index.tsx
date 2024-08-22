@@ -187,7 +187,7 @@ const GroupCreateModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                             placeholder="Write few lines about group"
                             register={formHook.register("groupDescription", {
                               required: true,
-                              // ...forAlphaNumeric.validations,
+                             
                             })}
                             fieldError={
                               formHook.formState.errors.groupDescription
