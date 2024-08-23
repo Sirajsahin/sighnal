@@ -325,18 +325,7 @@ export default function Login() {
               email={formHook.watch("email")}
             />
           )}
-          <div className="">
-            <div className="flex justify-end my-4 pr-6 items-center gap-3 text-sm font-medium text-[#333333]">
-              <p>Already have an account?</p>
-              <button
-                className=" border border-1 border-gray-600  px-4 py-1 rounded-md text-sm hover:bg-slate-500 hover:text-white flex gap-1 items-center"
-                // onClick={() => clientSignOut()}
-              >
-                {/* <LuLogOut /> */}
-                Login
-              </button>
-            </div>
-          </div>
+          <div className=""></div>
         </div>
       </div>
       <Outlet />
