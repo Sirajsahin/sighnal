@@ -1,6 +1,6 @@
 import { SighnalAuthAPIS } from "./interface";
 
-const BASE_URL = "https://api.sighnal.in";
+const BASE_URL = "https://api.sighnal.com";
 
 export const USER_LOGIN_APIS: SighnalAuthAPIS = {
   LOGIN_API: {
