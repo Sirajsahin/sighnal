@@ -11,6 +11,7 @@ export const ROUTES_MAPPINGS = {
   "/app/login/organization": "ORGANIZATION",
   "/app/org-details": "ORGANAIZATION_DETAILS",
   "/app/home": "HOME_PAGE",
+  "/app/campaign/live": "LIVE_PAGE",
   "/app/user-profile": "USER_PROFILE",
   "/app/thankyou": "THANKYOU",
   "/app/campaign": "CAMPAIGN",
@@ -73,6 +74,14 @@ export const CAMPAIGNPAGESUBROUTE: IRoutesDefined = {
     path: "survey-preview",
     children: {},
   },
+  LIVE_PAGE: {
+    id: "LIVE_PAGE",
+    title: "Campaign",
+    icon: "MdOutlineDashboard",
+    url: "/app/campaign/live",
+    path: "live",
+    children: {},
+  },
 };
 export const NAVIGATION_ROUTES: IRoutesDefined = {
   INVALID_ACCESS: {
@@ -107,6 +116,7 @@ export const NAVIGATION_ROUTES: IRoutesDefined = {
     path: "home",
     children: {},
   },
+
   USER_PROFILE: {
     id: "USER_PROFILE",
     title: "homepage",

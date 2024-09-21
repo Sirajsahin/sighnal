@@ -19,6 +19,7 @@ import Organaization from "@/components/shared/Organaization";
 import OrganaizationListComponent from "@/components/shared/OrganaizationListComponent";
 import UserProfile from "@/components/shared/UserProfile";
 import { useRouter } from "../hooks/useRouter";
+import LiveCampaignPageComponent from "@/components/routes/auth_routes/LiveCampaignPageComponent";
 
 export interface IRouterProps {}
 
@@ -86,6 +87,10 @@ const Router: React.FC<IRouterProps> = () => {
             {
               path: getRouteKey("SURVEY_PREVIEW", "path"),
               element: <QuestionPreviewComponent />,
+            },
+            {
+              path: getRouteKey("LIVE_PAGE", "path"),
+              element: <LiveCampaignPageComponent />,
             },
           ],
         },

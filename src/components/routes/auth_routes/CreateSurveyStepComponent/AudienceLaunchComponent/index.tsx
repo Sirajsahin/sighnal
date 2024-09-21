@@ -1,17 +1,16 @@
-import { ISelectMenuItemData } from "@/components/ui/interface";
 import { RiShareBoxLine } from "react-icons/ri";
 
 import { ISurveyLiveProps } from "@/api_framework/api_modals/group";
 import { useSurveyLiveAPI } from "@/app/hooks/api_hooks/Group/useSurveyLiveAPI";
 import GroupUsersCategoryModalComponent from "@/components/ui/Modal/GroupUsersCategoryModalComponent";
-import SearchableSelectMenu from "@/components/ui/SearchableSelectMenu";
+
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import CalenderComponent from "../../../../ui/CalenderComponent";
 import ToogleComponent from "../../../../ui/ToogleComponent";
+import SurveyLaunchThankyouModalComponent from "../SurveyLaunchThankyouModalComponent";
 
 export interface ICreateSurveyFromFields {
   comments: boolean;
@@ -32,69 +31,36 @@ export interface ISelectedDate {
 
 const AudienceLaunchComponent = () => {
   // State For StartDate And End Date
+
   const [params, _setparams] = useSearchParams();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const today = new Date();
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-
-  const [selectionDate, setSelectionDate] = useState<ISelectedDate>({
-    startDate: yesterday,
-    endDate: today,
-    key: "selectionDate",
-  });
-
   const [open, setOpen] = useState<boolean>(false);
+  const [live, setLive] = useState<boolean>(true);
+  const [time, setTime] = useState("09:00");
 
   const { execute: createSurveyLive } = useSurveyLiveAPI();
 
-  // Calculate Start Date And End Date and Change Date Format Also
-  const startDate = new Date(selectionDate.startDate);
-  const endDate = new Date(selectionDate.endDate);
-
-  //   const dispatch = useAppDispatch();
-
-  const startYear = startDate.getFullYear();
-  const startMonth = (startDate.getMonth() + 1).toString().padStart(2, "0");
-  const startDay = startDate.getDate().toString().padStart(2, "0");
-
-  const endYear = endDate.getFullYear();
-  const endMonth = (endDate.getMonth() + 1).toString().padStart(2, "0");
-  const endDay = endDate.getDate().toString().padStart(2, "0");
-
-  const formattedStartDate = `${startYear}/${startMonth}/${startDay}`;
-  const formattedEndDate = `${endYear}/${endMonth}/${endDay}`;
-
-  // Default Value
   const formHook = useForm<ICreateSurveyFromFields>({
     mode: "onChange",
     defaultValues: {
-      startDate: formattedStartDate,
-      endDate: formattedEndDate,
+      // startDate: formattedStartDate,
+      // endDate: formattedEndDate,
       comments: false,
     },
   });
 
   const navigate = useNavigate();
 
-  const generateTimeItems = (length: number, interval: number = 5) => {
-    return Array(length)
-      .fill(0)
-      .map((_v, count) => {
-        const value = count * interval;
-        const formattedValue = value < 10 ? `0${value}` : `${value}`;
-        return { id: `${count}`, title: formattedValue } as ISelectMenuItemData;
-      });
-  };
-
-  useEffect(() => {
-    formHook.setValue("startDate", formattedStartDate);
-    formHook.setValue("endDate", formattedEndDate);
-  }, [formattedStartDate, formattedEndDate]);
-
-  const startTime = generateTimeItems(24, 1);
-  const endTime = generateTimeItems(12, 5);
+  // const generateTimeItems = (length: number, interval: number = 5) => {
+  //   return Array(length)
+  //     .fill(0)
+  //     .map((_v, count) => {
+  //       const value = count * interval;
+  //       const formattedValue = value < 10 ? `0${value}` : `${value}`;
+  //       return { id: `${count}`, title: formattedValue } as ISelectMenuItemData;
+  //     });
+  // };
 
   /* Actions and Handlers */
   const survey_id = params.get("survey_id");
@@ -113,14 +79,10 @@ const AudienceLaunchComponent = () => {
       };
       createSurveyLive(constructedData, survey_id).then(({ status }) => {
         if (status) {
-          navigate("/app/thankyou");
+          setLive(true);
         }
       });
     }
-  };
-
-  const handelClick = () => {
-    console.log("");
   };
 
   const handelOpenPreview = () => {
@@ -189,160 +151,100 @@ const AudienceLaunchComponent = () => {
               </div>
             </div>
           </div>
-          <div className="w-full flex justify-between gap-3 my-2">
-            <div className="w-full mb-2">
-              <p className="text-[#333333] font-medium text-sm mb-2">
-                Start Date - End Date
-              </p>
+
+          <div className="grid grid-cols-4 py-3 gap-4">
+            <div className="flex  gap-2 flex-col ">
+              <p className="text-[#333333] font-medium text-sm">Start Date</p>
               <div className="text-sm text-[#333333] ">
-                <CalenderComponent
-                  selectionDate={selectionDate}
-                  setSelectionDate={setSelectionDate}
-                  startDate={formattedStartDate}
-                  endDate={formattedEndDate}
-                  handelClick={handelClick}
+                <input
+                  type="date"
+                  id="date"
+                  className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                  required
                 />
               </div>
             </div>
-            <div className="w-full mb-2">
-              <p className="text-[#333333] font-medium text-sm mb-2">
-                Start Time
-              </p>
-              <div className="text-sm text-[#333333] grid grid-cols-2 gap-3">
-                <SearchableSelectMenu
-                  errorMessages={[
-                    {
-                      message: "Start Time is required",
-                      type: "required",
-                    },
-                  ]}
-                  onSelectItem={(item) => {
-                    if (item) {
-                      formHook.setValue("startTime", item.title);
-                    }
-                    formHook.clearErrors(`startTime`);
-                  }}
-                  fieldError={formHook?.formState?.errors?.startTime}
-                  register={formHook.register("startTime", {
-                    required: false,
-                  })}
-                  selectItems={startTime}
-                  placeholder="HH"
-                  showTooltips={false}
-                  showTypedErrors={true}
-                  showDropdownIcon={true}
-                  defaultSelected={
-                    startTime?.filter(
-                      (oc) => oc.title === formHook.watch("startTime")
-                    )[0]
-                  }
-                  listBoxClassName="w-full"
-                  className="text-gray-800 "
-                  containerClassName="w-full"
-                />
-                <SearchableSelectMenu
-                  errorMessages={[
-                    {
-                      message: "End Time is required",
-                      type: "required",
-                    },
-                  ]}
-                  onSelectItem={(item) => {
-                    if (item) {
-                      formHook.setValue("startTimeMinute", item.title);
-                    }
-                    formHook.clearErrors(`startTimeMinute`);
-                  }}
-                  fieldError={formHook?.formState?.errors?.startTimeMinute}
-                  register={formHook.register("startTimeMinute", {
-                    required: false,
-                  })}
-                  selectItems={endTime}
-                  placeholder="MM"
-                  showTooltips={false}
-                  showTypedErrors={true}
-                  showDropdownIcon={true}
-                  defaultSelected={
-                    endTime?.filter(
-                      (oc) => oc.title === formHook.watch("startTimeMinute")
-                    )[0]
-                  }
-                  listBoxClassName="w-full"
-                  className="text-gray-800 "
-                  containerClassName="w-full"
+            <div className="flex  gap-2 flex-col ">
+              <p className="text-[#333333] font-medium text-sm">Start Time</p>
+              <div className="text-sm text-[#333333] ">
+                <form className="mx-auto">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+                      <svg
+                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      type="time"
+                      id="time"
+                      className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      min="09:00"
+                      max="18:00"
+                      value={time} // Controlled by state
+                      onChange={(e) => setTime(e.target.value)} // Update state on input change
+                      required
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div className="flex  gap-2 flex-col ">
+              <p className="text-[#333333] font-medium text-sm">End Date</p>
+              <div className="text-sm text-[#333333] ">
+                <input
+                  type="date"
+                  id="date"
+                  className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                  required
                 />
               </div>
             </div>
-            <div className="w-full mb-2">
-              <p className="text-[#333333] font-medium text-sm mb-2">
-                End Time
-              </p>
-              <div className="text-sm text-[#333333] grid grid-cols-2 gap-3">
-                <SearchableSelectMenu
-                  errorMessages={[
-                    {
-                      message: "Start Time is required",
-                      type: "required",
-                    },
-                  ]}
-                  onSelectItem={(item) => {
-                    if (item) {
-                      formHook.setValue("endTime", item.title);
-                    }
-                    formHook.clearErrors(`endTime`);
-                  }}
-                  fieldError={formHook?.formState?.errors?.endTime}
-                  register={formHook.register("endTime", {
-                    required: false,
-                  })}
-                  selectItems={startTime}
-                  placeholder="HH"
-                  showTooltips={false}
-                  showTypedErrors={true}
-                  showDropdownIcon={true}
-                  defaultSelected={
-                    startTime?.filter(
-                      (oc) => oc.title === formHook.watch("endTime")
-                    )[0]
-                  }
-                  listBoxClassName="w-full"
-                  className="text-gray-800 "
-                  containerClassName="w-full"
-                />
-                <SearchableSelectMenu
-                  errorMessages={[
-                    {
-                      message: "End Time is required",
-                      type: "required",
-                    },
-                  ]}
-                  onSelectItem={(item) => {
-                    if (item) {
-                      formHook.setValue("endTimeMinute", item.title);
-                    }
-                    formHook.clearErrors(`endTimeMinute`);
-                  }}
-                  fieldError={formHook?.formState?.errors?.endTimeMinute}
-                  register={formHook.register("endTimeMinute", {
-                    required: false,
-                  })}
-                  selectItems={endTime}
-                  placeholder="MM"
-                  showTooltips={false}
-                  showTypedErrors={true}
-                  showDropdownIcon={true}
-                  defaultSelected={
-                    endTime?.filter(
-                      (oc) => oc.title === formHook.watch("endTimeMinute")
-                    )[0]
-                  }
-                  listBoxClassName="w-full"
-                  className="text-gray-800 "
-                  containerClassName="w-full"
-                />
+            <div className="flex  gap-2 flex-col ">
+              <p className="text-[#333333] font-medium text-sm">End Time</p>
+              <div className="text-sm text-[#333333] ">
+                <form className="mx-auto">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+                      <svg
+                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      type="time"
+                      id="time"
+                      className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      min="09:00"
+                      max="18:00"
+                      value={time} // Controlled by state
+                      onChange={(e) => setTime(e.target.value)} // Update state on input change
+                      required
+                    />
+                  </div>
+                </form>
               </div>
             </div>
           </div>
+          {/* // */}
         </div>
         <div className="flex justify-end w-2/3 float-right gap-4 mt-6">
           <button
@@ -382,6 +284,9 @@ const AudienceLaunchComponent = () => {
           setSelectedCategories={setSelectedCategories}
           selectedCategories={selectedCategories}
         />
+      )}
+      {live && (
+        <SurveyLaunchThankyouModalComponent setOpen={setLive} open={live} />
       )}
     </div>
   );

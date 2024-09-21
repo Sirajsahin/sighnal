@@ -9,6 +9,13 @@ const navigation = [
     count: "5",
     current: true,
   },
+  {
+    name: "Campaign",
+    href: "/app/campaign/live?group_id=7cedd535-18e5-42c1-b742-b88d54e0e80b",
+    icon: HomeIcon,
+    count: "5",
+    current: true,
+  },
   // { name: "Campaign", href: "/app/campaign", icon: UsersIcon, current: false },
 ];
 

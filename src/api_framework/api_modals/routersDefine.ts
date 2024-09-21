@@ -36,6 +36,7 @@ export type RouteKeys =
   | "ORGANAIZATION_DETAILS"
   | "ORGANIZATION"
   | "HOME_PAGE"
+  | "LIVE_PAGE"
   | "CAMPAIGN"
   | "ONBOARD_PAGE"
   | "CAMPAIGN_PAGE"
