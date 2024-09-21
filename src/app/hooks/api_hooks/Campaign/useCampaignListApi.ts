@@ -23,8 +23,7 @@ export const useCategoryListAPI = () => {
       const accessToken = "";
       await axios
         .get(
-          "https://static.vetic.in/api/website/membership-sales-dashboard/" ??
-            "",
+          "https://static.vetic.in/api/website/membership-sales-dashboard/",
           {
             params: {},
             headers: {

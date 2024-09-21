@@ -15,7 +15,7 @@ export const useGroupStatsAPI = () => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
       await axios
-        .get(`${USER_LOGIN_APIS.GROUP_STATS_API.baseURL}` ?? "", {
+        .get(`${USER_LOGIN_APIS.GROUP_STATS_API.baseURL}`, {
           headers: {
             Authorization: `${accessToken}`,
           },

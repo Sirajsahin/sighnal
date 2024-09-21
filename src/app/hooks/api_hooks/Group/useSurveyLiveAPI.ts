@@ -14,7 +14,7 @@ export const useSurveyLiveAPI = () => {
         const accessToken = localStorage.getItem("AuthToken");
         const response: InventoryTaxCreateAPIResponse = await axios
           .post(
-            `${USER_LOGIN_APIS.SURVEY_LIVE_API.baseURL}${survey_id}` ?? "",
+            `${USER_LOGIN_APIS.SURVEY_LIVE_API.baseURL}${survey_id}`,
             paramProps,
             {
               headers: {

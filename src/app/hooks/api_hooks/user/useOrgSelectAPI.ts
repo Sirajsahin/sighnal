@@ -20,7 +20,7 @@ export const useOrgSelectAPI = () => {
   const execute = useCallback(async (org_id: string) => {
     try {
       await axios
-        .get(`${USER_LOGIN_APIS.SELECT_ORG_API.baseURL}${org_id}` ?? "", {
+        .get(`${USER_LOGIN_APIS.SELECT_ORG_API.baseURL}${org_id}`, {
           headers: {
             Authorization: localStorage.getItem("AuthToken"),
           },

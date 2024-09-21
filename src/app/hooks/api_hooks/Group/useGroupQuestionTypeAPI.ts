@@ -17,7 +17,7 @@ export const useGroupQuestionTypeAPI = () => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
       await axios
-        .get(`${USER_LOGIN_APIS.QUESTION_TYPE_API.baseURL}` ?? "", {
+        .get(`${USER_LOGIN_APIS.QUESTION_TYPE_API.baseURL}`, {
           headers: {
             Authorization: `${accessToken}`,
           },

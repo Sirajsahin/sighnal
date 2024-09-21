@@ -12,14 +12,11 @@ export const useGroupDeleteAPI = () => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
       const response: InventoryTaxCreateAPIResponse = await axios
-        .delete(
-          `${USER_LOGIN_APIS.GROUP_CREATE_API.baseURL}${group_id}` ?? "",
-          {
-            headers: {
-              Authorization: `${accessToken}`,
-            },
-          }
-        )
+        .delete(`${USER_LOGIN_APIS.GROUP_CREATE_API.baseURL}${group_id}`, {
+          headers: {
+            Authorization: `${accessToken}`,
+          },
+        })
         .then((res: AxiosResponse<IgroupDetailsResponse>) => {
           if (res.data.status === true) {
             toast.success("Group Deletion Successful");

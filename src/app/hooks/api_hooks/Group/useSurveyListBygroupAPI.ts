@@ -15,14 +15,11 @@ export const useSurveyListBygroupAPI = () => {
     try {
       const accessToken = localStorage.getItem("AuthToken");
       await axios
-        .get(
-          `${USER_LOGIN_APIS.SURVEY_LIST.baseURL}?group_id=${group_id}` ?? "",
-          {
-            headers: {
-              Authorization: `${accessToken}`,
-            },
-          }
-        )
+        .get(`${USER_LOGIN_APIS.SURVEY_LIST.baseURL}?group_id=${group_id}`, {
+          headers: {
+            Authorization: `${accessToken}`,
+          },
+        })
         .then((res: AxiosResponse<ISurveyListResponse>) => {
           if (res.data.status === true) {
             setSurveyList(res.data?.data);
