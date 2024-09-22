@@ -11,7 +11,7 @@ const navigation = [
   },
   {
     name: "Campaign",
-    href: "/app/campaign/live?group_id=7cedd535-18e5-42c1-b742-b88d54e0e80b",
+    href: "/app/campaign/live?group_id=4d38d7b7-18b8-41ea-ba19-28669b405a01&survey_id=44a4ba4f-0cac-47ef-a374-88bfd324b32b",
     icon: HomeIcon,
     count: "5",
     current: true,
