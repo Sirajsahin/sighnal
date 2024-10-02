@@ -103,7 +103,7 @@ const QuestionPreviewComponent = () => {
       `/app/campaign/create-survey?step_id=3&group_id=${params.get("group_id")}&survey_id=${params.get("survey_id")}`
     );
   };
-
+  console.log(currentQuestionIndex, "currentQuestionIndex");
   return (
     <div className="">
       <div className="grid-cols-3 grid items-center border-b  pb-4 ">
@@ -183,13 +183,16 @@ const QuestionPreviewComponent = () => {
                     Back
                   </button>
                 )}
-                <button
-                  type="submit"
-                  onClick={handleContinue}
-                  className="inline-flex justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-semibold text-white cursor-pointer border"
-                >
-                  Continue
-                </button>
+                {prevQuestionDetails?.length ===
+                currentQuestionIndex + 1 ? null : (
+                  <button
+                    type="submit"
+                    onClick={handleContinue}
+                    className="inline-flex justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-semibold text-white cursor-pointer border"
+                  >
+                    Continue
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -258,13 +261,16 @@ const QuestionPreviewComponent = () => {
                       Back
                     </button>
                   )}
-                  <button
-                    type="submit"
-                    onClick={handleContinue}
-                    className="inline-flex justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-semibold text-white cursor-pointer border-transparent"
-                  >
-                    Continue
-                  </button>
+                  {prevQuestionDetails?.length ===
+                  currentQuestionIndex + 1 ? null : (
+                    <button
+                      type="submit"
+                      onClick={handleContinue}
+                      className="inline-flex justify-center rounded-md bg-[#333333] px-4 py-2 text-sm font-semibold text-white cursor-pointer border-transparent"
+                    >
+                      Continue
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

@@ -12,6 +12,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import ToogleComponent from "../../../../ui/ToogleComponent";
 import SurveyLaunchThankyouModalComponent from "../SurveyLaunchThankyouModalComponent";
 import CustomDatePicker from "@/components/ui/CustomDatePicker";
+import CustomTimePicker from "@/components/ui/CustomTimePicker";
 
 export interface ICreateSurveyFromFields {
   comments: boolean;
@@ -38,7 +39,6 @@ const AudienceLaunchComponent = () => {
 
   const [open, setOpen] = useState<boolean>(false);
   const [live, setLive] = useState<boolean>(false);
-  const [time, setTime] = useState("09:00");
 
   const { execute: createSurveyLive } = useSurveyLiveAPI();
 
@@ -154,104 +154,16 @@ const AudienceLaunchComponent = () => {
           </div>
 
           <div className="grid grid-cols-4 py-3 gap-4">
-            <CustomDatePicker />
             <div className="flex flex-col gap-1">
-              <label
-                htmlFor="startDate"
-                className="text-sm font-medium text-gray-800"
-              >
-                Start Date
-              </label>
-              <input
-                type="date"
-                id="startDate"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 transition-colors duration-300"
-                aria-describedby="startDateHelp"
-                required
-              />
-              <small id="startDateHelp" className="text-xs text-gray-500">
-                Select a start date.
-              </small>
+              <CustomDatePicker title={"Start Date"} />
             </div>
+            <CustomTimePicker title={"Start Time"} />
 
             <div className="flex  gap-2 flex-col ">
-              <p className="text-[#333333] font-medium text-sm">Start Time</p>
-              <div className="text-sm text-[#333333] ">
-                <form className="mx-auto">
-                  <div className="relative">
-                    <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                      <svg
-                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <input
-                      type="time"
-                      id="time"
-                      className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      min="09:00"
-                      max="18:00"
-                      value={time} // Controlled by state
-                      onChange={(e) => setTime(e.target.value)} // Update state on input change
-                      required
-                    />
-                  </div>
-                </form>
-              </div>
+              <CustomDatePicker title={"End Date"} />
             </div>
             <div className="flex  gap-2 flex-col ">
-              <p className="text-[#333333] font-medium text-sm">End Date</p>
-              <div className="text-sm text-[#333333] ">
-                <input
-                  type="date"
-                  id="date"
-                  className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                  required
-                />
-              </div>
-            </div>
-            <div className="flex  gap-2 flex-col ">
-              <p className="text-[#333333] font-medium text-sm">End Time</p>
-              <div className="text-sm text-[#333333] ">
-                <form className="mx-auto">
-                  <div className="relative">
-                    <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                      <svg
-                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <input
-                      type="time"
-                      id="time"
-                      className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      min="09:00"
-                      max="18:00"
-                      value={time} // Controlled by state
-                      onChange={(e) => setTime(e.target.value)} // Update state on input change
-                      required
-                    />
-                  </div>
-                </form>
-              </div>
+              <CustomTimePicker title={"End Time"} />
             </div>
           </div>
           {/* // */}

@@ -25,7 +25,7 @@ const ImagePreviewComponent = ({ data, flage, type }) => {
     <div
       className={`${flage ? "grid-cols-4 grid" : "flex flex-col gap-4 h-44 overflow-auto"} gap-4 my-2`}
     >
-      {data.map((item, id) => (
+      {data?.map((item, id) => (
         <div
           key={id}
           className={`relative w-full h-36 rounded-md cursor-pointer ${
