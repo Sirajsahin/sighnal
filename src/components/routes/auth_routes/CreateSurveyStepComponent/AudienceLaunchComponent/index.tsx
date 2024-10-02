@@ -11,6 +11,7 @@ import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ToogleComponent from "../../../../ui/ToogleComponent";
 import SurveyLaunchThankyouModalComponent from "../SurveyLaunchThankyouModalComponent";
+import CustomDatePicker from "@/components/ui/CustomDatePicker";
 
 export interface ICreateSurveyFromFields {
   comments: boolean;
@@ -36,7 +37,7 @@ const AudienceLaunchComponent = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const [open, setOpen] = useState<boolean>(false);
-  const [live, setLive] = useState<boolean>(true);
+  const [live, setLive] = useState<boolean>(false);
   const [time, setTime] = useState("09:00");
 
   const { execute: createSurveyLive } = useSurveyLiveAPI();
@@ -153,17 +154,26 @@ const AudienceLaunchComponent = () => {
           </div>
 
           <div className="grid grid-cols-4 py-3 gap-4">
-            <div className="flex  gap-2 flex-col ">
-              <p className="text-[#333333] font-medium text-sm">Start Date</p>
-              <div className="text-sm text-[#333333] ">
-                <input
-                  type="date"
-                  id="date"
-                  className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                  required
-                />
-              </div>
+            <CustomDatePicker />
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="startDate"
+                className="text-sm font-medium text-gray-800"
+              >
+                Start Date
+              </label>
+              <input
+                type="date"
+                id="startDate"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 transition-colors duration-300"
+                aria-describedby="startDateHelp"
+                required
+              />
+              <small id="startDateHelp" className="text-xs text-gray-500">
+                Select a start date.
+              </small>
             </div>
+
             <div className="flex  gap-2 flex-col ">
               <p className="text-[#333333] font-medium text-sm">Start Time</p>
               <div className="text-sm text-[#333333] ">
