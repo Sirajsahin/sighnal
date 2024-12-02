@@ -77,7 +77,7 @@ const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                     {groupList?.map((item, id) => {
                       return (
                         <div
-                          className=" p-4 rounded-2xl shadow-md h-48 border-solid border-2 border-[#F5F5F5]"
+                          className=" p-4 rounded-2xl shadow-md h-[250px] border-solid border-2 border-[#F5F5F5]"
                           key={id}
                         >
                           <div className="flex  items-center gap-3">
@@ -90,10 +90,12 @@ const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                             <hr className="border-solid border-1  border-[#F5F5F5]" />
                           </div>
 
-                          <p className="text-[#475467] text-xs">
-                            {item?.group_description}
+                          <p className="text-[#475467] text-xs h-[70px]">
+                            {item?.group_description?.length > 180
+                              ? `${item.group_description.slice(0, 180)}...`
+                              : item.group_description}
                           </p>
-                          <div className="mt-8">
+                          <div className="mt-7 ">
                             <button
                               className="text-[##333333] border   w-full font-bold p-3 rounded-lg text-sm  border-[#333333]"
                               onClick={() => handelClick(item?.group_id)}

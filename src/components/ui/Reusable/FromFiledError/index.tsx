@@ -10,7 +10,7 @@ const FormFieldErrors: React.FC<{
     return (
       <span
         key={err}
-        className={clsx("text-[9px]  mt-1 text-red-500", props?.className)}
+        className={clsx("text-xs  text-red-500", props?.className)}
       >
         {props.errors[err]}
       </span>

@@ -40,7 +40,7 @@ const TextareaComponent: React.FC<ITextarea> = ({
           autoComplete="off"
           autoCorrect="off"
           className={clsx(
-            " py-1.5 p-2 border outline-none ring-1 focus:border-[#333333] ring-inset text-sm  disabled:bg-gray-200 disabled:text-gray-600 sm:leading-6 w-full",
+            " py-1.5 p-2  outline-none ring-1 focus:border-[#333333] ring-inset text-sm  disabled:bg-gray-200 disabled:text-gray-600 sm:leading-6 w-full",
             inputClassName,
             isValid
               ? "text-gray-900 ring-gray-300 placeholder:text-gray-400"
@@ -54,7 +54,9 @@ const TextareaComponent: React.FC<ITextarea> = ({
           </div>
         )}
       </div>
-      <FormFieldErrors errors={reducedErrorMessages} />
+      <div className="mt-1 -mb-2">
+        <FormFieldErrors errors={reducedErrorMessages} />
+      </div>
     </div>
   );
 };

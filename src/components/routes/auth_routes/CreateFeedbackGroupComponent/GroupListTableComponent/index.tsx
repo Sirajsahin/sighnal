@@ -185,10 +185,10 @@ const GroupListTableComponent = ({ source }) => {
                     . &nbsp;{item?.status}
                   </td>
                   <td
-                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium sticky  right-0 bg-gray-50 -z-10"
+                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium sticky  right-0 bg-gray-50 -z-10 cursor-pointer"
                     style={{ width: "100px" }}
                   >
-                    Book
+                    <p className="text-center ">...</p>
                   </td>
                 </tr>
               ))}

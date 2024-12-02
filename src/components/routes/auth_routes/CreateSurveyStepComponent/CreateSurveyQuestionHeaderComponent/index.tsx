@@ -127,7 +127,7 @@ const CreateSurveyQuestionHeaderComponent = () => {
               </div>
             </div>
             <div>
-              <div className="w-full  mt-2">
+              <div className="w-full  mt-4">
                 <Field>
                   <Label className="text-xs font-medium text-[#333333]">
                     Survey Description{" "}

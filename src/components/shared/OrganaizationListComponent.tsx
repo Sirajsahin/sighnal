@@ -108,10 +108,13 @@ export default function OrganaizationListComponent() {
               </button>
             </div>
             <div className="mt-10">
-              <p className="text-[#27272544] text-sm text-center">
+              <p className="text-[#27272544] text-sm text-center ">
                 Not seeing your workspace?
               </p>
-              <p className="text-[#3284FF] text-[10px] text-center">
+              <p
+                className="text-[#3284FF] text-sm text-center cursor-pointer"
+                onClick={() => clientSignOut()}
+              >
                 Try a different email
               </p>
             </div>

@@ -22,7 +22,7 @@ const Input: React.FC<IInput> = ({
 
   return (
     <div className={clsx(" relative w-full mt-1", className)}>
-      <div className="w-full relative  flex justify-start items-center rounded-md border ">
+      <div className="w-full relative  flex justify-start items-center rounded-md  ">
         {props?.startIcon && (
           <div className="pointer-events-none  inset-y-0 left-0 flex justify-center items-center pl-2 pr-2">
             {props?.startIcon}
@@ -46,7 +46,7 @@ const Input: React.FC<IInput> = ({
           )}
         />
       </div>
-      <div className="absolute">
+      <div className="mt-1 -mb-2">
         <FormFieldErrors errors={reducedErrorMessages} />
       </div>
     </div>

@@ -250,7 +250,7 @@ export default function Login() {
                       <div className="mt-2">
                         <div className="card flex  flex-col gap-1 w-full">
                           <Password
-                            className="w-full text-xs leading-5 placeholder:text-xs placeholder:text-gray-50 focus:outline-none right-0"
+                            className="w-full text-xs border-gray-200 leading-5 placeholder:text-xs placeholder:text-gray-50 focus:outline-none right-0"
                             placeholder="Password"
                             value={formHook.watch("password")}
                             onChange={(e) => {
@@ -262,7 +262,7 @@ export default function Login() {
                             // tooltip="s"
                           />
                           {!isValidPassword() && passwordValue && (
-                            <p className="text-red-500 text-[10px]">
+                            <p className="text-red-500 text-xs">
                               Invalid Password
                             </p>
                           )}

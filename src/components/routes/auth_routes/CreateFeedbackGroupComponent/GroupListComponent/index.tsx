@@ -30,7 +30,7 @@ export default function GroupListComponent() {
             <hr className="border-solid border-1  border-[#F5F5F5]" />
           </div>
 
-          <p className="text-[#475467] text-xs">
+          <p className="text-[#475467] text-xs h-[30px]">
             Create a group and launch your survey to receive responses in
             minutes.
           </p>
@@ -60,8 +60,10 @@ export default function GroupListComponent() {
                 <hr className="border-solid border-1  border-[#F5F5F5]" />
               </div>
 
-              <p className="text-[#475467] text-xs">
-                {item?.group_description}
+              <p className="text-[#475467] text-xs h-[30px]">
+                {item?.group_description?.length > 150
+                  ? `${item.group_description.slice(0, 140)}...`
+                  : item.group_description}
               </p>
               <div className="mt-8">
                 <button

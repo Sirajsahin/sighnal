@@ -1,9 +1,30 @@
 import { useUtils } from "@/app/hooks/useUtils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const MoodScaleComponent = ({ data }) => {
   const { splitEmojiAndText } = useUtils();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [showMood, setShowMood] = useState([]);
+
+  // Correct order to ensure data is always displayed in the same sequence
+  const correctOrder = [
+    "😡 Very unsatisfied",
+    "😕 Unsatisfied",
+    "😐 It's Okay",
+    "😃 Satisfied",
+    "😍 Very Satisfied",
+  ];
+
+  // Sync the `showMood` state with sorted `data`
+  useEffect(() => {
+    if (data?.length > 0) {
+      // Sort data according to the correct order
+      const sortedData = correctOrder.filter((item) => data.includes(item));
+      setShowMood(sortedData);
+    } else {
+      setShowMood([]); // Handle empty data gracefully
+    }
+  }, [data]); // Re-run when `data` changes
 
   const handleOptionClick = (option: number) => {
     setSelectedOption(option);
@@ -11,7 +32,7 @@ const MoodScaleComponent = ({ data }) => {
 
   return (
     <div className="grid grid-cols-5 gap-3 my-4">
-      {data?.map((option, index) => (
+      {showMood?.map((option, index) => (
         <div
           key={index}
           className={`p-3 w-full flex items-center border justify-between rounded-lg gap-3 text-sm flex-col cursor-pointer transition-colors duration-500 ${
@@ -28,4 +49,5 @@ const MoodScaleComponent = ({ data }) => {
     </div>
   );
 };
+
 export default MoodScaleComponent;
