@@ -185,7 +185,7 @@ const SearchableMultiSelectMenu: React.FC<ISearchableMultiSelectMenu> = ({
                           onChange={(event) => setQuery(event.target.value)}
                         />
                       </Combobox.Button>
-                      <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                      <Combobox.Button className="absolute z-10 inset-y-0 right-0 flex items-center pr-2">
                         <ChevronUpDownIcon
                           className="h-5 w-5 text-gray-400"
                           aria-hidden="true"
@@ -218,7 +218,7 @@ const SearchableMultiSelectMenu: React.FC<ISearchableMultiSelectMenu> = ({
                   <Combobox.Options
                     // style={{ zIndex: 1 }}
                     className={clsx(
-                      "absolute   mt-1 w-full  overflow-auto  rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none max-h-60 sm:text-sm",
+                      "absolute z-10  mt-1 w-full  overflow-auto  rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none max-h-60 sm:text-sm",
                       listBoxClassName ? listBoxClassName : ""
                       //   props?.listZIndex ? props?.listZIndex : "z-50"
                     )}

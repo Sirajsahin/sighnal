@@ -9,7 +9,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import ToogleComponent from "../../../../ui/ToogleComponent";
 import SurveyLaunchThankyouModalComponent from "../SurveyLaunchThankyouModalComponent";
 import CustomDatePicker from "@/components/ui/CustomDatePicker";
 import CustomTimePicker from "@/components/ui/CustomTimePicker";
@@ -129,27 +128,6 @@ const AudienceLaunchComponent = () => {
               >
                 <PlusIcon className="w-4 h-4" /> Click to add target audience
               </span>
-            </div>
-          </div>
-          <div className="w-2/4 flex justify-between gap-3 my-3">
-            <div className="w-full ">
-              <p className="text-[#333333] font-medium text-sm mb-2">
-                Add Comments
-              </p>
-              <div className="text-sm text-[#333333]">
-                <div className="border border-1 border-purple-100  p-3 w-full rounded-lg flex justify-between items-center gap-2">
-                  <span className="flex items-center gap-2 text-sm text-black  px-2 py-0 rounded-3xl  justify-between">
-                    Comments On
-                  </span>
-                  <ToogleComponent
-                    enabled={formHook.watch("comments")}
-                    setEnabled={() => {
-                      const toggleState = formHook.getValues("comments");
-                      formHook.setValue("comments", !toggleState);
-                    }}
-                  />
-                </div>
-              </div>
             </div>
           </div>
 
