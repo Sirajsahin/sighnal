@@ -131,7 +131,7 @@ const AudienceLaunchComponent = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-4 py-3 gap-4">
+          <div className="grid grid-cols-4 py-3 gap-4 items-center">
             <div className="flex flex-col gap-1">
               <CustomDatePicker title={"Start Date"} />
             </div>

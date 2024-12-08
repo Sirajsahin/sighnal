@@ -4,7 +4,7 @@ const CustomTimePicker = ({ title }) => {
   const [time, setTime] = useState<string>("09:00"); // Initialize with a default time
 
   return (
-    <form className="w-full mx-auto">
+    <form className="w-full mx-auto mt-1">
       <label
         htmlFor="time"
         className="block mb-2 text-xs font-medium text-black"
@@ -14,7 +14,7 @@ const CustomTimePicker = ({ title }) => {
       <div className="relative">
         <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
           <svg
-            className="w-4 h-4 text-gray-500 dark:text-gray-400"
+            className="w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"

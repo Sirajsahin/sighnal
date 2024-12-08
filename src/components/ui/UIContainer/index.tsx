@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent/SidebarComponent";
 import { IUIContainerProps } from "./interface";
@@ -7,6 +7,14 @@ const UIContainer: React.FC<React.PropsWithChildren<IUIContainerProps>> = (
   props
 ) => {
   const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = "auto";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   return (
     <div className="bg-gradient-to-r ">
       <HeaderComponent />
