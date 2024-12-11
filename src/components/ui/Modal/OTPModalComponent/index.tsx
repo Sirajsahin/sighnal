@@ -113,7 +113,7 @@ const OTPModalComponent: React.FC<IGroupDeleteModalComponent> = ({
                         key={index}
                         type="text"
                         maxLength={1}
-                        ref={(el) => (inputsRef.current[index] = el!)}
+                        // ref={(el) => (inputsRef.current[index] = el!)}
                         className="rounded-lg border-2 border-[#333333] h-14 w-14 flex justify-center items-center text-[#333333] font-medium text-4xl text-center"
                         value={otp[index] || ""}
                         onChange={(e) => handleOtpChange(e, index)}
