@@ -3,7 +3,8 @@ import { ParseResult } from "papaparse";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { CiFileOn } from "react-icons/ci";
-import { LuUploadCloud } from "react-icons/lu";
+import { LuUpload } from "react-icons/lu";
+
 import * as XLSX from "xlsx";
 
 type FileUploadProps = {
@@ -81,7 +82,7 @@ const XlsxUploadComponent: React.FC<FileUploadProps> = ({
           <input {...getInputProps()} hidden />
           <div className="flex flex-col items-center justify-center gap-3">
             <div className="border-[#EAECF0] border p-3 rounded-xl">
-              <LuUploadCloud className="w-5 h-5" />
+              <LuUpload className="w-5 h-5" />
             </div>
             <p className="text-[#34A853] text-sm font-semibold ">
               {isDragActive

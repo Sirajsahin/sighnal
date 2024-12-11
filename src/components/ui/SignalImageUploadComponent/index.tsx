@@ -1,4 +1,4 @@
-import { LuUploadCloud } from "react-icons/lu";
+import { ArrowUpOnSquareIcon } from "@heroicons/react/24/outline";
 
 type SignalImageUploadComponentProps = {
   handleFileChange: (
@@ -26,7 +26,7 @@ const SignalImageUploadComponent: React.FC<SignalImageUploadComponentProps> = ({
         onChange={(e) => handleFileChange(e, index)}
       />
       <div className="flex items-center justify-center flex-col">
-        <LuUploadCloud className="w-5 h-5 " />
+        <ArrowUpOnSquareIcon className="w-5 h-5 " />
 
         <p className="text-[#34A853] text-sm font-medium pt-1">
           Click to upload Image Files
