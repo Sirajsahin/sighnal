@@ -137,7 +137,7 @@ const UserProfile = () => {
     }
   }, [userDetails, organization]);
 
-  const countyListItem = useSelectMenuReducer(countyList, "name", "id");
+  const countyListItem = useSelectMenuReducer(countyList, "name", "code");
   const industryListItem = useSelectMenuReducer(industry, "name", "id");
   const jobTypeListItem = useSelectMenuReducer(jobType, "name", "id");
 

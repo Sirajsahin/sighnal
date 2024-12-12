@@ -57,7 +57,7 @@ export default function Organaization() {
     }
   }, [localStorage.getItem("email")]);
 
-  const countyListItem = useSelectMenuReducer(countyList, "name", "id");
+  const countyListItem = useSelectMenuReducer(countyList, "name", "code");
   const departmentList = useSelectMenuReducer(department, "name", "id");
   const onSubmit = (data: ICreateGroupFromFields) => {
     const isFormSubmissionValid = validateConditionalFormFields(data);
@@ -176,7 +176,7 @@ export default function Organaization() {
                       selectItems={countyListItem}
                       placeholder="Select Country"
                       showTooltips={false}
-                      showTypedErrors={true}
+                      // showTypedErrors={true}
                       showDropdownIcon={true}
                       defaultSelected={
                         countyListItem?.filter(

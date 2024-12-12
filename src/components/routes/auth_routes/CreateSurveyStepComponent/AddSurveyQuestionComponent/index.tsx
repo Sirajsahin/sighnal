@@ -338,8 +338,8 @@ const AddSurveyQuestionComponent = () => {
                           </Field>
                         </div>
                         <div className="flex items-center justify-between gap-3 w-full my-2">
-                          <div className="w-full">
-                            <p className="text-sm font-medium text-[#333333]">
+                          <div className="w-full py-3">
+                            <p className="text-sm font-medium text-[#333333] pb-1">
                               Question Type
                             </p>
 
@@ -454,8 +454,8 @@ const AddSurveyQuestionComponent = () => {
                           {formHook.watch(
                             `question_details.${index}.question_type_id`
                           ) === "mood_scale" && (
-                            <div className="w-full">
-                              <p className="text-sm font-medium text-[#333333]">
+                            <div className="w-full py-3">
+                              <p className="text-sm font-medium text-[#333333] pb-2">
                                 Limit
                               </p>
 
@@ -488,7 +488,7 @@ const AddSurveyQuestionComponent = () => {
                                 )}
                                 showTypedErrors={false}
                                 containerClassName=""
-                                placeholder="Select Clinics"
+                                placeholder="Select Limit"
                                 defaultSelected={moodScaleData.filter((c) =>
                                   formHook
                                     .watch(`question_details.${index}.mood`)
@@ -498,8 +498,8 @@ const AddSurveyQuestionComponent = () => {
                               />
                             </div>
                           )}
-                          <div className="w-full">
-                            <p className="text-sm font-medium text-[#333333] ">
+                          <div className="w-full py-3">
+                            <p className="text-sm font-medium text-[#333333] pb-1">
                               Can this question be skipped? *
                             </p>
                             <SearchableSelectMenu
