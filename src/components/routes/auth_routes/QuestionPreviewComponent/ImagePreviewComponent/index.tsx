@@ -23,26 +23,32 @@ const ImagePreviewComponent = ({ data, flage, type }) => {
 
   return (
     <div
-      className={`${flage ? "grid-cols-4 grid" : "flex flex-col gap-4 h-44 overflow-auto"} gap-4 my-2`}
+      className={`${flage ? "grid grid-cols-2" : "flex flex-col gap-4"} gap-4 my-2 ${
+        !flage ? "overflow-auto max-h-[500px]" : ""
+      }`}
     >
       {data?.map((item, id) => (
         <div
           key={id}
-          className={`relative w-full h-36 rounded-md cursor-pointer ${
-            selected.includes(id) ? " border-black border-2" : ""
-          }`}
+          className={`${flage ? "max-w-[400px] h-[500px]" : "h-[300px]"} rounded-xl cursor-pointer relative border-2 bg-white `}
           onClick={() => handleSelect(id)}
         >
+          {/* Image */}
           <img
             src={item?.link}
             alt={item?.file_name}
-            className="w-full h-full rounded-md object-cover"
+            className="w-full h-full object-cover rounded-xl"
           />
-          {selected.includes(id) && (
-            <div className="absolute flex justify-center items-center inset-0 ">
-              <MdDone className="w-8 h-8 text-black bg-white rounded-full p-1" />
-            </div>
-          )}
+
+          {/* Overlay */}
+          <div
+            className={`absolute inset-0 bg-black bg-opacity-50 rounded-xl flex justify-center items-center transition-opacity duration-300 ${
+              selected.includes(id) ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {/* Checkmark */}
+            <MdDone className="w-8 h-8 text-white bg-black rounded-full p-1" />
+          </div>
         </div>
       ))}
     </div>

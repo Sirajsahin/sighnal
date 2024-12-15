@@ -567,34 +567,33 @@ const AddSurveyQuestionComponent = () => {
                                 index={index}
                               />
                             )}
-                            <div className="flex items-center gap-4 my-3">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-3">
                               {formHook
                                 .watch(`question_details.${index}.image`)
                                 ?.slice(0, 4)
                                 ?.map((image, imgIndex) => (
-                                  <div key={imgIndex} className="">
-                                    <div className="flex items-center gap-4 w-60">
-                                      <div className="w-32 h-24 border border-red-500 rounded-lg">
-                                        <img
-                                          src={image.link}
-                                          alt={image.file_name}
-                                          className="w-auto h-[100%] object-cover rounded-lg"
-                                        />
-                                      </div>
-                                      <p
-                                        className=" items-center cursor-pointer relative "
-                                        onClick={(e) => {
-                                          e.preventDefault();
-                                          e.stopPropagation();
-                                          handleDeleteProductImage(
-                                            index,
-                                            imgIndex
-                                          );
-                                        }}
-                                      >
-                                        <TrashIcon className="w-4 h-4 text-red-500" />{" "}
-                                      </p>
-                                    </div>
+                                  <div
+                                    key={imgIndex}
+                                    className="border border-gray-300 rounded-lg relative items-center h-auto w-auto flex"
+                                  >
+                                    <img
+                                      src={image.link}
+                                      alt={image.file_name}
+                                      className="w-full h-auto object-cover rounded-lg"
+                                    />
+                                    <p
+                                      className="absolute top-2 right-2 bg-white p-1 rounded-full cursor-pointer"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleDeleteProductImage(
+                                          index,
+                                          imgIndex
+                                        );
+                                      }}
+                                    >
+                                      <TrashIcon className="w-4 h-4 text-red-500" />
+                                    </p>
                                   </div>
                                 ))}
                             </div>

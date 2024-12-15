@@ -75,7 +75,7 @@ export default function GroupuserTableComponent({ setOpen, open }) {
   useEffect(() => {
     const groupId = params.get("group_id");
     if (selectedCategories?.length > 0 && groupId) {
-      fetchUserListData(groupId, selectedCategories);
+      // fetchUserListData(groupId, selectedCategories);
     }
   }, [selectedCategories, params.get("group_id")]);
 

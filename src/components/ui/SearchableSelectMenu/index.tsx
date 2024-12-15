@@ -41,12 +41,12 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
   const filteredDataItems: SelectMenuItems =
     query === ""
       ? props?.selectItems
-      : props?.selectItems?.filter((item) =>
+      : (props?.selectItems?.filter((item) =>
           item?.title
             ?.toLowerCase()
             ?.replace(/\s+/g, "")
             ?.includes(query.toLowerCase()?.replace(/\s+/g, ""))
-        ) ?? [];
+        ) ?? []);
 
   const reducedErrorMessages = deduceFormFieldErrors(errorMessages, fieldError);
   const isValid: boolean = isFormFieldValid(reducedErrorMessages);
@@ -191,7 +191,7 @@ const SearchableSelectMenu: React.FC<ISearchableSelectMenu> = ({
                   )}
                 </div>
                 {showFieldErrors && (
-                  <div className="absolute -mt-1">
+                  <div className="absolute mt-1">
                     <FormFieldErrors errors={reducedErrorMessages} />
                   </div>
                 )}
