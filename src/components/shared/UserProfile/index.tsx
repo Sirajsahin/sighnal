@@ -289,9 +289,7 @@ const UserProfile = () => {
               />
             </div>
             <div>
-              <p className="flex items-center gap-1 text-sm">
-                Job Title <span className="text-red-400">*</span>
-              </p>
+              <p className="flex items-center gap-1 text-sm">Job Title</p>
               <SearchableSelectMenu
                 // label="Job Title"
                 errorMessages={[
@@ -308,7 +306,7 @@ const UserProfile = () => {
                 }}
                 fieldError={formHook?.formState?.errors?.jobTitle}
                 register={formHook.register(`jobTitle`, {
-                  required: true,
+                  required: false,
                 })}
                 selectItems={jobTypeListItem}
                 placeholder="Select Job Title"
@@ -338,15 +336,15 @@ const UserProfile = () => {
           <div className="grid grid-cols-2 gap-6 items-center mt-6">
             <div>
               <p className="flex items-center gap-1 text-sm">
-                Organisation Name <span className="text-red-400">*</span>
+                Organisation Name
               </p>
               <Input
                 className="text-xs"
                 placeholder="Enter Your Org Name"
                 // labelName="Company Name"
-                isMandatory={true}
+                isMandatory={false}
                 register={formHook.register("org_name", {
-                  required: true,
+                  required: false,
                   ...forAlphaNumericWithoutDot.validations,
                 })}
                 fieldError={formHook.formState.errors.org_name}
@@ -361,15 +359,15 @@ const UserProfile = () => {
             </div>
             <div>
               <p className="flex items-center gap-1 text-sm">
-                Organisation Size <span className="text-red-400">*</span>
+                Organisation Size
               </p>
               <Input
                 className="text-xs"
                 placeholder="Organisation Size"
                 // labelName="Company Name"
-                isMandatory={true}
+                isMandatory={false}
                 register={formHook.register("org_size", {
-                  required: true,
+                  required: false,
                   ...forOnlyNumber.validations,
                 })}
                 fieldError={formHook.formState.errors.org_size}
@@ -384,16 +382,16 @@ const UserProfile = () => {
             </div>
             <div>
               <p className="flex items-center gap-1 text-sm">
-                Organisation Website <span className="text-red-400">*</span>
+                Organisation Website
               </p>
               <Input
                 className="text-xs"
                 type="wbesite"
-                isMandatory={true}
+                isMandatory={false}
                 // labelName="Website"
                 placeholder="Enter Your Org Website"
                 register={formHook.register("org_website", {
-                  required: true,
+                  required: false,
                   // ...forAlphaNumeric.validations,
                 })}
                 fieldError={formHook.formState.errors.org_website}
@@ -408,7 +406,7 @@ const UserProfile = () => {
             </div>
             <div>
               <p className="flex items-center gap-1 text-sm">
-                Organisation Age <span className="text-red-400">*</span>
+                Organisation Age
               </p>
               <Input
                 // labelName="Company Age"
@@ -416,7 +414,7 @@ const UserProfile = () => {
                 className="text-xs"
                 placeholder="Enter Your Org Age"
                 register={formHook.register("org_age", {
-                  required: true,
+                  required: false,
                   ...forOnlyNumber.validations,
                 })}
                 fieldError={formHook.formState.errors.org_age}
@@ -430,9 +428,7 @@ const UserProfile = () => {
               />
             </div>
             <div>
-              <p className="flex items-center gap-1 text-sm">
-                Country <span className="text-red-400">*</span>
-              </p>
+              <p className="flex items-center gap-1 text-sm">Country</p>
               <SearchableSelectMenu
                 errorMessages={[
                   {
@@ -448,7 +444,7 @@ const UserProfile = () => {
                 }}
                 fieldError={formHook?.formState?.errors?.citizen}
                 register={formHook.register(`citizen`, {
-                  required: true,
+                  required: false,
                 })}
                 selectItems={countyListItem}
                 placeholder="Select Country"
@@ -466,7 +462,7 @@ const UserProfile = () => {
             </div>
             <div>
               <p className="flex items-center gap-1 text-sm">
-                Organisation Type<span className="text-red-400">*</span>
+                Organisation Type
               </p>
               <SearchableSelectMenu
                 // label="I’m a citizen of"
@@ -484,7 +480,7 @@ const UserProfile = () => {
                 }}
                 fieldError={formHook?.formState?.errors?.Industry}
                 register={formHook.register(`Industry`, {
-                  required: true,
+                  required: false,
                 })}
                 selectItems={industryListItem}
                 placeholder="Select Industry"
@@ -502,14 +498,14 @@ const UserProfile = () => {
             </div>
             <div className="col-span-2">
               <p className="flex items-center gap-1 text-sm">
-                About Organisation<span className="text-red-400">*</span>
+                About Organisation
               </p>
               <div>
                 <TextareaComponent
                   className="text-xs"
                   placeholder="About Company "
                   register={formHook.register("org_about", {
-                    required: true,
+                    required: false,
                     ...forAlphaNumericWithoutDot.validations,
                   })}
                   fieldError={formHook.formState.errors.org_about}
@@ -525,10 +521,7 @@ const UserProfile = () => {
             </div>
           </div>
           <div className="mt-4">
-            <p className="flex items-center gap-1 text-sm">
-              End Consumers
-              <span className="text-red-400">*</span>
-            </p>
+            <p className="flex items-center gap-1 text-sm">End Consumers</p>
             <div className="w-full border border-[#D0D5DD] px-4 py-3 rounded-lg  cursor-pointer">
               <p className="text-sm">Your End Consumers Displayed Here </p>
             </div>

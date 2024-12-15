@@ -23,27 +23,27 @@ export const useUpdatedOrganizationDetailsAPI = () => {
         })
         .then((res: AxiosResponse<IOrganizationDetailsResponse>) => {
           if (res.data?.status) {
-            toast.success("Organisation details updation done");
+            // toast.success("Organisation details updation done");
           } else {
-            toast.error("Organisation details updation faild");
+            // toast.error("Organisation details updation faild");
             // navigate("/app/login/onboard");
           }
         })
         .catch((e: AxiosError) => {
-          toast.error("Organisation details updation faild");
+          // toast.error("Organisation details updation faild");
           // navigate("/app/login/onboard");
           if (e.code === "ERR_BAD_REQUEST") {
             //
           }
           if (e.status === 400) {
-            toast.error("User Onboard Faild");
+            // toast.error("User Onboard Faild");
           }
           if (e.response.status === 500) {
-            toast.error("Server error 500");
+            // toast.error("Server error 500");
           }
         });
     } catch (e: any) {
-      toast.error("Organisation details updation faild");
+      // toast.error("Organisation details updation faild");
       // navigate("/app/login/onboard");
       toast.error("Server Error: " + e.message);
     }
