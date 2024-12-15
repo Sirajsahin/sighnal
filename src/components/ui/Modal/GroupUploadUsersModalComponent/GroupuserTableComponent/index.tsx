@@ -36,6 +36,46 @@ export default function GroupuserTableComponent({ setOpen, open }) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [initial, setInitial] = useState(false);
+
+  const [editUserId, setEditUserId] = useState<string | null>(null);
+  const [editFormData, setEditFormData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    tag: "",
+  });
+
+  const handleEditClick = (user) => {
+    setEditUserId(user.customer_id);
+    setEditFormData({
+      name: user.name || "",
+      email: user.email || "",
+      mobile: user.mobile || "",
+      tag: user.tags.join(", ") || "",
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveClick = () => {
+    if (editUserId) {
+      updateCustomerAPI(editUserId, editFormData).then(() => {
+        fetchUserListData(params.get("group_id"));
+        setEditUserId(null); // Exit edit mode
+      });
+    }
+  };
+
+  const handleCancelClick = () => {
+    setEditUserId(null); // Exit edit mode without saving
+  };
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -64,30 +104,31 @@ export default function GroupuserTableComponent({ setOpen, open }) {
   };
 
   useEffect(() => {
-    if (userData?.length > 0) {
+    if (userData?.length > 0 && !initial) {
       const uniqueTags = [
         ...new Set(userData?.flatMap((customer) => customer?.tags)),
       ];
       setCategories(uniqueTags);
+      setInitial(true);
     }
-  }, [userData]);
+  }, [userData, initial]);
 
   useEffect(() => {
     const groupId = params.get("group_id");
     if (selectedCategories?.length > 0 && groupId) {
-      // fetchUserListData(groupId, selectedCategories);
+      fetchUserListData(groupId, selectedCategories);
     }
   }, [selectedCategories, params.get("group_id")]);
 
-  const handleEdit = (customerId) => {
-    const customer = userData.find((user) => user.customer_id === customerId);
-    if (customer) {
-      const updatedData = { ...customer, name: "Updated Name" }; // Modify as needed
-      updateCustomerAPI(customerId, updatedData).then(() => {
-        fetchUserListData(params.get("group_id"));
-      });
-    }
-  };
+  // const handleEdit = (customerId) => {
+  //   const customer = userData.find((user) => user.customer_id === customerId);
+  //   if (customer) {
+  //     const updatedData = { ...customer, name: "Updated Name" }; // Modify as needed
+  //     updateCustomerAPI(customerId, updatedData).then(() => {
+  //       fetchUserListData(params.get("group_id"));
+  //     });
+  //   }
+  // };
 
   const handleDelete = (customerId) => {
     deleteCustomerAPI(customerId).then(() => {
@@ -198,57 +239,96 @@ export default function GroupuserTableComponent({ setOpen, open }) {
                             </tr>
                           </thead>
                           <tbody className="bg-white">
-                            {currentTableData?.map((person) => (
+                            {currentTableData?.map((user) => (
                               <tr
-                                key={person?.email}
+                                key={user.customer_id}
                                 className="even:bg-gray-50 border-t"
                               >
-                                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-xs text-[#475467] sm:pl-3">
-                                  <div className="flex items-center gap-2">
-                                    <CheckBoxComponent />
-                                    {person?.name}
-                                  </div>
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-4 text-xs text-[#475467]">
-                                  {person?.mobile}
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-4 text-xs text-[#475467]">
-                                  {person?.email}
-                                </td>
-                                <td className=" px-3 py-4 text-xs text-[#475467]">
-                                  {person?.tags?.length > 0 ? (
-                                    <div className="w-auto flex gap-2 items-center my-4 flex-wrap">
-                                      {[...new Set(person?.tags)]?.map(
-                                        (category) => (
-                                          <p
-                                            key={category}
-                                            className="p-2 w-auto rounded-2xl text-xs items-center flex justify-center font-medium cursor-pointer bg-[#F5F5F5]"
-                                          >
-                                            {category}
-                                          </p>
-                                        )
-                                      )}
-                                    </div>
-                                  ) : (
-                                    "NA"
-                                  )}
-                                </td>
-                                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-xs font-medium sm:pr-3">
-                                  <div className="flex items-center gap-4 justify-center">
-                                    <TrashIcon
-                                      className="h-4 w-4 text-[#475467] cursor-pointer"
-                                      onClick={() =>
-                                        handleDelete(person?.customer_id)
-                                      }
-                                    />
-                                    <FiEdit2
-                                      className="h-4 w-4 text-[#475467] cursor-pointer"
-                                      onClick={() =>
-                                        handleEdit(person?.customer_id)
-                                      }
-                                    />
-                                  </div>
-                                </td>
+                                {editUserId === user.customer_id ? (
+                                  <>
+                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-3">
+                                      <input
+                                        type="text"
+                                        name="name"
+                                        value={editFormData.name}
+                                        onChange={handleInputChange}
+                                        className="border rounded px-2 py-1 text-xs"
+                                      />
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4">
+                                      <input
+                                        type="text"
+                                        name="mobile"
+                                        value={editFormData.mobile}
+                                        onChange={handleInputChange}
+                                        className="border rounded px-2 py-1 text-xs"
+                                      />
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4">
+                                      <input
+                                        type="text"
+                                        name="email"
+                                        value={editFormData.email}
+                                        onChange={handleInputChange}
+                                        className="border rounded px-2 py-1 text-xs"
+                                      />
+                                    </td>
+                                    <td className="px-3 py-4 text-xs">
+                                      <input
+                                        type="text"
+                                        name="tag"
+                                        value={editFormData.tag}
+                                        onChange={handleInputChange}
+                                        className="border rounded px-2 py-1 text-xs"
+                                      />
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right sm:pr-3">
+                                      <button
+                                        onClick={handleSaveClick}
+                                        className="text-green-600 font-medium mr-2"
+                                      >
+                                        Save
+                                      </button>
+                                      <button
+                                        onClick={handleCancelClick}
+                                        className="text-red-600 font-medium"
+                                      >
+                                        Cancel
+                                      </button>
+                                    </td>
+                                  </>
+                                ) : (
+                                  <>
+                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-3">
+                                      {user.name}
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4">
+                                      {user.mobile}
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4">
+                                      {user.email}
+                                    </td>
+                                    <td className="px-3 py-4 text-xs">
+                                      {user.tags?.length
+                                        ? user.tags.join(", ")
+                                        : "NA"}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4  text-right  flex items-center ">
+                                      <button
+                                        onClick={() => handleEditClick(user)}
+                                        className="text-gray-600 font-medium mr-2"
+                                      >
+                                        <FiEdit2 className="h-4 w-4" />
+                                      </button>
+                                      <TrashIcon
+                                        className="h-4 w-4 text-red-600 cursor-pointer"
+                                        onClick={() =>
+                                          handleDelete(user.customer_id)
+                                        }
+                                      />
+                                    </td>
+                                  </>
+                                )}
                               </tr>
                             ))}
                           </tbody>
