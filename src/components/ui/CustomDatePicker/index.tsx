@@ -48,12 +48,18 @@ const Modal = ({
   );
 };
 
-const CustomDatePicker = ({ title }: { title: string }) => {
-  const [startDate, setStartDate] = useState<Date | null>(null);
+const CustomDatePicker = ({ title, startDate, setStartDate }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, "0"); // Ensure 2 digits
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div className="flex flex-col gap-2 w-full">
@@ -67,9 +73,9 @@ const CustomDatePicker = ({ title }: { title: string }) => {
         {/* Open Modal Button */}
         <button
           onClick={openModal}
-          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md w-full p-3 shadow-sm flex items-center justify-between"
+          className="bg-white border border-gray-300 text-gray-900 text-sm  rounded-md w-full p-3 shadow-sm flex items-center justify-between gap-3"
         >
-          {startDate ? startDate.toLocaleDateString("en-CA") : "Select a date"}
+          {startDate ? formatDate(startDate) : "Select a date"}
           <FiCalendar className="text-gray-500" size={20} />
         </button>
       </div>
@@ -83,7 +89,7 @@ const CustomDatePicker = ({ title }: { title: string }) => {
             closeModal(); // Close modal on date select
           }}
           inline
-          dateFormat="yyyy-MM-dd"
+          dateFormat="dd-MM-yyyy"
         />
       </Modal>
     </div>

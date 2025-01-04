@@ -3,7 +3,7 @@ import useRouteInfo from "@/app/hooks/useRouteInfo";
 import { useRouter } from "@/app/hooks/useRouter";
 import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const tableHeader = [
   {
@@ -58,6 +58,7 @@ const tableHeader2 = [
 const GroupListTableComponent = ({ source }) => {
   const { getRouteKey } = useRouter();
   const [params, _setparams] = useSearchParams();
+  const navigate = useNavigate();
 
   const { surveyList } = useRouteInfo(getRouteKey("HOME_PAGE", "id"))
     ?.routeState?.state as ISurvetSliceState;
@@ -78,6 +79,13 @@ const GroupListTableComponent = ({ source }) => {
   ) => {
     const percentage = response_count / total_sent / 100;
     return percentage;
+  };
+
+  const handelREdirect = (item: any) => {
+    console.log(item, "items");
+    navigate(
+      `/app/campaign/live?group_id=${item.group_id}&survey_id=${item.group_id}`
+    );
   };
 
   return (
@@ -111,7 +119,11 @@ const GroupListTableComponent = ({ source }) => {
 
             <tbody className="divide-y divide-gray-200">
               {surveyList?.map((item, id) => (
-                <tr key={id} className="border-b">
+                <tr
+                  key={id}
+                  className="border-b cursor-pointer hover:bg-gray-100"
+                  onClick={() => handelREdirect(item)}
+                >
                   <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
                     <div className="flex flex-col">{id + 1}</div>
                   </td>

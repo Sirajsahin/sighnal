@@ -271,7 +271,7 @@ const AddSurveyQuestionComponent = () => {
   };
 
   return (
-    <div className="flex justify-center items-center mr-auto">
+    <div className="flex justify-center items-center mr-auto mb-10">
       <div className="px-4 w-2/3">
         <div className="flex flex-col gap-1 px-10 my-3">
           <p className="text-[#475467] font-medium text-sm">Step 2/3</p>

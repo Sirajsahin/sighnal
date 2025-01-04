@@ -23,15 +23,17 @@ export const useSurveyLiveAPI = () => {
             }
           )
           .then((res: AxiosResponse<any>) => {
-            if (res.data.status === true) {
+            if (res.data.status) {
               toast.success("Survey Live Successful");
-              return { status: true, message: res.data?.data?.survey_id };
+              return { status: true, message: res.data?.data?.link };
             } else {
               toast.error("Survey live Faild");
               return { status: false, message: null };
             }
           })
           .catch((e: AxiosError) => {
+            const ee = (e.response.data as any).message;
+            toast.error(ee);
             if (e.response && e.response.status === 400) {
               const ee = (e.response.data as any).message;
               toast.error(ee);
@@ -45,10 +47,11 @@ export const useSurveyLiveAPI = () => {
               toast.error("Server error 500");
               return { status: false, message: null };
             }
+            return { status: false, message: null };
           });
         return response;
       } catch (e: any) {
-        return { status: false, message: null };
+        // return { status: false, message: null };
         toast.error("Server Error: " + e.message);
       }
     },

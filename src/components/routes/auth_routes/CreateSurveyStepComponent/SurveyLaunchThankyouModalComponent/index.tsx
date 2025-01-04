@@ -5,9 +5,23 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import toast from "react-hot-toast";
 import { IoCopyOutline } from "react-icons/io5";
 
-const SurveyLaunchThankyouModalComponent = ({ open, setOpen }) => {
+const SurveyLaunchThankyouModalComponent = ({ open, setOpen, link }) => {
+  const handleCopy = () => {
+    if (link) {
+      navigator.clipboard
+        .writeText(link)
+        .then(() => {
+          toast.success("Link copied to clipboard!");
+        })
+        .catch((err) => {
+          toast.error("Failed to copy link:", err);
+        });
+    }
+  };
+
   return (
     <Transition show={open}>
       <Dialog className="relative z-10" onClose={() => setOpen(false)}>
@@ -170,12 +184,13 @@ const SurveyLaunchThankyouModalComponent = ({ open, setOpen }) => {
                   <div className="border border-1 border-purple-100  p-3 w-full rounded-xl ">
                     <span className="flex items-center gap-2 text-sm text-black  px-2 py-0 rounded-3xl  justify-between">
                       <div className="flex justify-between items-center w-full">
-                        <p className="text-sm font-medium">
-                          appfeedback.survey.sighnal.com
-                        </p>
+                        <p className="text-sm font-medium">{link}</p>
                         <IoCopyOutline
                           className="h-4 w-4 cursor-pointer"
-                          onClick={() => setOpen(false)}
+                          onClick={() => {
+                            handleCopy();
+                            setOpen(false);
+                          }}
                         />
                       </div>
                     </span>

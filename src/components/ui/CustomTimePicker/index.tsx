@@ -1,7 +1,9 @@
-import { useState } from "react";
-
-const CustomTimePicker = ({ title }) => {
-  const [time, setTime] = useState<string>("09:00"); // Initialize with a default time
+const CustomTimePicker = ({ title, time, setTime }) => {
+  // Ensure the time value is always in "HH:mm" format with zero-padded hours
+  const formatTime = (value) => {
+    const [hours, minutes] = value.split(":");
+    return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
+  };
 
   return (
     <form className="w-full mx-auto mt-1">
@@ -30,11 +32,11 @@ const CustomTimePicker = ({ title }) => {
         <input
           type="time"
           id="time"
-          className="bg-white border  border-gray-300 text-gray-900 text-sm rounded-md   block w-full p-3  dark:placeholder-gray-400  "
-          min="09:00"
-          max="18:00"
-          value={time} // Use state variable for controlled input
-          onChange={(e) => setTime(e.target.value)} // Update state on input change
+          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md block w-full p-3"
+          min="01:00"
+          max="23:00"
+          value={formatTime(time)} // Display in "HH:mm" format
+          onChange={(e) => setTime(e.target.value)} // Update state with raw input value
           required
         />
       </div>
