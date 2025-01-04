@@ -83,8 +83,9 @@ const GroupListTableComponent = ({ source }) => {
 
   const handelREdirect = (item: any) => {
     console.log(item, "items");
+
     navigate(
-      `/app/campaign/live?group_id=${item.group_id}&survey_id=${item.group_id}`
+      `/app/campaign/live?group_id=${item.group_id}&survey_id=${item.survey_id}`
     );
   };
 
