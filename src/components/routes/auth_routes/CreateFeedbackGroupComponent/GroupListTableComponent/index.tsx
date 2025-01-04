@@ -93,7 +93,7 @@ const GroupListTableComponent = ({ source }) => {
       {surveyList?.length > 0 && (
         <div className="overflow-x-auto overflow-y-auto mt-3 max-h-[438px] shadow-md rounded-md">
           <table className="min-w-full divide-y divide-gray-200 rounded-md">
-            <thead className="bg-[#F6F6F7] sticky top-0 z-20">
+            <thead className="bg-[#F6F6F7] sticky top-0 z-10">
               <tr>
                 {source
                   ? tableHeader?.map((key, index) => (

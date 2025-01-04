@@ -1,6 +1,5 @@
 import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsAPI";
 import { useGroupUserListAPI } from "@/app/hooks/api_hooks/Group/useGroupUserListAPI";
-import CheckBoxComponent from "@/components/ui/CheckBoxComponent";
 import Pagination from "@/components/ui/Pagination";
 import {
   Dialog,
@@ -8,23 +7,10 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useMemo, useState } from "react";
-import { FiEdit2 } from "react-icons/fi";
+
 import { useSearchParams } from "react-router-dom";
-
-// Mock API call functions
-const updateCustomerAPI = async (customerId, data) => {
-  // Implement your API call here
-  console.log(`Updating customer with ID: ${customerId}`, data);
-  // Return updated data or status
-};
-
-const deleteCustomerAPI = async (customerId) => {
-  // Implement your API call here
-  console.log(`Deleting customer with ID: ${customerId}`);
-  // Return status
-};
 
 const PageSize = 5;
 
@@ -37,45 +23,6 @@ export default function GroupuserTableComponent({ setOpen, open }) {
   const [categories, setCategories] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [initial, setInitial] = useState(false);
-
-  const [editUserId, setEditUserId] = useState<string | null>(null);
-  const [editFormData, setEditFormData] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    tag: "",
-  });
-
-  const handleEditClick = (user) => {
-    setEditUserId(user.customer_id);
-    setEditFormData({
-      name: user.name || "",
-      email: user.email || "",
-      mobile: user.mobile || "",
-      tag: user.tags.join(", ") || "",
-    });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSaveClick = () => {
-    if (editUserId) {
-      updateCustomerAPI(editUserId, editFormData).then(() => {
-        fetchUserListData(params.get("group_id"));
-        setEditUserId(null); // Exit edit mode
-      });
-    }
-  };
-
-  const handleCancelClick = () => {
-    setEditUserId(null); // Exit edit mode without saving
-  };
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -115,26 +62,10 @@ export default function GroupuserTableComponent({ setOpen, open }) {
 
   useEffect(() => {
     const groupId = params.get("group_id");
-    if (selectedCategories?.length > 0 && groupId) {
+    if (selectedCategories && groupId) {
       fetchUserListData(groupId, selectedCategories);
     }
   }, [selectedCategories, params.get("group_id")]);
-
-  // const handleEdit = (customerId) => {
-  //   const customer = userData.find((user) => user.customer_id === customerId);
-  //   if (customer) {
-  //     const updatedData = { ...customer, name: "Updated Name" }; // Modify as needed
-  //     updateCustomerAPI(customerId, updatedData).then(() => {
-  //       fetchUserListData(params.get("group_id"));
-  //     });
-  //   }
-  // };
-
-  const handleDelete = (customerId) => {
-    deleteCustomerAPI(customerId).then(() => {
-      fetchUserListData(params.get("group_id"));
-    });
-  };
 
   return (
     <Transition show={open}>
@@ -200,7 +131,7 @@ export default function GroupuserTableComponent({ setOpen, open }) {
                   <div className="mt-2 flow-root">
                     <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                       <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                        <table className="min-w-full divide-y divide-gray-300">
+                        <table className="w-full divide-y divide-gray-300">
                           <thead>
                             <tr>
                               <th
@@ -208,7 +139,6 @@ export default function GroupuserTableComponent({ setOpen, open }) {
                                 className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-[#475467] sm:pl-3"
                               >
                                 <div className="flex items-center gap-2">
-                                  <CheckBoxComponent />
                                   Name
                                 </div>
                               </th>
@@ -230,12 +160,6 @@ export default function GroupuserTableComponent({ setOpen, open }) {
                               >
                                 Tags
                               </th>
-                              <th
-                                scope="col"
-                                className="relative py-3.5 pl-3 pr-4 sm:pr-3"
-                              >
-                                <span className="sr-only">Edit</span>
-                              </th>
                             </tr>
                           </thead>
                           <tbody className="bg-white">
@@ -244,91 +168,35 @@ export default function GroupuserTableComponent({ setOpen, open }) {
                                 key={user.customer_id}
                                 className="even:bg-gray-50 border-t"
                               >
-                                {editUserId === user.customer_id ? (
-                                  <>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-3">
-                                      <input
-                                        type="text"
-                                        name="name"
-                                        value={editFormData.name}
-                                        onChange={handleInputChange}
-                                        className="border rounded px-2 py-1 text-xs"
-                                      />
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4">
-                                      <input
-                                        type="text"
-                                        name="mobile"
-                                        value={editFormData.mobile}
-                                        onChange={handleInputChange}
-                                        className="border rounded px-2 py-1 text-xs"
-                                      />
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4">
-                                      <input
-                                        type="text"
-                                        name="email"
-                                        value={editFormData.email}
-                                        onChange={handleInputChange}
-                                        className="border rounded px-2 py-1 text-xs"
-                                      />
-                                    </td>
-                                    <td className="px-3 py-4 text-xs">
-                                      <input
-                                        type="text"
-                                        name="tag"
-                                        value={editFormData.tag}
-                                        onChange={handleInputChange}
-                                        className="border rounded px-2 py-1 text-xs"
-                                      />
-                                    </td>
-                                    <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right sm:pr-3">
-                                      <button
-                                        onClick={handleSaveClick}
-                                        className="text-green-600 font-medium mr-2"
-                                      >
-                                        Save
-                                      </button>
-                                      <button
-                                        onClick={handleCancelClick}
-                                        className="text-red-600 font-medium"
-                                      >
-                                        Cancel
-                                      </button>
-                                    </td>
-                                  </>
-                                ) : (
-                                  <>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-3">
-                                      {user.name}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4">
-                                      {user.mobile}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4">
-                                      {user.email}
-                                    </td>
-                                    <td className="px-3 py-4 text-xs">
-                                      {user.tags?.length
-                                        ? user.tags.join(", ")
-                                        : "NA"}
-                                    </td>
-                                    <td className="whitespace-nowrap py-4  text-right  flex items-center ">
-                                      <button
-                                        onClick={() => handleEditClick(user)}
-                                        className="text-gray-600 font-medium mr-2"
-                                      >
-                                        <FiEdit2 className="h-4 w-4" />
-                                      </button>
-                                      <TrashIcon
-                                        className="h-4 w-4 text-red-600 cursor-pointer"
-                                        onClick={() =>
-                                          handleDelete(user.customer_id)
-                                        }
-                                      />
-                                    </td>
-                                  </>
-                                )}
+                                <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-3 text-sm">
+                                  {user.name}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm">
+                                  {user.mobile}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm">
+                                  {user.email}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm font-medium">
+                                  {user.tags?.length > 0 ? (
+                                    <div className="flex gap-3">
+                                      {user.tags?.slice(0, 3)?.map((item) => {
+                                        return (
+                                          <button className="text-sm font-medium border rounded-full  px-3 py-1">
+                                            {item}
+                                          </button>
+                                        );
+                                      })}
+                                      {user.tags?.length > 3 && (
+                                        <button className="text-sm font-medium border rounded-full  px-3 py-1">
+                                          +&nbsp;{user.tags?.length - 3}
+                                        </button>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    "NA"
+                                  )}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
