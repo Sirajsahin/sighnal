@@ -93,7 +93,7 @@ const GroupListTableComponent = ({ source }) => {
       {surveyList?.length > 0 && (
         <div className="overflow-x-auto overflow-y-auto mt-3 max-h-[438px] shadow-md rounded-md">
           <table className="min-w-full divide-y divide-gray-200 rounded-md">
-            <thead className="bg-[#F6F6F7] sticky top-0">
+            <thead className="bg-[#F6F6F7] sticky top-0 z-20">
               <tr>
                 {source
                   ? tableHeader?.map((key, index) => (
@@ -201,7 +201,7 @@ const GroupListTableComponent = ({ source }) => {
                     . &nbsp;{item?.status}
                   </td>
                   <td
-                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium sticky  right-0 bg-gray-50 -z-10 cursor-pointer"
+                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium sticky  right-0 bg-gray-50 z-10 cursor-pointer"
                     style={{ width: "100px" }}
                   >
                     <p className="text-center ">...</p>
