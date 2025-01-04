@@ -175,22 +175,26 @@ const GroupListTableComponent = ({ source }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
                     <div className="flex gap-4 items-center">
                       {item?.response_count}{" "}
-                      <span
-                        className={`${
-                          handelResponderPercentage(
+                      {item?.response_count ? (
+                        <span
+                          className={`${
+                            handelResponderPercentage(
+                              item?.response_count,
+                              item?.total_sent
+                            ) < 50
+                              ? "bg-[#FFD7CA] text-[#CA6100]"
+                              : "bg-[#C6FFDD] text-[#129045] "
+                          } rounded-full px-2 py-1 font-semibold `}
+                        >
+                          {handelResponderPercentage(
                             item?.response_count,
                             item?.total_sent
-                          ) < 50
-                            ? "bg-[#FFD7CA] text-[#CA6100]"
-                            : "bg-[#C6FFDD] text-[#129045] "
-                        } rounded-full px-2 py-1 font-semibold `}
-                      >
-                        {handelResponderPercentage(
-                          item?.response_count,
-                          item?.total_sent
-                        )}
-                        %
-                      </span>
+                          )}
+                          %
+                        </span>
+                      ) : (
+                        "NA"
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">

@@ -5,13 +5,14 @@ import { useSurveyLiveAPI } from "@/app/hooks/api_hooks/Group/useSurveyLiveAPI";
 import GroupUsersCategoryModalComponent from "@/components/ui/Modal/GroupUsersCategoryModalComponent";
 
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SurveyLaunchThankyouModalComponent from "../SurveyLaunchThankyouModalComponent";
 import CustomDatePicker from "@/components/ui/CustomDatePicker";
 import CustomTimePicker from "@/components/ui/CustomTimePicker";
+import { useGroupUserListAPI } from "@/app/hooks/api_hooks/Group/useGroupUserListAPI";
 
 export interface ICreateSurveyFromFields {
   comments: boolean;
@@ -40,13 +41,14 @@ const AudienceLaunchComponent = () => {
   const [live, setLive] = useState<boolean>(false);
   const [link, setLink] = useState<string>(null);
 
-  const [startTime, setStartTime] = useState("09:00"); // Default time in 24-hour format
-  const [endTime, setEndTime] = useState("09:00"); // Default time in 24-hour format
+  const [startTime, setStartTime] = useState("00:00"); // Default time in 24-hour format
+  const [endTime, setEndTime] = useState("00:00"); // Default time in 24-hour format
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const { execute: createSurveyLive } = useSurveyLiveAPI();
+  const { execute: fetchUserListData, userData } = useGroupUserListAPI();
 
   const formHook = useForm<ICreateSurveyFromFields>({
     mode: "onChange",
@@ -57,7 +59,30 @@ const AudienceLaunchComponent = () => {
     },
   });
 
+  useEffect(() => {
+    // Get current time
+    const now = new Date();
+
+    // Format current time as HH:mm
+    const formattedStartTime = now.toTimeString().slice(0, 5);
+
+    // Calculate end time by adding 1 hour
+    now.setHours(now.getHours() + 1);
+    const formattedEndTime = now.toTimeString().slice(0, 5);
+
+    // Set start and end times
+    setStartTime(formattedStartTime);
+    setEndTime(formattedEndTime);
+  }, []);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const groupId = params.get("group_id");
+    if (selectedCategories?.length > 0 && groupId) {
+      fetchUserListData(groupId, selectedCategories);
+    }
+  }, [selectedCategories, params.get("group_id")]);
 
   // const generateTimeItems = (length: number, interval: number = 5) => {
   //   return Array(length)
@@ -126,7 +151,12 @@ const AudienceLaunchComponent = () => {
           </p>
           <div className="text-sm text-[#333333] mt-6">
             <p className="text-[#333333] font-medium text-sm ">
-              Add Target Audience
+              Add Target Audience{" "}
+              {userData?.length > 0 && (
+                <span className="bg-[#6ec6a6] font-medium border text-white rounded-xl text-xs p-1">
+                  {userData?.length} users
+                </span>
+              )}
             </p>
             <div className="border border-1 border-purple-100 mt-2 p-3 w-full rounded-lg flex  items-center gap-2">
               <div className="flex items-center gap-2 flex-wrap">
@@ -154,6 +184,16 @@ const AudienceLaunchComponent = () => {
                 startDate={startDate}
                 setStartDate={setStartDate}
               />
+              {/* <CalenderComponent
+                endDate={startDate}
+                handelClick={() => {
+                  //
+                }}
+                selectionDate={new Date()}
+                setSelectionDate={formHook.date}
+                startDate={startDate}
+                key={""}
+              /> */}
             </div>
 
             <div className="flex flex-col gap-1">
