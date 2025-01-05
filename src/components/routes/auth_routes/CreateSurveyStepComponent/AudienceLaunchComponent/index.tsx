@@ -43,9 +43,8 @@ const AudienceLaunchComponent = () => {
 
   const [startTime, setStartTime] = useState("00:00"); // Default time in 24-hour format
   const [endTime, setEndTime] = useState("00:00"); // Default time in 24-hour format
-
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   const { execute: createSurveyLive } = useSurveyLiveAPI();
   const { execute: fetchUserListData, userData } = useGroupUserListAPI();

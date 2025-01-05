@@ -20,7 +20,17 @@ html{
   overflow: auto !important;
 }
 
+
 /* Custom styles for the datepicker */
+h2.react-datepicker__current-month{
+  margin-top: 10px !important;
+}
+.react-datepicker__navigation-icon--next{
+  background-color:black!important;
+}
+.react-datepicker__day-names{
+  margin-top: 10px!important;
+}
 .react-datepicker {
   background-color: #f9fafb; /* Light background */
   border: 1px solid #d1d5db; /* Border color */
@@ -29,7 +39,6 @@ html{
 }
 
 .react-datepicker__header {
-  background-color: #d5ddea; /* Blue header */
   color: white; /* White text */
   padding: 10px;
   border-bottom: none;
@@ -63,7 +72,7 @@ html{
 
 .react-datepicker__day--selected {
   /* background-color: #e8e9ed; Blue for selected day */
-  background-color: black;
+  background-color: black !important; /* Light blue hover */
   color: white;
 }
 .react-datepicker__day--selected:hover {
