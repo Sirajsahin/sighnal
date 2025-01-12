@@ -16,12 +16,11 @@ import ThreeDotComponent from "../FeedbackCampaignSurveyComponent/ThreeDotCompon
 import { Disclosure } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useQuestionPreviewAPI } from "@/app/hooks/api_hooks/Group/useQuestionPreviewAPI";
-import OptionComponent from "../QuestionPreviewComponent/OptionComponent";
-import MultipleOptionComponent from "../QuestionPreviewComponent/MultipleOptionComponent";
-import NPSComponent from "../QuestionPreviewComponent/NPSComponent";
-import RatingComponent from "../QuestionPreviewComponent/RatingComponent";
-import OpenTextArea from "../QuestionPreviewComponent/OpenTextArea";
-import ImagePreviewComponent from "../QuestionPreviewComponent/ImagePreviewComponent";
+import UserResponseOptionComponent from "../UserResponseComponent/UserResponseOptionComponent";
+import UserResponseNPSComponent from "../UserResponseComponent/UserResponseNPSComponent";
+import UserResponseRatingComponent from "../UserResponseComponent/UserResponseRatingComponent";
+import UserResponseOpenTextArea from "../UserResponseComponent/UserResponseOpenTextArea";
+import UserResponseImageComponent from "../UserResponseComponent/UserResponseImageComponent";
 
 const LiveCampaignPageComponent = () => {
   const [params, _setparams] = useSearchParams();
@@ -55,10 +54,10 @@ const LiveCampaignPageComponent = () => {
       fetchQuestionDetails(group_id, survey_id);
     }
   }, [params.get("survey_id")]);
-
+  console.log(prevQuestionDetails, "prevQuestionDetails");
   return (
     <div>
-      <div className="grid grid-cols-8">
+      <div className="grid grid-cols-8 mb-3 sticky top-0">
         <div className="col-span-7">
           <GroupHeaderComponent
             header={groupDetails?.group_name}
@@ -73,11 +72,11 @@ const LiveCampaignPageComponent = () => {
       </div>
       <div>
         <div className="grid grid-cols-12 grid-flow-col gap-4">
-          <div className="col-span-8 ">
+          <div className="col-span-8 h-[83vh] overflow-auto">
             {prevQuestionDetails?.map((question, id) => {
               return (
                 <div className="py-3">
-                  <Disclosure key={id} defaultOpen={id === 0}>
+                  <Disclosure key={id} defaultOpen={true}>
                     {({ open }) => (
                       <>
                         <Disclosure.Button
@@ -98,19 +97,21 @@ const LiveCampaignPageComponent = () => {
                           </p>
                           {question.question_type_id === "single_choice" && (
                             <div>
-                              <OptionComponent data={question?.options} />
+                              <UserResponseOptionComponent
+                              // data={question?.options}
+                              />
                             </div>
                           )}
                           {question.question_type_id === "multiple_choice" && (
                             <div>
-                              <MultipleOptionComponent
-                                data={question?.options}
+                              <UserResponseOptionComponent
+                              // data={question?.options}
                               />
                             </div>
                           )}
                           {question.question_type_id === "mood_scale" && (
                             <div>
-                              <NPSComponent
+                              <UserResponseNPSComponent
                                 data={question?.mood}
                                 flage={true}
                               />
@@ -118,24 +119,23 @@ const LiveCampaignPageComponent = () => {
                           )}
                           {question.question_type_id === "rating_scale" && (
                             <div>
-                              <RatingComponent
+                              <UserResponseRatingComponent
                                 data={question?.mood}
-                                flage={true}
+                                // flage={true}
                               />
                             </div>
                           )}
                           {question.question_type_id ===
                             "open_text_response" && (
                             <div>
-                              <OpenTextArea />
+                              <UserResponseOpenTextArea />
                             </div>
                           )}
                           {question.question_type_id ===
                             "image_single_choice" && (
                             <div>
-                              <ImagePreviewComponent
+                              <UserResponseImageComponent
                                 data={question?.image}
-                                flage={false}
                                 type={false}
                               />
                             </div>
@@ -143,9 +143,8 @@ const LiveCampaignPageComponent = () => {
                           {question.question_type_id ===
                             "image_multiple_choice" && (
                             <div>
-                              <ImagePreviewComponent
+                              <UserResponseImageComponent
                                 data={question?.image}
-                                flage={false}
                                 type={false}
                               />
                             </div>
