@@ -52,7 +52,7 @@ const UserResponseImageComponent = ({ data }) => {
     }
   }, [result]);
 
-  console.log(result.options, "mood");
+  console.log(data, "mood");
 
   // console.log(data?.response_percentage, "data?.response_percentage");
   return (

@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 const UserResponseRatingComponent = ({ data }) => {
   const [selected, setSelected] = useState<number | null>(null);
 
-  function transformData(mood, optionCounts = {}, responsePercentage) {
+  function transformData(mood, optionCounts, responsePercentage) {
     const transformedOptions = (mood || []).map((option) => ({
       item: option,
       percentage:
         responsePercentage?.find((oo) => oo.item === option)?.percentage ?? 0,
-      count: optionCounts[option] ?? 0,
+      count: optionCounts?.find((oo) => oo.item === option)?.count ?? 0,
     }));
 
     return { options: transformedOptions };
@@ -23,11 +23,18 @@ const UserResponseRatingComponent = ({ data }) => {
     [];
 
   const options = Array.from(
-    { length: parseInt(data?.rating_scale) },
+    { length: parseInt("5") },
     (_, index) => `${index + 1}`
   );
 
-  const result = transformData(options, data?.optionCounts, responseArray);
+  const option_countsArray =
+    data?.option_counts &&
+    Object.entries(data?.option_counts)?.map(([item, count]) => ({
+      item,
+      count,
+    }));
+
+  const result = transformData(options, option_countsArray, responseArray);
 
   useEffect(() => {
     if (result?.options?.length > 0) {
@@ -47,7 +54,7 @@ const UserResponseRatingComponent = ({ data }) => {
           return (
             <div>
               <div>
-                {val?.item} ({val?.percentage})
+                {val?.count} ({val?.percentage})
               </div>
 
               <div

@@ -6,12 +6,12 @@ const UserResponseNPSComponent = ({ data, flage }) => {
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  function transformData(mood, optionCounts = {}, responsePercentage) {
+  function transformData(mood, optionCounts, responsePercentage) {
     const transformedOptions = mood?.map((option) => ({
       item: option,
       percentage:
         responsePercentage?.find((oo) => oo.item === option)?.percentage ?? 0,
-      count: optionCounts[option] ?? 0,
+      count: optionCounts?.find((oo) => oo.item === option)?.count ?? 0,
     }));
 
     return { options: transformedOptions };
@@ -23,7 +23,13 @@ const UserResponseNPSComponent = ({ data, flage }) => {
       item,
       percentage,
     }));
-  const result = transformData(data?.mood, data?.optionCounts, responseArray);
+  const option_countsArray =
+    data?.option_counts &&
+    Object.entries(data?.option_counts)?.map(([item, count]) => ({
+      item,
+      count,
+    }));
+  const result = transformData(data?.mood, option_countsArray, responseArray);
 
   useEffect(() => {
     if (result?.options?.length > 0) {

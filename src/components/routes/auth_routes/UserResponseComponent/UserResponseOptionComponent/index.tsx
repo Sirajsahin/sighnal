@@ -56,7 +56,7 @@ const UserResponseOptionComponent = ({ data }) => {
           </div>
           <div
             className={`relative text-lg p-3 ${
-              index === selectedOptionIndex ? "text-white" : "text-gray-500 "
+              option.percentage === 100 ? "text-white" : "text-gray-500 "
             }`}
             style={{
               width: "80px",
