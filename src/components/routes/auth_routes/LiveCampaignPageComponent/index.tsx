@@ -1,67 +1,36 @@
 import GroupHeaderComponent from "@/components/ui/GroupHeaderComponent";
-
-import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsAPI";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-
-import {
-  ISurveyListProps,
-  useSurveyListAPI,
-} from "@/app/hooks/api_hooks/Group/useSurveyListAPI";
-import useRouteInfo from "@/app/hooks/useRouteInfo";
-import { useRouter } from "@/app/hooks/useRouter";
-import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
 import ThreeDotComponent from "../FeedbackCampaignSurveyComponent/ThreeDotComponent";
 
 import { Disclosure } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useQuestionPreviewAPI } from "@/app/hooks/api_hooks/Group/useQuestionPreviewAPI";
 import UserResponseOptionComponent from "../UserResponseComponent/UserResponseOptionComponent";
 import UserResponseNPSComponent from "../UserResponseComponent/UserResponseNPSComponent";
 import UserResponseRatingComponent from "../UserResponseComponent/UserResponseRatingComponent";
 import UserResponseOpenTextArea from "../UserResponseComponent/UserResponseOpenTextArea";
 import UserResponseImageComponent from "../UserResponseComponent/UserResponseImageComponent";
+import { useQuestionResponseAPI } from "@/app/hooks/api_hooks/Group/useQuestionResponseAPI";
 
 const LiveCampaignPageComponent = () => {
   const [params, _setparams] = useSearchParams();
-
-  const { getRouteKey } = useRouter();
-
-  const { groupDetails } = useRouteInfo(getRouteKey("HOME_PAGE", "id"))
-    ?.routeState?.state as ISurvetSliceState;
-
-  const { execute: fetchGroupDetails } = useGroupDetailsAPI();
-  const { execute: fetchSurveyList } = useSurveyListAPI();
   const { execute: fetchQuestionDetails, prevQuestionDetails } =
-    useQuestionPreviewAPI();
-
-  useEffect(() => {
-    const groupId = params.get("group_id");
-    if (groupId) {
-      fetchGroupDetails(groupId);
-      const cc: ISurveyListProps = {
-        group_id: groupId,
-        status: "total",
-      };
-      fetchSurveyList(cc);
-    }
-  }, [params.get("group_id")]);
+    useQuestionResponseAPI();
 
   useEffect(() => {
     const survey_id = params.get("survey_id");
-    const group_id = params.get("group_id");
-    if (group_id && survey_id) {
-      fetchQuestionDetails(group_id, survey_id);
+    if (survey_id) {
+      fetchQuestionDetails(survey_id);
     }
   }, [params.get("survey_id")]);
-  console.log(prevQuestionDetails, "prevQuestionDetails");
+
   return (
     <div>
       <div className="grid grid-cols-8 mb-3 sticky top-0">
         <div className="col-span-7">
           <GroupHeaderComponent
-            header={groupDetails?.group_name}
-            para={groupDetails?.group_description}
+            header={prevQuestionDetails?.survey_name}
+            para={prevQuestionDetails?.survey_description}
           />
         </div>
         <div className="col-span-1">
@@ -73,7 +42,7 @@ const LiveCampaignPageComponent = () => {
       <div>
         <div className="grid grid-cols-12 grid-flow-col gap-4">
           <div className="col-span-8 h-[83vh] overflow-auto">
-            {prevQuestionDetails?.map((question, id) => {
+            {prevQuestionDetails?.result?.map((question, id) => {
               return (
                 <div className="py-3">
                   <Disclosure key={id} defaultOpen={true}>
@@ -97,32 +66,25 @@ const LiveCampaignPageComponent = () => {
                           </p>
                           {question.question_type_id === "single_choice" && (
                             <div>
-                              <UserResponseOptionComponent
-                              // data={question?.options}
-                              />
+                              <UserResponseOptionComponent data={question} />
                             </div>
                           )}
                           {question.question_type_id === "multiple_choice" && (
                             <div>
-                              <UserResponseOptionComponent
-                              // data={question?.options}
-                              />
+                              <UserResponseOptionComponent data={question} />
                             </div>
                           )}
                           {question.question_type_id === "mood_scale" && (
                             <div>
                               <UserResponseNPSComponent
-                                data={question?.mood}
+                                data={question}
                                 flage={true}
                               />
                             </div>
                           )}
                           {question.question_type_id === "rating_scale" && (
                             <div>
-                              <UserResponseRatingComponent
-                                data={question?.mood}
-                                // flage={true}
-                              />
+                              <UserResponseRatingComponent data={question} />
                             </div>
                           )}
                           {question.question_type_id ===
@@ -134,19 +96,13 @@ const LiveCampaignPageComponent = () => {
                           {question.question_type_id ===
                             "image_single_choice" && (
                             <div>
-                              <UserResponseImageComponent
-                                data={question?.image}
-                                type={false}
-                              />
+                              <UserResponseImageComponent data={question} />
                             </div>
                           )}
                           {question.question_type_id ===
                             "image_multiple_choice" && (
                             <div>
-                              <UserResponseImageComponent
-                                data={question?.image}
-                                type={false}
-                              />
+                              <UserResponseImageComponent data={question} />
                             </div>
                           )}
                         </Disclosure.Panel>

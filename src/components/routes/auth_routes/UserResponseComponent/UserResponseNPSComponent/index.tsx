@@ -1,21 +1,47 @@
 import { useUtils } from "@/app/hooks/useUtils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const UserResponseNPSComponent = ({ data, flage }) => {
   const { splitEmojiAndText } = useUtils();
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  const handleOptionClick = (option: number) => {
-    setSelectedOption(option);
-  };
+  function transformData(mood, optionCounts = {}, responsePercentage) {
+    const transformedOptions = mood?.map((option) => ({
+      item: option,
+      percentage:
+        responsePercentage?.find((oo) => oo.item === option)?.percentage ?? 0,
+      count: optionCounts[option] ?? 0,
+    }));
+
+    return { options: transformedOptions };
+  }
+
+  const responseArray =
+    data?.response_percentage &&
+    Object.entries(data?.response_percentage)?.map(([item, percentage]) => ({
+      item,
+      percentage,
+    }));
+  const result = transformData(data?.mood, data?.optionCounts, responseArray);
+
+  useEffect(() => {
+    if (result?.options?.length > 0) {
+      const maxIndex = result?.options.reduce(
+        (maxIdx, option, idx, arr) =>
+          option.percentage > arr[maxIdx].percentage ? idx : maxIdx,
+        0
+      );
+      setSelectedOption(maxIndex);
+    }
+  }, [result]);
 
   return (
     <div>
       <div
         className={`${flage ? "grid grid-cols-5" : "flex flex-wrap"} gap-3 my-4`}
       >
-        {data?.map((option, index) => (
+        {result?.options?.map((option, index) => (
           <div className="flex flex-col items-center gap-2">
             <div
               key={index}
@@ -24,14 +50,17 @@ const UserResponseNPSComponent = ({ data, flage }) => {
                   ? "bg-[#0C6243] text-white border"
                   : "bg-white text-[#333333]"
               }`}
-              onClick={() => handleOptionClick(index)}
             >
               <p className={`text-2xl ${!flage && "bg-white rounded-md px-1"}`}>
-                {splitEmojiAndText(option)?.emoji}
+                {splitEmojiAndText(option?.item)?.emoji}
               </p>
-              <p className="text-xs">{splitEmojiAndText(option)?.title}</p>
+              <p className="text-xs">
+                {splitEmojiAndText(option?.item)?.title}
+              </p>
             </div>
-            <div>50 (60%)</div>
+            <div>
+              {option?.count} ({option?.percentage}%)
+            </div>
           </div>
         ))}
       </div>

@@ -1,40 +1,42 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const UserResponseOptionComponent = () => {
+const UserResponseOptionComponent = ({ data }) => {
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(
     null
   );
 
-  const dataItem = [
-    { text: "Great", percentage: 80 },
-    { text: "Okay", percentage: 20 },
-    { text: "Okay", percentage: 2 },
-    { text: "Okay", percentage: 100 },
-    { text: "Okay", percentage: 60 },
-  ];
+  function transformData(responsePercentage, options) {
+    const transformedOptions = options?.map((option) => {
+      const percentage = responsePercentage[option] || 0;
+      return { item: option, percentage };
+    });
+
+    return { options: transformedOptions };
+  }
+
+  // Transforming Data
+  const result = transformData(data?.response_percentage, data?.options);
 
   useEffect(() => {
-    if (dataItem.length > 0) {
-      const highestIndex = dataItem.reduce(
+    if (result?.options?.length > 0) {
+      const highestIndex = result?.options?.reduce(
         (maxIndex, item, index, arr) =>
           item.percentage > arr[maxIndex].percentage ? index : maxIndex,
         0
       );
       setSelectedOptionIndex(highestIndex);
     }
-  }, [dataItem]);
-  console.log(selectedOptionIndex, "selectedOptionIndex");
+  }, [result]);
+
   return (
     <div className="p-4">
-      {dataItem?.map((option, index) => (
+      {result?.options?.map((option, index) => (
         <div
           key={index}
-          className={`relative flex items-center justify-between rounded-lg h-[50px] overflow-hidden bg-white transition-colors duration-300 mb-3 ${
+          className={`relative flex items-center justify-between rounded-lg h-[40px] overflow-hidden bg-white transition-colors duration-300 mb-3 ${
             index === selectedOptionIndex ? "" : ""
           }`}
-          // style={{ background: "bg-white" }} // Gray background for the bar
         >
-          {/* Dynamic Background Fill */}
           {index === selectedOptionIndex ? (
             <div
               className="absolute top-0 left-0 h-full bg-[#0C6243] rounded-lg text-white"
@@ -47,11 +49,10 @@ const UserResponseOptionComponent = () => {
             ></div>
           )}
 
-          {/* Content on Top */}
           <div
             className={`relative flex-1 text-sm px-2  ${index === selectedOptionIndex ? "text-white" : "text-[#333333]"}`}
           >
-            {option.text}
+            {option.item}
           </div>
           <div
             className={`relative text-lg p-3 ${

@@ -47,6 +47,10 @@ export const USER_LOGIN_APIS: SighnalAuthAPIS = {
     baseURL: `${BASE_URL}/survey/stats/`,
     params: {},
   },
+  SURVEY_RESPONSE__API: {
+    baseURL: `${BASE_URL}/survey/responses-result/`,
+    params: {},
+  },
   SURVEY_CREATE_API: {
     baseURL: `${BASE_URL}/survey/`,
     params: {},
