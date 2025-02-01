@@ -49,6 +49,8 @@ const SearchableMultiSelectMenu: React.FC<ISearchableMultiSelectMenu> = ({
 
   const handleSelectItems = (items: ISelectMenuItemData[] | any) => {
     const selectedItems = items?.filter((i) => i !== "selectAll");
+    console.log(selectedItems, "selectedItems");
+    console.log(items, "items");
     if (
       items?.length > 0 &&
       items[items?.length - 1] === "selectAll" &&
@@ -59,6 +61,15 @@ const SearchableMultiSelectMenu: React.FC<ISearchableMultiSelectMenu> = ({
       setSelectedOptions([]);
       setSelectAll(false);
     } else if (items?.length > 0 && items[0] === "selectAll" && !selectAll) {
+      console.log("3st");
+      setSelectedOptions(props.selectItems);
+      onSelectItem(props.selectItems);
+      setSelectAll(true);
+    } else if (
+      items?.length > 0 &&
+      items[items?.length - 1] === "selectAll" &&
+      !selectAll
+    ) {
       console.log("3st");
       setSelectedOptions(props.selectItems);
       onSelectItem(props.selectItems);
