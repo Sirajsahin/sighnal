@@ -1,5 +1,5 @@
 import { useFormUtils } from "@/app/hooks/useFormUtils";
-import { useAfterFirstRender } from "@/app_redux/ui_hooks/useAfterFirstRender";
+// import { useAfterFirstRender } from "@/app_redux/ui_hooks/useAfterFirstRender";
 import { Combobox, Transition } from "@headlessui/react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
@@ -47,21 +47,35 @@ const SearchableMultiSelectMenu: React.FC<ISearchableMultiSelectMenu> = ({
   const reducedErrorMessages = deduceFormFieldErrors(errorMessages, fieldError);
   const isValid: boolean = isFormFieldValid(reducedErrorMessages);
 
-  const handleSelectItems = (items: ISelectMenuItemData[]) => {
-    const selectedItems = items?.filter((i) => i !== null);
-    setSelectedOptions(selectedItems);
-    if (onSelectItem) {
+  const handleSelectItems = (items: ISelectMenuItemData[] | any) => {
+    const selectedItems = items?.filter((i) => i !== "selectAll");
+    if (
+      items?.length > 0 &&
+      items[items?.length - 1] === "selectAll" &&
+      selectAll
+    ) {
+      console.log("2st");
+      onSelectItem([]);
+      setSelectedOptions([]);
+      setSelectAll(false);
+    } else if (items?.length > 0 && items[0] === "selectAll" && !selectAll) {
+      console.log("3st");
+      setSelectedOptions(props.selectItems);
+      onSelectItem(props.selectItems);
+      setSelectAll(true);
+    } else if (selectedItems?.length === props?.selectItems?.length) {
+      setSelectedOptions(props.selectItems);
+      onSelectItem(props.selectItems);
+      setSelectAll(true);
+    } else {
+      console.log("4st");
+      setSelectAll(false);
       onSelectItem(selectedItems);
+      setSelectedOptions(selectedItems);
     }
   };
-
-  useAfterFirstRender(() => {
-    if (selectAll) {
-      handleSelectItems(filteredItems);
-    } else {
-      handleSelectItems([]);
-    }
-  }, [selectAll]);
+  // console.log(props?.defaultSelectAll, "defaultSelected");
+  // console.log(selectedOptions, "defaultSelected");
 
   useEffect(() => {
     setSelectedOptions(defaultSelected);
@@ -78,25 +92,27 @@ const SearchableMultiSelectMenu: React.FC<ISearchableMultiSelectMenu> = ({
     }
   }, [defaultSelectedIds]);
 
-  useAfterFirstRender(() => {
+  useEffect(() => {
     if (
       props?.selectItems?.length > 0 &&
       props?.defaultSelectAll === true &&
       !selectAll
     ) {
       setSelectAll(true);
+      setSelectedOptions(props.selectItems);
+      onSelectItem(props.selectItems);
     }
   }, [props?.selectItems?.length, props?.defaultSelectAll]);
 
-  useAfterFirstRender(() => {
-    if (
-      props?.selectItems?.length > 0 &&
-      selectedOptions?.length === 0 &&
-      selectAll
-    ) {
-      setSelectAll(false);
-    }
-  }, [props?.selectItems?.length]);
+  // useAfterFirstRender(() => {
+  //   if (
+  //     props?.selectItems?.length > 0 &&
+  //     selectedOptions?.length === 0 &&
+  //     selectAll
+  //   ) {
+  //     setSelectAll(false);
+  //   }
+  // }, [props?.selectItems?.length]);
 
   const showFieldErrors =
     showTypedErrors && showTypedErrors === true
@@ -129,6 +145,15 @@ const SearchableMultiSelectMenu: React.FC<ISearchableMultiSelectMenu> = ({
     return null;
   };
 
+  // const handelSelectAll = () => {
+  //   console.log(selectAll, "click");
+  //   if (!selectAll) {
+  //     setSelectedOptions(props.selectItems);
+  //   }
+  //   setSelectAll((prev) => !prev);
+  // };
+
+  // console.log(props?.selectItems, "selectedOptions");
   return (
     <div
       style={props?.style ?? {}}
@@ -138,6 +163,7 @@ const SearchableMultiSelectMenu: React.FC<ISearchableMultiSelectMenu> = ({
         disabled={props?.disabled && props?.disabled === true ? true : false}
         value={selectedOptions ?? []}
         onChange={(items: ISelectMenuItemData[]) => {
+          // console.log(items, "items");
           handleSelectItems(items);
         }}
         multiple
@@ -263,8 +289,10 @@ const SearchableMultiSelectMenu: React.FC<ISearchableMultiSelectMenu> = ({
                               : ""
                           )
                         }
-                        onClick={() => setSelectAll(!selectAll)}
-                        value={null}
+                        // onClick={() => handel}
+                        // setSelectAll(!selectAll)
+                        // onClick={() => handelSelectAll()}
+                        value={"selectAll"}
                       >
                         <div className="w-full flex justify-start items-center">
                           <input

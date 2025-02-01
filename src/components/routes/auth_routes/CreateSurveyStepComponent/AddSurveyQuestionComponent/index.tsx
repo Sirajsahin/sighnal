@@ -134,7 +134,7 @@ const AddSurveyQuestionComponent = () => {
       question: "",
       openText: "",
       rating: "",
-      mood: ["dsdshg"],
+      mood: [""],
       question_type_id: "",
       options: ["", ""],
       rating_scale: "5",
@@ -470,7 +470,7 @@ const AddSurveyQuestionComponent = () => {
                                   }
                                 }}
                                 withSelectAll
-                                defaultSelectAll
+                                defaultSelectAll={true}
                                 errorMessages={[
                                   { message: "Required", type: "required" },
                                 ]}
