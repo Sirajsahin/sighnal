@@ -123,20 +123,31 @@ const GroupListTableComponent = ({ source }) => {
                 <tr
                   key={id}
                   className="border-b cursor-pointer hover:bg-gray-100"
-                  onClick={() => handelREdirect(item)}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium"
+                    onClick={() => handelREdirect(item)}
+                  >
                     <div className="flex flex-col">{id + 1}</div>
                   </td>
                   {source && (
-                    <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                    <td
+                      className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium"
+                      onClick={() => handelREdirect(item)}
+                    >
                       {item?.group_name}
                     </td>
                   )}
-                  <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium"
+                    onClick={() => handelREdirect(item)}
+                  >
                     {item?.survey_name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium"
+                    onClick={() => handelREdirect(item)}
+                  >
                     {item?.tags && (
                       <div className="flex items-center gap-2">
                         <p className="font-medium text-[#333333] text-sm">
@@ -153,8 +164,14 @@ const GroupListTableComponent = ({ source }) => {
                         )}
                       </div>
                     )}
+                    {item?.tags?.length === 0 && (
+                      <span className="text-sm">NA</span>
+                    )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium flex items-center gap-2">
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium flex items-center gap-2"
+                    onClick={() => handelREdirect(item)}
+                  >
                     <div className="flex flex-col gap-1">
                       <p className="font-medium text-[#333333] text-sm">
                         {item?.start_date}
@@ -173,7 +190,10 @@ const GroupListTableComponent = ({ source }) => {
                       </p>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium"
+                    onClick={() => handelREdirect(item)}
+                  >
                     <div className="flex gap-4 items-center">
                       {item?.response_count}{" "}
                       {item?.response_count ? (
@@ -198,7 +218,10 @@ const GroupListTableComponent = ({ source }) => {
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium">
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium"
+                    onClick={() => handelREdirect(item)}
+                  >
                     . &nbsp;{item?.status}
                   </td>
                   <td

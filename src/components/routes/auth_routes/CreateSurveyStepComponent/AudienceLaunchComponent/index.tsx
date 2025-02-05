@@ -182,6 +182,7 @@ const AudienceLaunchComponent = () => {
                 title={"Start Date"}
                 startDate={startDate}
                 setStartDate={setStartDate}
+                dateDisableBefore={new Date()}
               />
               {/* <CalenderComponent
                 endDate={startDate}
@@ -208,6 +209,7 @@ const AudienceLaunchComponent = () => {
                 title={"End Date"}
                 startDate={endDate}
                 setStartDate={setEndDate}
+                dateDisableBefore={startDate}
               />
             </div>
 

@@ -48,7 +48,12 @@ const Modal = ({
   );
 };
 
-const CustomDatePicker = ({ title, startDate, setStartDate }) => {
+const CustomDatePicker = ({
+  title,
+  startDate,
+  setStartDate,
+  dateDisableBefore,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
@@ -70,7 +75,6 @@ const CustomDatePicker = ({ title, startDate, setStartDate }) => {
         {title}
       </label>
       <div className="relative">
-        {/* Open Modal Button */}
         <button
           onClick={openModal}
           className="bg-white border border-gray-300 text-gray-900 text-sm  rounded-md w-full p-3 shadow-sm flex items-center justify-between gap-3"
@@ -80,16 +84,16 @@ const CustomDatePicker = ({ title, startDate, setStartDate }) => {
         </button>
       </div>
 
-      {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <DatePicker
           selected={startDate}
           onChange={(date: Date | null) => {
             setStartDate(date);
-            closeModal(); // Close modal on date select
+            closeModal();
           }}
           inline
           dateFormat="dd-MM-yyyy"
+          minDate={dateDisableBefore}
         />
       </Modal>
     </div>

@@ -165,15 +165,15 @@ const UserProfile = () => {
         onSubmit={formHook.handleSubmit(onSubmit)}
       >
         <div className="flex gap-3 items-center my-4">
-          <div className="h-20 w-20 rounded-full bg-[#D9D9D9] flex items-center justify-center relative overflow-hidden cursor-pointer">
+          <div className="h-20 w-20 rounded-full bg-[#D9D9D9] flex items-center justify-center relative overflow-hidden border">
             {organization?.icon ? (
               <img
                 src={organization?.icon}
                 alt="Company Logo"
-                className="h-full w-full object-cover rounded-full cursor-pointer"
+                className="h-full w-full object-cover rounded-full "
               />
             ) : (
-              <label className="flex flex-col items-center justify-center cursor-pointer text-xs text-gray-500">
+              <label className="flex flex-col items-center justify-center cursor-pointer text-xs text-gray-500 h-20 w-20 rounded-full">
                 Upload Logo
                 <input
                   type="file"
