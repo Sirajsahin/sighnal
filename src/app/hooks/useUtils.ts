@@ -76,6 +76,7 @@ type useUtilsReturnType = {
   base64ToValidURL: (base64String: string, fileType: string) => string;
   imageUrlToDownload: (url: string, fileName: string) => void;
   convertDataToHTMLList: (data: any) => string;
+  vaticDateFormat: (expiry_date: string | number) => string;
   cleanURLPathname(url: string): string;
   convertToReadableFormat(str: string): string;
   POStatusTextColor(str: string): string;
@@ -103,6 +104,54 @@ const POStatusTextColor = (status: string) => {
     return "text-[#C13BF0]";
   }
 };
+
+function vaticDateFormat(expiry_date: string | number): string {
+  if (expiry_date) {
+    let dateObj: Date;
+
+    // Check if expiry_date is a number (epoch timestamp)
+    if (typeof expiry_date === "number") {
+      dateObj = new Date(expiry_date * 1000); // Convert seconds to milliseconds
+    } else if (typeof expiry_date === "string") {
+      // Try parsing different date formats
+      const parts = expiry_date.split("/");
+      if (parts.length === 3) {
+        // Assuming MM/DD/YYYY format
+        const [month, day, year] = parts.map(Number);
+        dateObj = new Date(year, month - 1, day);
+      } else {
+        // Fallback to default Date parsing
+        dateObj = new Date(expiry_date);
+      }
+    } else {
+      throw new Error("Invalid expiry_date format");
+    }
+
+    // Month mapping
+    const monthNames = [
+      "JAN",
+      "FEB",
+      "MAR",
+      "APR",
+      "MAY",
+      "JUN",
+      "JUL",
+      "AUG",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DEC",
+    ];
+
+    const date = String(dateObj.getDate()).padStart(2, "0");
+    const month = monthNames[dateObj.getMonth()];
+    const year = dateObj.getFullYear();
+
+    return `${date} ${month} ${year}`;
+  } else {
+    return null;
+  }
+}
 
 function convertToReadableFormat(str) {
   return str
@@ -708,5 +757,6 @@ export const useUtils = (): useUtilsReturnType => {
     convertToReadableFormat,
     POStatusTextColor,
     epocToDateTimeForNumber,
+    vaticDateFormat,
   };
 };

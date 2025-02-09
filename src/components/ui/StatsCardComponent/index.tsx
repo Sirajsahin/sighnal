@@ -7,7 +7,7 @@ const StatsCardComponent: React.FC<IFeedbackStatsComponentProps> = ({
 }) => {
   return (
     <div
-      className={`p-4 bg-[#F5F5F5] w-auto rounded-xl cursor-pointer ${isSelected ? "border-gray-300 border" : "border-gray-300"}`}
+      className={`p-4 bg-[#F5F5F5] w-auto rounded-xl cursor-pointer ${isSelected ? "border-black border-2" : "border-gray-300"}`}
       onClick={handelCallback}
     >
       <div className="flex  items-center gap-3">

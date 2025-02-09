@@ -55,8 +55,8 @@ const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-3 text-left shadow-xl transition-all sm:my-6 sm:w-full sm:max-w-6xl sm:p-6">
-                <div>
-                  <div className="text-base font-semibold text-[#333333] py-2 flex justify-between items-center">
+                <div className="h-[600px] overflow-auto">
+                  <div className="text-base font-semibold text-[#333333] pt-2 flex justify-between items-center">
                     <p className="flex items-center gap-1">
                       Total Groups{" "}
                       <span className="bg-[#cde6dd] text-[#0C6243] border border-[#333333] w-auto h-auto p-1 rounded-lg text-xs">
@@ -71,9 +71,7 @@ const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                       />
                     </p>
                   </div>
-                  <div
-                    className={`grid grid-cols-3 gap-4 overflow-auto h-[700px] `}
-                  >
+                  <div className={`grid grid-cols-3 gap-4 overflow-auto  `}>
                     {groupList?.map((item, id) => {
                       return (
                         <div
@@ -95,7 +93,7 @@ const ViewAllGroupModalComponent: React.FC<IFeedbackCreateModalProps> = ({
                               ? `${item.group_description.slice(0, 180)}...`
                               : item.group_description}
                           </p>
-                          <div className="mt-7 ">
+                          <div className="mt-9 ">
                             <button
                               className="text-[##333333] border   w-full font-bold p-3 rounded-lg text-sm  border-[#333333]"
                               onClick={() => handelClick(item?.group_id)}

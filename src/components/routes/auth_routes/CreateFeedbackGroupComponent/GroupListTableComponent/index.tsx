@@ -1,6 +1,7 @@
 import { useSurveyListAPI } from "@/app/hooks/api_hooks/Group/useSurveyListAPI";
 import useRouteInfo from "@/app/hooks/useRouteInfo";
 import { useRouter } from "@/app/hooks/useRouter";
+import { useUtils } from "@/app/hooks/useUtils";
 import { ISurvetSliceState } from "@/app_redux/reducers/slice/auth/survey_slice";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -59,6 +60,7 @@ const GroupListTableComponent = ({ source }) => {
   const { getRouteKey } = useRouter();
   const [params, _setparams] = useSearchParams();
   const navigate = useNavigate();
+  const { vaticDateFormat } = useUtils();
 
   const { surveyList } = useRouteInfo(getRouteKey("HOME_PAGE", "id"))
     ?.routeState?.state as ISurvetSliceState;
@@ -67,9 +69,9 @@ const GroupListTableComponent = ({ source }) => {
   useEffect(() => {
     const groupId = params.get("group_id");
     if (groupId) {
-      fetchSurveyList({ status: "total", group_id: groupId });
+      fetchSurveyList({ status: "live", group_id: groupId });
     } else {
-      fetchSurveyList({ status: "total" });
+      fetchSurveyList({ status: "live" });
     }
   }, [params.get("group_id")]);
 
@@ -82,8 +84,6 @@ const GroupListTableComponent = ({ source }) => {
   };
 
   const handelREdirect = (item: any) => {
-    console.log(item, "items");
-
     navigate(
       `/app/campaign/live?group_id=${item.group_id}&survey_id=${item.survey_id}`
     );
@@ -92,7 +92,7 @@ const GroupListTableComponent = ({ source }) => {
   return (
     <>
       {surveyList?.length > 0 && (
-        <div className="overflow-x-auto overflow-y-auto mt-3 max-h-[438px] shadow-md rounded-md">
+        <div className="overflow-x-auto overflow-y-auto mt-3 max-h-[508px] shadow-md rounded-md">
           <table className="min-w-full divide-y divide-gray-200 rounded-md">
             <thead className="bg-[#F6F6F7] sticky top-0 z-10">
               <tr>
@@ -148,18 +148,18 @@ const GroupListTableComponent = ({ source }) => {
                     className="px-6 py-4 whitespace-nowrap text-[#333333] text-sm font-medium"
                     onClick={() => handelREdirect(item)}
                   >
-                    {item?.tags && (
+                    {item?.tags?.length > 0 && (
                       <div className="flex items-center gap-2">
-                        <p className="font-medium text-[#333333] text-sm">
+                        <p className="font-medium text-[#333333] text-sm rounded-full px-3 py-1 flex items-center justify-center bg-[#F5F5F5]">
                           {item?.tags[0]}
                         </p>
-                        <p className="font-medium text-[#333333] text-sm">
+                        <p className="font-medium text-[#333333] text-sm rounded-full px-3 py-1 flex items-center justify-center bg-[#F5F5F5]">
                           {item?.tags[1]}
                         </p>
 
                         {item?.tags?.length > 3 && (
-                          <div className="bg-black text-white rounded-xl p-1 text-xs cursor-pointer">
-                            {item?.tags?.length - 2}
+                          <div className="bg-black text-white rounded-full w-auto px-1 h-6 flex items-center justify-center text-xs cursor-pointer">
+                            <span>+</span> {item?.tags?.length - 2}
                           </div>
                         )}
                       </div>
@@ -174,7 +174,7 @@ const GroupListTableComponent = ({ source }) => {
                   >
                     <div className="flex flex-col gap-1">
                       <p className="font-medium text-[#333333] text-sm">
-                        {item?.start_date}
+                        {vaticDateFormat(item?.start_date)}
                       </p>
                       <p className="font-medium text-[#333333] text-sm">
                         {item?.start_time}
@@ -183,7 +183,7 @@ const GroupListTableComponent = ({ source }) => {
                     <div className="px-4">-</div>
                     <div className="flex flex-col gap-1">
                       <p className="font-medium text-[#333333] text-sm">
-                        {item?.end_date}
+                        {vaticDateFormat(item?.end_date)}
                       </p>
                       <p className="font-medium text-[#333333] text-sm">
                         {item?.end_time}

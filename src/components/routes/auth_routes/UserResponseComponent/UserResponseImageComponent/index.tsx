@@ -73,7 +73,10 @@ const UserResponseImageComponent = ({ data }) => {
             key={id}
             className={` ${selected === id ? "bg-[#0C6243] text-white" : "bg-gray-200 text-black "}  text-sm  w-full h-auto flex rounded-lg  p-2 justify-between items-center  transition-all duration-600 my-3 `}
           >
-            <span className="w-full">{item?.percentage} % </span>
+            <span className="w-full">
+              {" "}
+              {item?.count} ({item?.percentage}%){" "}
+            </span>
           </div>
         </div>
       ))}

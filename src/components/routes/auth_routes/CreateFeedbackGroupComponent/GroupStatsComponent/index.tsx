@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 const GroupStatsComponent = () => {
   const { execute: fetchGroupStats, groupStats } = useGroupStatsAPI();
-  const [selectedStatus, setSelectedStatus] = useState("total");
+  const [selectedStatus, setSelectedStatus] = useState("live");
   const { execute: fetchSurveyList } = useSurveyListAPI();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const GroupStatsComponent = () => {
 
   return (
     <div className=" grid grid-cols-5 gap-6">
-      {groupStats?.map((val, id) => {
+      {groupStats?.slice(1)?.map((val, id) => {
         const isSelected = selectedStatus === val?.status;
         return (
           <div key={id}>

@@ -36,7 +36,7 @@ const FeedbackCampaignSurveyComponent = () => {
       fetchGroupDetails(groupId);
       const cc: ISurveyListProps = {
         group_id: groupId,
-        status: "total",
+        status: "live",
       };
       fetchSurveyList(cc);
     }

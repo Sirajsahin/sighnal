@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router-dom";
 const SurveyStatsComponent = () => {
   const [params, _setparams] = useSearchParams();
   const { execute: fetchGroupStats, groupStats } = useSurveyStatsListAPI();
-  const [selectedStatus, setSelectedStatus] = useState("total");
+  const [selectedStatus, setSelectedStatus] = useState("live");
   const { execute: fetchSurveyList } = useSurveyListAPI();
 
   const groupId = params.get("group_id");
@@ -32,7 +32,7 @@ const SurveyStatsComponent = () => {
   };
   return (
     <div className=" grid grid-cols-5 gap-6">
-      {groupStats?.map((val, id) => {
+      {groupStats?.slice(1)?.map((val, id) => {
         const isSelected = selectedStatus === val?.status;
 
         return (

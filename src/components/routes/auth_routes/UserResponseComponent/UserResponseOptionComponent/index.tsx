@@ -5,17 +5,30 @@ const UserResponseOptionComponent = ({ data }) => {
     null
   );
 
-  function transformData(responsePercentage, options) {
+  function transformData(responsePercentage, options, optionCounts: any) {
     const transformedOptions = options?.map((option) => {
       const percentage = responsePercentage[option] || 0;
-      return { item: option, percentage };
+      const count = optionCounts?.find((oo) => oo.item === option)?.count ?? 0;
+      return { item: option, percentage, count };
     });
 
     return { options: transformedOptions };
   }
 
   // Transforming Data
-  const result = transformData(data?.response_percentage, data?.options);
+
+  const option_countsArray =
+    data?.option_counts &&
+    Object.entries(data?.option_counts)?.map(([item, count]) => ({
+      item,
+      count,
+    }));
+
+  const result = transformData(
+    data?.response_percentage,
+    data?.options,
+    option_countsArray
+  );
 
   useEffect(() => {
     if (result?.options?.length > 0) {
@@ -27,6 +40,8 @@ const UserResponseOptionComponent = ({ data }) => {
       setSelectedOptionIndex(highestIndex);
     }
   }, [result]);
+
+  console.log(data, "data");
 
   return (
     <div className="p-4">
@@ -55,14 +70,14 @@ const UserResponseOptionComponent = ({ data }) => {
             {option.item}
           </div>
           <div
-            className={`relative text-lg p-3 ${
+            className={`relative text-lg p-3 flex  justify-end ${
               option.percentage === 100 ? "text-white" : "text-gray-500 "
             }`}
             style={{
-              width: "80px",
+              width: "auto",
             }}
           >
-            {`${option.percentage}%`}
+            {option?.count} ({`${option.percentage}%`})
           </div>
         </div>
       ))}
