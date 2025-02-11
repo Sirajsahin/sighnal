@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent/SidebarComponent";
 import { IUIContainerProps } from "./interface";
+import BreadcrumbsNavComponent from "../BreadCambs";
 
 const UIContainer: React.FC<React.PropsWithChildren<IUIContainerProps>> = (
   props
@@ -23,6 +24,7 @@ const UIContainer: React.FC<React.PropsWithChildren<IUIContainerProps>> = (
       <div className={`${collapsed ? "pl-10 " : "lg:pl-64"}`}>
         <main className="py-5 mt-16 ">
           <div className="px-2 sm:px-2 lg:px-3 relative ">
+            <BreadcrumbsNavComponent />
             {props?.children}
           </div>
         </main>

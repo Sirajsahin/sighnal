@@ -9,6 +9,13 @@ const navigation = [
     count: "5",
     current: true,
   },
+  {
+    name: "Feature",
+    href: "/app/home",
+    icon: HomeIcon,
+    count: "5",
+    current: false,
+  },
   // {
   //   name: "Campaign",
   //   href: "/app/campaign/live?group_id=4d38d7b7-18b8-41ea-ba19-28669b405a01&survey_id=44a4ba4f-0cac-47ef-a374-88bfd324b32b",
@@ -26,7 +33,7 @@ function classNames(...classes: any[]) {
 export default function SidebarComponent({ collapsed, setCollapsed }) {
   return (
     <div
-      className={`fixed z-50 h-full mt-16 bg-gray-800 ${collapsed ? "w-10" : "lg:w-[15rem]"} lg:inset-y-0 lg:z-0 lg:flex lg:flex-col`}
+      className={`fixed z-50 h-full mt-16 bg-white border ${collapsed ? "w-10" : "lg:w-[15rem]"} lg:inset-y-0 lg:z-0 lg:flex lg:flex-col`}
     >
       <div className="flex h-16 shrink-0 items-center justify-end px-4">
         <button
@@ -50,8 +57,8 @@ export default function SidebarComponent({ collapsed, setCollapsed }) {
                     href={item.href}
                     className={classNames(
                       item.current
-                        ? " text-white"
-                        : "text-gray-400 hover:text-white",
+                        ? " text-black hover:bg-[#F5F5F5] cursor-pointer"
+                        : "text-[#475467] hover:text-black hover:bg-[#F5F5F5] cursor-pointer",
                       "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                     )}
                   >

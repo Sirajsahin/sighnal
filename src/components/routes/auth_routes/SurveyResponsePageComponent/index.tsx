@@ -11,11 +11,13 @@ import UserResponseRatingComponent from "../UserResponseComponent/UserResponseRa
 import UserResponseOpenTextArea from "../UserResponseComponent/UserResponseOpenTextArea";
 import UserResponseImageComponent from "../UserResponseComponent/UserResponseImageComponent";
 import { useQuestionResponseAPI } from "@/app/hooks/api_hooks/Group/useQuestionResponseAPI";
+import { useGroupDetailsAPI } from "@/app/hooks/api_hooks/Group/useGroupDetailsAPI";
 
-const LiveCampaignPageComponent = () => {
+const SurveyResponsePageComponent = () => {
   const [params, _setparams] = useSearchParams();
   const { execute: fetchQuestionDetails, prevQuestionDetails } =
     useQuestionResponseAPI();
+  const { execute: fetchGroupDetails } = useGroupDetailsAPI();
 
   useEffect(() => {
     const survey_id = params.get("survey_id");
@@ -23,6 +25,13 @@ const LiveCampaignPageComponent = () => {
       fetchQuestionDetails(survey_id);
     }
   }, [params.get("survey_id")]);
+
+  useEffect(() => {
+    const groupId = params.get("group_id");
+    if (groupId) {
+      fetchGroupDetails(groupId);
+    }
+  }, [params.get("group_id")]);
 
   return (
     <div>
@@ -41,7 +50,7 @@ const LiveCampaignPageComponent = () => {
       </div>
       <div>
         <div className="grid grid-cols-12 grid-flow-col gap-4">
-          <div className="col-span-8 h-[83vh] overflow-auto">
+          <div className="col-span-7 h-[83vh] overflow-auto">
             {prevQuestionDetails?.result?.map((question, id) => {
               return (
                 <div className="py-3">
@@ -113,10 +122,10 @@ const LiveCampaignPageComponent = () => {
               );
             })}
           </div>
-          <div className="col-span-4 gap-4 mt-3">
+          <div className="col-span-5 gap-4 mt-3">
             <div className="flex flex-col gap-4">
-              <div className=" bg-[#F5F5F5] h-[20vh] w-full rounded-lg"></div>
-              <div className=" bg-[#F5F5F5] h-[60vh] w-full rounded-lg"></div>
+              <div className=" bg-white h-[20vh] w-full rounded-lg"></div>
+              <div className=" bg-white h-[60vh] w-full rounded-lg"></div>
             </div>
           </div>
         </div>
@@ -124,4 +133,4 @@ const LiveCampaignPageComponent = () => {
     </div>
   );
 };
-export default LiveCampaignPageComponent;
+export default SurveyResponsePageComponent;
