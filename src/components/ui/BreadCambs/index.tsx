@@ -45,17 +45,26 @@ const BreadcrumbsNavComponent = () => {
       );
     }
   };
+  const pathname = window.location.pathname;
+  console.log(pathname, "ffcbjshbjs");
+  // /app/campaign/campaign-list
+  // /app/campaign/live
   return useMemo(() => {
     return (
       <nav
-        className={`relative flex  pr-16 ${locations?.length > 0 && "border-b pb-4 mb-4"}  `}
+        className={`relative flex  pr-16 ${
+          (pathname === "/app/campaign/campaign-list" ||
+            pathname === "/app/campaign/live") &&
+          "border-b pb-4 mb-4"
+        }  `}
         aria-label="Breadcrumb"
       >
         <ol
           role="list"
           className="flex items-center  bg-white   rounded-md w-full"
         >
-          {locations?.length > 0 && (
+          {(pathname === "/app/campaign/campaign-list" ||
+            pathname === "/app/campaign/live") && (
             <li>
               <div>
                 <Link
@@ -70,25 +79,29 @@ const BreadcrumbsNavComponent = () => {
               </div>
             </li>
           )}
-          {locations.map((loc, id) => (
-            <li key={loc} onClick={() => handelClick(loc)}>
-              <div className="flex items-center ml-3">
-                <img
-                  src="https://vetic-img.s3.ap-south-1.amazonaws.com/quick_commerce//misc/thesvgsdIcon.svg"
-                  alt="icon"
-                />
+          {locations.map(
+            (loc, id) =>
+              (pathname === "/app/campaign/campaign-list" ||
+                pathname === "/app/campaign/live") && (
+                <li key={loc} onClick={() => handelClick(loc)}>
+                  <div className="flex items-center ml-3">
+                    <img
+                      src="https://vetic-img.s3.ap-south-1.amazonaws.com/quick_commerce//misc/thesvgsdIcon.svg"
+                      alt="icon"
+                    />
 
-                <a
-                  href="#"
-                  className={`ml-3 font-bold ${id === locations?.length - 1 ? "text-[#0C6545]" : "text-[#475467]"} text-sm `}
-                >
-                  {loc === "campaign" && groupDetails?.group_name}
-                  {loc === "live" && prevQuestionDetails?.survey_name}
-                  {/* {startCase(loc.split("-")?.join(" ")) ?? ""} */}
-                </a>
-              </div>
-            </li>
-          ))}
+                    <a
+                      href="#"
+                      className={`ml-3 font-bold ${id === locations?.length - 1 ? "text-[#0C6545]" : "text-[#475467]"} text-sm `}
+                    >
+                      {loc === "campaign" && groupDetails?.group_name}
+                      {loc === "live" && prevQuestionDetails?.survey_name}
+                      {/* {startCase(loc.split("-")?.join(" ")) ?? ""} */}
+                    </a>
+                  </div>
+                </li>
+              )
+          )}
         </ol>
       </nav>
     );

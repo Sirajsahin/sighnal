@@ -106,51 +106,49 @@ const POStatusTextColor = (status: string) => {
 };
 
 function vaticDateFormat(expiry_date: string | number): string {
-  if (expiry_date) {
-    let dateObj: Date;
+  if (!expiry_date) return "";
 
-    // Check if expiry_date is a number (epoch timestamp)
-    if (typeof expiry_date === "number") {
-      dateObj = new Date(expiry_date * 1000); // Convert seconds to milliseconds
-    } else if (typeof expiry_date === "string") {
-      // Try parsing different date formats
-      const parts = expiry_date.split("/");
-      if (parts.length === 3) {
-        // Assuming MM/DD/YYYY format
-        const [month, day, year] = parts.map(Number);
-        dateObj = new Date(year, month - 1, day);
-      } else {
-        // Fallback to default Date parsing
-        dateObj = new Date(expiry_date);
-      }
+  let dateObj: Date;
+
+  if (typeof expiry_date === "number") {
+    dateObj = new Date(expiry_date * 1000); // Convert seconds to milliseconds
+  } else if (typeof expiry_date === "string") {
+    if (/^\d{2}-\d{2}-\d{4}$/.test(expiry_date)) {
+      // If format is DD-MM-YYYY
+      const [day, month, year] = expiry_date.split("-").map(Number);
+      dateObj = new Date(year, month - 1, day);
+    } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(expiry_date)) {
+      // If format is MM/DD/YYYY
+      const [month, day, year] = expiry_date.split("/").map(Number);
+      dateObj = new Date(year, month - 1, day);
     } else {
-      throw new Error("Invalid expiry_date format");
+      dateObj = new Date(expiry_date); // Default date parsing
     }
-
-    // Month mapping
-    const monthNames = [
-      "JAN",
-      "FEB",
-      "MAR",
-      "APR",
-      "MAY",
-      "JUN",
-      "JUL",
-      "AUG",
-      "SEP",
-      "OCT",
-      "NOV",
-      "DEC",
-    ];
-
-    const date = String(dateObj.getDate()).padStart(2, "0");
-    const month = monthNames[dateObj.getMonth()];
-    const year = dateObj.getFullYear();
-
-    return `${date} ${month} ${year}`;
   } else {
-    return null;
+    throw new Error("Invalid expiry_date format");
   }
+
+  // Month mapping
+  const monthNames = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC",
+  ];
+
+  const date = String(dateObj.getDate()).padStart(2, "0");
+  const month = monthNames[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+
+  return `${date} ${month} ${year}`;
 }
 
 function convertToReadableFormat(str) {

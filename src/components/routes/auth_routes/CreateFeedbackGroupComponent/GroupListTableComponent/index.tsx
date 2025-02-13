@@ -75,13 +75,13 @@ const GroupListTableComponent = ({ source }) => {
     }
   }, [params.get("group_id")]);
 
-  const handelResponderPercentage = (
-    response_count: number,
-    total_sent: number
-  ) => {
-    const percentage = response_count / total_sent / 100;
-    return percentage;
-  };
+  // const handelResponderPercentage = (
+  //   response_count: number,
+  //   total_sent: number
+  // ) => {
+  //   const percentage = response_count / total_sent / 100;
+  //   return percentage;
+  // };
 
   const handelREdirect = (item: any) => {
     navigate(
@@ -195,8 +195,8 @@ const GroupListTableComponent = ({ source }) => {
                     onClick={() => handelREdirect(item)}
                   >
                     <div className="flex gap-4 items-center">
-                      {item?.response_count}{" "}
-                      {item?.response_count ? (
+                      {item?.responses_count}{" "}
+                      {/* {item?.response_count ? (
                         <span
                           className={`${
                             handelResponderPercentage(
@@ -215,7 +215,7 @@ const GroupListTableComponent = ({ source }) => {
                         </span>
                       ) : (
                         "NA"
-                      )}
+                      )} */}
                     </div>
                   </td>
                   <td

@@ -91,7 +91,7 @@ export interface ISurveyListResponseData {
   end_date?: string;
   end_time?: string;
   tags?: Array<string>;
-  response_count?: number | null;
+  responses_count?: number | null;
   total_sent?: number | null;
   group_name?: string;
   status?: string;

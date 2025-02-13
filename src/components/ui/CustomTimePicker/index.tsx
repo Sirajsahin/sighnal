@@ -1,22 +1,50 @@
+import { useRef } from "react";
+
 const CustomTimePicker = ({ title, time, setTime }) => {
-  // Ensure the time value is always in "HH:mm" format with zero-padded hours
-  const formatTime = (value) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  // Format the time properly (HH:mm)
+  const formatTime = (value: string | null) => {
+    if (!value) return "";
     const [hours, minutes] = value.split(":");
+    if (!hours || !minutes) return "";
     return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
   };
 
+  // Handle clicking anywhere inside the time picker
+  const handlePickerClick = () => {
+    if (inputRef.current) {
+      inputRef.current.showPicker(); // Opens the native time picker
+    }
+  };
+
   return (
-    <form className="w-full mx-auto mt-1">
+    <div className="w-full mx-auto mt-1">
       <label
-        htmlFor="time"
+        htmlFor="CustomTimePicker"
         className="block mb-2 text-xs font-medium text-black"
       >
         {title}
       </label>
-      <div className="relative">
-        <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+
+      {/* Make the entire div clickable */}
+      <div className="relative cursor-pointer" onClick={handlePickerClick}>
+        <input
+          ref={inputRef}
+          type="time"
+          id="CustomTimePicker"
+          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md block w-full p-3 cursor-pointer"
+          min="01:00"
+          max="23:00"
+          value={time || ""}
+          onChange={(e) => setTime(formatTime(e.target.value))}
+          required
+        />
+
+        {/* Clock Icon */}
+        <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5">
           <svg
-            className="w-4 h-4 text-gray-500 dark:text-gray-400 cursor-pointer"
+            className="w-4 h-4 text-gray-500 dark:text-gray-400"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
@@ -29,18 +57,8 @@ const CustomTimePicker = ({ title, time, setTime }) => {
             />
           </svg>
         </div>
-        <input
-          type="time"
-          id="time"
-          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md block w-full p-3"
-          min="01:00"
-          max="23:00"
-          value={formatTime(time)} // Display in "HH:mm" format
-          onChange={(e) => setTime(e.target.value)} // Update state with raw input value
-          required
-        />
       </div>
-    </form>
+    </div>
   );
 };
 
